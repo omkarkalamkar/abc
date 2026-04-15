@@ -9,6 +9,7 @@ from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
+from ska_integration_test_harness.inputs.json_input import DictJSONInput
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
@@ -64,6 +65,82 @@ def _check_abort_flow(
             ObsState.ABORTED,
             previous_value=ObsState.ABORTING,
         )
+
+
+def _configure_after_restart_recovery(
+    tmc: TMCFacade,
+    csp: CSPFacade,
+    sdp: SDPFacade,
+    event_tracer: TangoEventTracer,
+    default_commands_inputs: TestHarnessInputs,
+):
+    """Verify restart recovery by re-running AssignResources and Configure."""
+    event_tracer.clear_events()
+
+    _, assign_command_id = tmc.assign_resources(
+        default_commands_inputs.assign_input, wait_termination=False
+    )
+
+    assert_that(event_tracer).described_as(
+        f"TMC Subarray Node ({tmc.subarray_node}), "
+        f"CSP Subarray ({csp.csp_subarray}) and "
+        f"SDP Subarray ({sdp.sdp_subarray}) should reach IDLE "
+        "after AssignResources."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+        previous_value=ObsState.RESOURCING,
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.IDLE,
+        previous_value=ObsState.RESOURCING,
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.IDLE,
+        previous_value=ObsState.RESOURCING,
+    ).has_desired_result_code_message_in_lrcr_event(
+        tmc.central_node,
+        ["completed"],
+        assign_command_id[0],
+        ResultCode.OK,
+    )
+
+    event_tracer.clear_events()
+
+    _, configure_command_id = tmc.configure(
+        DictJSONInput(default_commands_inputs.configure_input.as_json),
+        wait_termination=False,
+    )
+
+    assert_that(event_tracer).described_as(
+        f"TMC Subarray Node ({tmc.subarray_node}), "
+        f"CSP Subarray ({csp.csp_subarray}) and "
+        f"SDP Subarray ({sdp.sdp_subarray}) should reach READY "
+        "after Configure."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "obsState",
+        ObsState.READY,
+        previous_value=ObsState.CONFIGURING,
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.READY,
+        previous_value=ObsState.CONFIGURING,
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.READY,
+        previous_value=ObsState.CONFIGURING,
+    ).has_desired_result_code_message_in_lrcr_event(
+        tmc.subarray_node,
+        ["completed"],
+        configure_command_id[0],
+        ResultCode.OK,
+    )
 
 
 @pytest.mark.SKA_tmc_mid_restart
@@ -284,4 +361,21 @@ def verify_tmc_subarray_in_empty_observation_state(
         f"from {ObsState.FAULT} to EMPTY."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node, "obsState", ObsState.EMPTY
+    )
+
+
+@then(
+    "AssignResources and Configure commands are executed "
+    "successfully after restart recovery"
+)
+def verify_post_restart_recovery_flow(
+    tmc: TMCFacade,
+    csp: CSPFacade,
+    sdp: SDPFacade,
+    event_tracer: TangoEventTracer,
+    default_commands_inputs: TestHarnessInputs,
+):
+    """Verify the subarray can be configured again after restart recovery."""
+    _configure_after_restart_recovery(
+        tmc, csp, sdp, event_tracer, default_commands_inputs
     )
