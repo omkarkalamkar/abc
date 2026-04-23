@@ -94,8 +94,7 @@ def check_timeout_error(
         lookahead=15,
     )
     exception_message = (
-        "Exception occurred on the following devices:"
-        + f" {pytest.sdp_sim.dev_name()}:"
+        "Exception occurred on devices:" + f" {pytest.sdp_sim.dev_name()}:"
         " ska_tmc_simulators.dependencies.exceptions.CommandNotAllowed:"
         " Command is not allowed\n"
     )

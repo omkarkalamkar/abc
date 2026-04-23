@@ -1,5 +1,5 @@
 Feature: Default
-
+    @new
 	Scenario: Test command queuing
 		Given the subarray is in the EMPTY state
 		When I queue AssignResources,Configure and Scan command
