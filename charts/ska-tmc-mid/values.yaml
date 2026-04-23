@@ -92,14 +92,14 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 1.4.0
+    tag: 1.7.1
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.29.0
+    tag: 0.30.0
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -118,9 +118,9 @@ cspsubarrayleafnode:
 
 dishleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.44.0
+    tag: 0.45.0-dev.c5cc51f1c
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
