@@ -100,8 +100,8 @@ def subarray_in_empty_state(
     )
 
 
-@when("I queue AssignResources,Configure and Scan command")
-def invoke_all_commands(tmc: TMCFacade):
+@when("I queue Configure and Scan command")
+def invoke_all_commands(tmc: TMCFacade, event_tracer):
     """Invoke Assign Resources,"""
     json_input = MyFileJSONInput(
         "centralnode", "assign_resources_mid"
@@ -111,6 +111,16 @@ def invoke_all_commands(tmc: TMCFacade):
     pytest.assign_result = tmc.assign_resources(
         DictJSONInput(assign_json),
         wait_termination=False,
+    )
+    assert_that(event_tracer).described_as(
+        "AssignResources command should complete successfully"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.central_node,
+        "longRunningCommandResult",
+        (
+            pytest.assign_result[1][0],
+            json.dumps(((ResultCode.OK), "Command Completed")),
+        ),
     )
     json_input = MyFileJSONInput("subarray", "command_Configure")
     configure_json = json.loads(json_input.as_str())
@@ -132,16 +142,7 @@ def invoke_all_commands(tmc: TMCFacade):
 )
 def command_results_ok(event_tracer, tmc: TMCFacade):
     """Check all results ok"""
-    assert_that(event_tracer).described_as(
-        "AssignResources command should complete successfully"
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.central_node,
-        "longRunningCommandResult",
-        (
-            pytest.assign_result[1][0],
-            json.dumps(((ResultCode.OK), "Command Completed")),
-        ),
-    )
+
     assert_that(event_tracer).described_as(
         "Configure command should complete successfully"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
