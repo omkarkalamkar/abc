@@ -16,7 +16,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
     COMMAND_NOT_ALLOWED_DEFECT_BEFORE_QUEUING,
     RESET_DEFECT,
-    tmc_sdp_subarray_leaf_node,
 )
 
 
