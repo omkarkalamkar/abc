@@ -166,7 +166,7 @@ def command_results_ok(event_tracer, tmc: TMCFacade):
     )
 
 
-@then("the subarray should transition to the READY state")
+@then("the subarray transitions to the READY state")
 def verify_ready_state(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
