@@ -193,15 +193,12 @@ def verify_ready_state(
         tmc.subarray_node,
         "obsState",
         ObsState.READY,
-        previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         csp.csp_subarray,
         "obsState",
         ObsState.READY,
-        previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         sdp.sdp_subarray,
         "obsState",
         ObsState.READY,
-        previous_value=context_fixt.starting_state,
     )
