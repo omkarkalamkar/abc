@@ -13,6 +13,7 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
 class TestMidCentralNodeAssignResources(object):
+    @pytest.mark.xfail(reason=("Testcase failing due to cdm error"))
     @pytest.mark.batch1
     @pytest.mark.SKA_mid
     @pytest.mark.parametrize(
