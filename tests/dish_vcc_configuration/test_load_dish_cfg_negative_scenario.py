@@ -370,9 +370,11 @@ def invoke_command_load_cfg_on_defective_csp(
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
+    cspln = central_node_mid.csp_master_leaf_node.dev_name()
 
     exception_msg = (
-        f'[3, "Exception occurred on devices: '
+        f'[3, "Exception occurred on the following devices: {cspln}: '
+        "Exception occurred on devices: "
         f"{csp_sim.dev_name()}: Exception occurred, "
         f'command failed."]'
     )
