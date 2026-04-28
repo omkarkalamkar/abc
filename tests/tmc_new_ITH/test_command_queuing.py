@@ -70,7 +70,7 @@ def _setup_event_subscriptions(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/command_queue.feature",
-    "Test command queuing",
+    "Test TMC Mid command queuing",
 )
 def test_command_queuing():
     """Test command queuing"""
