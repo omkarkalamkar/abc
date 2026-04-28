@@ -110,7 +110,10 @@ def invoke_release_on_csp_subarray(
         "ObsState attribute value should move "
         f"from {ObsState.EMPTY}."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.csp_subarray_leaf_node, "CspSubarrayObsState", ObsState.EMPTY
+        tmc.csp_subarray_leaf_node,
+        "CspSubarrayObsState",
+        ObsState.EMPTY,
+        previous_value=ObsState.RESOURCING,
     )
 
 
