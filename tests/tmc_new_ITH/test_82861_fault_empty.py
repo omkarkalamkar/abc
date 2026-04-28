@@ -78,7 +78,7 @@ def verify_tmc_subarray_resourcing_fault(
         "ObsState attribute value should move "
         f"from {ObsState.IDLE}."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.csp_subarray_leaf_node, "obsState", ObsState.IDLE
+        tmc.csp_subarray_leaf_node, "CspSubarrayObsState", ObsState.IDLE
     )
 
 
@@ -110,7 +110,7 @@ def invoke_release_on_csp_subarray(
         "ObsState attribute value should move "
         f"from {ObsState.EMPTY}."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.csp_subarray_leaf_node, "obsState", ObsState.EMPTY
+        tmc.csp_subarray_leaf_node, "CspSubarrayObsState", ObsState.EMPTY
     )
 
 
