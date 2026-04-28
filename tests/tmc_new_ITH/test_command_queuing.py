@@ -135,10 +135,7 @@ def invoke_all_commands(tmc: TMCFacade, event_tracer):
     )
 
 
-@then(
-    "the command results of AssignResources,Configure and Scan "
-    "transitions to OK"
-)
+@then("the command results of Configure and Scan transitions to OK")
 def command_results_ok(event_tracer, tmc: TMCFacade):
     """Check all results ok"""
 
