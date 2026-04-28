@@ -73,6 +73,13 @@ def verify_tmc_subarray_resourcing_fault(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         csp.csp_subarray, "obsState", ObsState.IDLE
     )
+    assert_that(event_tracer).described_as(
+        f"CSP SubarrayLN device ({tmc.csp_subarray_leaf_node.dev_name()})"
+        "ObsState attribute value should move "
+        f"from {ObsState.IDLE}."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.csp_subarray_leaf_node, "obsState", ObsState.IDLE
+    )
 
 
 @given("CSP and SDP in observation state IDLE and EMPTY")
@@ -87,7 +94,7 @@ def verify_csp_mccs_sdp_obs_state_empty(csp: CSPFacade, sdp: SDPFacade):
     "CSP transitions to observation state EMPTY after resources are released"
 )
 def invoke_release_on_csp_subarray(
-    csp: CSPFacade, event_tracer: TangoEventTracer
+    tmc: TMCFacade, csp: CSPFacade, event_tracer: TangoEventTracer
 ):
     """Invokes release command on csp subarray"""
     csp.csp_subarray.ReleaseAllResources()
@@ -97,6 +104,13 @@ def invoke_release_on_csp_subarray(
         f"from {ObsState.EMPTY}."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         csp.csp_subarray, "obsState", ObsState.EMPTY
+    )
+    assert_that(event_tracer).described_as(
+        f"CSP SubarrayLN device ({tmc.csp_subarray_leaf_node.dev_name()})"
+        "ObsState attribute value should move "
+        f"from {ObsState.EMPTY}."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.csp_subarray_leaf_node, "obsState", ObsState.EMPTY
     )
 
 
