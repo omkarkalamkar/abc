@@ -17,7 +17,7 @@ class TestMidCentralNodeAssignResources(object):
     @pytest.mark.SKA_mid
     @pytest.mark.parametrize(
         "input_json_name",
-        ["assign_resources_mid"],
+        ["assign_resources_mid", "assign_resources_mid_v2_1"],
     )
     def test_mid_centralnode_assign_resources(
         self,
