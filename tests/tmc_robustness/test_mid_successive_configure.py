@@ -86,7 +86,7 @@ def given_subarray_in_idle(
     """
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "multiple_assign1", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     _, unique_id = central_node_mid.store_resources(assign_input_json)

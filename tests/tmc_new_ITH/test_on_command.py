@@ -70,10 +70,10 @@ def when_tmc_on(tmc: TMCFacade):
 )
 def when_dishes_in_dish_mode(
     dishes: DishesFacade,
-    dish_mode_ska001: DishMode,
-    dish_mode_ska036: DishMode,
-    dish_mode_ska063: DishMode,
-    dish_mode_ska100: DishMode,
+    DishModeSKA001: DishMode,
+    DishModeSKA036: DishMode,
+    DishModeSKA063: DishMode,
+    DishModeSKA100: DishMode,
 ):
     """
     Ensure that the dishes are in the specified dish mode.
@@ -82,10 +82,10 @@ def when_dishes_in_dish_mode(
     for dish_id, dish_mode in zip(
         ["dish_001", "dish_036", "dish_063", "dish_100"],
         [
-            dish_mode_ska001,
-            dish_mode_ska036,
-            dish_mode_ska063,
-            dish_mode_ska100,
+            DishModeSKA001,
+            DishModeSKA036,
+            DishModeSKA063,
+            DishModeSKA100,
         ],
     ):
         dish = dishes.dish_master_dict[dish_id]
