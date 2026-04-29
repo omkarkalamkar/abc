@@ -70,10 +70,10 @@ def when_tmc_on(tmc: TMCFacade):
 )
 def when_dishes_in_dish_mode(
     dishes: DishesFacade,
-    DishModeSKA001: DishMode,
-    DishModeSKA036: DishMode,
-    DishModeSKA063: DishMode,
-    DishModeSKA100: DishMode,
+    DishModeSKA001: str,
+    DishModeSKA036: str,
+    DishModeSKA063: str,
+    DishModeSKA100: str,
 ):
     """
     Ensure that the dishes are in the specified dish mode.
@@ -89,7 +89,7 @@ def when_dishes_in_dish_mode(
         ],
     ):
         dish = dishes.dish_master_dict[dish_id]
-        dish_mode_enum = DishMode(dish_mode)
+        dish_mode_enum = DishMode[dish_mode]
         dish.SetDirectDishMode(dish_mode_enum)
 
 
