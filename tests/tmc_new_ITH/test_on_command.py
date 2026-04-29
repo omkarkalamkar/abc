@@ -17,9 +17,8 @@ from tests.resources.test_support.enum import DishMode
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_on.feature",
-    "Central Node ON command succeeds when at least one "
-    "dish is available (in STANDBY_FP)",
+    "../features/xtp-108859_telescope_state.feature",
+    "telescopeState should be ON if atleast one dish is available",
 )
 def test_on_command():
     """BDD scenario for verifying On Command"""
