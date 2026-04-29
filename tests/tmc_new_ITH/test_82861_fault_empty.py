@@ -73,13 +73,13 @@ def verify_tmc_subarray_resourcing_fault(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         csp.csp_subarray, "obsState", ObsState.IDLE
     )
-    # assert_that(event_tracer).described_as(
-    #     f"CSP SubarrayLN device ({tmc.csp_subarray_leaf_node.dev_name()})"
-    #     "ObsState attribute value should move "
-    #     f"from {ObsState.IDLE}."
-    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #     tmc.csp_subarray_leaf_node, "CspSubarrayObsState", ObsState.IDLE
-    # )
+    assert_that(event_tracer).described_as(
+        f"CSP SubarrayLN device ({tmc.csp_subarray_leaf_node.dev_name()})"
+        "ObsState attribute value should move "
+        f"from {ObsState.IDLE}."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.csp_subarray_leaf_node, "CspSubarrayObsState", ObsState.IDLE
+    )
 
 
 @given("CSP and SDP in observation state IDLE and EMPTY")
@@ -105,16 +105,16 @@ def invoke_release_on_csp_subarray(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         csp.csp_subarray, "obsState", ObsState.EMPTY
     )
-    # assert_that(event_tracer).described_as(
-    #     f"CSP SubarrayLN device ({tmc.csp_subarray_leaf_node.dev_name()})"
-    #     "ObsState attribute value should move "
-    #     f"from {ObsState.EMPTY}."
-    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #     tmc.csp_subarray_leaf_node,
-    #     "CspSubarrayObsState",
-    #     ObsState.EMPTY,
-    #     previous_value=ObsState.RESOURCING,
-    # )
+    assert_that(event_tracer).described_as(
+        f"CSP SubarrayLN device ({tmc.csp_subarray_leaf_node.dev_name()})"
+        "ObsState attribute value should move "
+        f"from {ObsState.EMPTY}."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.csp_subarray_leaf_node,
+        "CspSubarrayObsState",
+        ObsState.EMPTY,
+        previous_value=ObsState.RESOURCING,
+    )
 
 
 @when("I invoke Restart Command on the TMC Subarray")
