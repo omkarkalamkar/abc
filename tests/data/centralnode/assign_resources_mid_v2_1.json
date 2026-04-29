@@ -85,8 +85,8 @@
                   "dec": [
                      -0.01328889
                   ],
-                  "reference_time": "...",
-                  "reference_frame": "icrs"
+                  "reference_time": "2025-12-21T15:34:37.727590Z",
+                  "reference_frame": "ICRF3"
                },
                "pointing_fqdn": "low-tmc/telstate/0/pointing"
             },
@@ -99,8 +99,8 @@
                   "dec": [
                      2.052388
                   ],
-                  "reference_time": "...",
-                  "reference_frame": "icrs"
+                  "reference_time": "2025-12-21T15:34:37.727590Z",
+                  "reference_frame": "ICRF3"
                },
                "pointing_fqdn": "low-tmc/telstate/0/pointing"
             }
