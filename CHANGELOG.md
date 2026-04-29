@@ -11,7 +11,7 @@ Updated
 -------
 
 * Support for Position Velocity Time pattern added.
-* programTrackTable size is now configurable via `ProgramTrackTableSize` property in dish pointing device
+* programTrackTable size is now configurable via `ProgramTrackTableSize` property in dish pointing device.
 
 [1.20.0-rc.1]
 *************
