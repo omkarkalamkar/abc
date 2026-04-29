@@ -8,7 +8,7 @@ Scenario Outline: telescopeState should be ON if atleast one dish is available.
     Examples:
       | DishModeSKA001 | DishModeSKA036 | DishModeSKA063 | DishModeSKA100 |
       | STANDBY_FP     | STANDBY_FP     | STANDBY_FP     | STANDBY_FP     |
-      | STANDBY_FP     | STANDBY_LP     | SHUTDOWN       | STANDBY_FP     |
+      | STANDBY_FP     | STANDBY_LP     | SHUTDOWN       | SHUTDOWN       |
       | STANDBY_FP     | OPERATE        | CONFIG         | STANDBY_FP     |
       | STANDBY_LP     | OPERATE        | SHUTDOWN       | STANDBY_FP     |
       | STANDBY_LP     | SHUTDOWN       | CONFIG         | STANDBY_FP     |
