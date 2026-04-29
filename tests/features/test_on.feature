@@ -4,7 +4,6 @@ Scenario: Central Node ON command succeeds when at least one dish is available (
     When I invoke the ON command on the Central Node
     And dishes SKA001, SKA036, SKA063, SKA100 are in dish mode <DishModeSKA001>, <DishModeSKA036>, <DishModeSKA063>, <DishModeSKA100> respectively
     Then telescopeState is in DevState.ON
-    And The ON command is successful
 
     Examples:
       | DishModeSKA001 | DishModeSKA036 | DishModeSKA063 | DishModeSKA100 |

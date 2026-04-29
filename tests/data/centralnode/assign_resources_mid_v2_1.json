@@ -86,7 +86,7 @@
                      -0.01328889
                   ],
                   "reference_time": "...",
-                  "reference_frame": "ICRF3"
+                  "reference_frame": "icrs"
                },
                "pointing_fqdn": "low-tmc/telstate/0/pointing"
             },

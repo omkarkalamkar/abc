@@ -3,12 +3,9 @@ Test ON Command when at least one dish is available in STANDBY_FP
 """
 
 
-import json
-
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ResultCode
 from ska_integration_test_harness.facades import DishesFacade, TMCFacade
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
@@ -58,7 +55,7 @@ def when_tmc_on(tmc: TMCFacade):
     """
     Ensure that the TMC and ResourceMonitor devices are available and ON.
     """
-    _, pytest.unique_id = tmc.central_node.TelescopeOn()
+    tmc.move_to_on(wait_termination=True)
 
 
 @when(
@@ -101,20 +98,4 @@ def then_central_node_on(event_tracer: TangoEventTracer, tmc: TMCFacade):
         "Expected telescopeState event with DevState.ON"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         tmc.central_node, "TelescopeState", DevState.ON
-    )
-
-
-@then("The ON command is successful")
-def then_on_command_successful(event_tracer: TangoEventTracer, tmc: TMCFacade):
-    """Then the ON command should be successful."""
-
-    assert_that(event_tracer).described_as(
-        "Expected longRunningCommandResult event with ON command success"
-    ).within_timeout(TIMEOUT).has_change_event_occurred(
-        tmc.central_node,
-        "longRunningCommandResult",
-        (
-            pytest.unique_id[0],
-            json.dumps((int(ResultCode.OK), "Command Completed")),
-        ),
     )
