@@ -74,7 +74,6 @@ def when_dishes_in_dish_mode(
     dish_mode_ska036: DishMode,
     dish_mode_ska063: DishMode,
     dish_mode_ska100: DishMode,
-    event_tracer: TangoEventTracer,
 ):
     """
     Ensure that the dishes are in the specified dish mode.
