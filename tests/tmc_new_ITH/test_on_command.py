@@ -24,7 +24,7 @@ from tests.resources.test_support.enum import DishMode
     "Central Node ON command succeeds when at least one "
     "dish is available (in STANDBY_FP)",
 )
-def test_resource_monitor_updates():
+def test_on_command():
     """BDD scenario for verifying On Command"""
 
 
@@ -54,7 +54,7 @@ def given_tmc(
 
 
 @when("I invoke the ON command on the Central Node")
-def given_tmc_on(tmc: TMCFacade):
+def when_tmc_on(tmc: TMCFacade):
     """
     Ensure that the TMC and ResourceMonitor devices are available and ON.
     """
@@ -69,7 +69,7 @@ def given_tmc_on(tmc: TMCFacade):
     )
 )
 def when_dishes_in_dish_mode(
-    dishesh: DishesFacade,
+    dishes: DishesFacade,
     dish_mode_ska001: DishMode,
     dish_mode_ska036: DishMode,
     dish_mode_ska063: DishMode,
@@ -80,7 +80,7 @@ def when_dishes_in_dish_mode(
     """
 
     for dish_id, dish_mode in zip(
-        ["SKA001", "SKA036", "SKA063", "SKA100"],
+        ["dish_001", "dish_036", "dish_063", "dish_100"],
         [
             dish_mode_ska001,
             dish_mode_ska036,
@@ -88,7 +88,7 @@ def when_dishes_in_dish_mode(
             dish_mode_ska100,
         ],
     ):
-        dish = dishesh.dish_master_dict[f"dish_{dish_id.split('SKA')[1]}"]
+        dish = dishes.dish_master_dict[dish_id]
         dish_mode_enum = DishMode(dish_mode)
         dish.SetDirectDishMode(dish_mode_enum)
 
