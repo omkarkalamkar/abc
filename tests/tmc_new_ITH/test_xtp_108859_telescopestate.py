@@ -1,0 +1,139 @@
+"""
+Test ON Command when at least one dish is available in STANDBY_FP
+"""
+
+
+import pytest
+from assertpy import assert_that
+from pytest_bdd import given, parsers, scenario, then, when
+from ska_integration_test_harness.facades import DishesFacade, TMCFacade
+from ska_tango_testing.integration import TangoEventTracer, log_events
+from tango import DevState
+
+from tests.resources.test_support.constant import TIMEOUT
+from tests.resources.test_support.enum import DishMode
+
+
+@pytest.mark.batch1
+@pytest.mark.SKA_mid
+@scenario(
+    "../features/telescope_state_on_off.feature",
+    "telescopeState should be ON if atleast one dish is available",
+)
+def test_on_command():
+    """BDD scenario for verifying On Command"""
+
+
+@pytest.mark.batch1
+@pytest.mark.SKA_mid
+@scenario(
+    "../features/telescope_state_on_off.feature",
+    "telescopeState should be OFF when all dishes are in STANDBY_LP",
+)
+def test_off_command():
+    """BDD scenario for verifying Off Command"""
+
+
+@given("A TMC")
+def given_tmc(
+    tmc: TMCFacade,
+    dishes: DishesFacade,
+    event_tracer: TangoEventTracer,
+):
+    """Given a TMC"""
+    event_tracer.subscribe_event(tmc.central_node, "telescopeState")
+    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
+    for dish_manager in dishes.dish_master_list:
+        event_tracer.subscribe_event(dish_manager, "State")
+    for leaf_node in tmc.dish_leaf_node_list:
+        event_tracer.subscribe_event(leaf_node, "State")
+    log_events(
+        {
+            tmc.central_node: ["telescopeState", "longRunningCommandResult"],
+            **{leaf_node: ["State"] for leaf_node in tmc.dish_leaf_node_list},
+            **{
+                dish_manager: ["State"]
+                for dish_manager in dishes.dish_master_list
+            },
+        }
+    )
+
+
+@when("I invoke the ON command on the Central Node")
+def when_tmc_on(tmc: TMCFacade):
+    """
+    Ensure that the TMC devices are available and ON.
+    """
+    tmc.move_to_on(wait_termination=True)
+
+
+@when("I invoke the OFF command on the Central Node")
+def when_tmc_off(tmc: TMCFacade):
+    """
+    Ensure that the TMC devices are available and OFF.
+    """
+    tmc.move_to_on(wait_termination=True)
+    tmc.move_to_off(wait_termination=True)
+
+
+@when(
+    parsers.parse(
+        "dishes SKA001, SKA036, SKA063, SKA100 are in"
+        " dish mode {DishModeSKA001}, {DishModeSKA036}, "
+        "{DishModeSKA063}, {DishModeSKA100} respectively"
+    )
+)
+def when_dishes_in_dish_mode(
+    dishes: DishesFacade,
+    DishModeSKA001: str,
+    DishModeSKA036: str,
+    DishModeSKA063: str,
+    DishModeSKA100: str,
+):
+    """
+    Ensure that the dishes are in the specified dish mode.
+    """
+
+    for dish_id, dish_mode in zip(
+        ["dish_001", "dish_036", "dish_063", "dish_100"],
+        [
+            DishModeSKA001,
+            DishModeSKA036,
+            DishModeSKA063,
+            DishModeSKA100,
+        ],
+    ):
+        dish = dishes.dish_master_dict[dish_id]
+        dish_mode_enum = DishMode[dish_mode]
+        dish.SetDirectDishMode(dish_mode_enum)
+
+
+@when("all dishes are in STANDBY_LP")
+def when_all_dishes_in_dish_mode(dishes: DishesFacade):
+    """
+    Ensure that all dishes are in the specified dish mode.
+    """
+    for dish in dishes.dish_master_list:
+        dish.SetDirectDishMode(DishMode.STANDBY_LP)
+
+
+@then("telescopeState is in DevState.ON")
+def then_central_node_on(event_tracer: TangoEventTracer, tmc: TMCFacade):
+    """Then the Central Node should be in ON state."""
+
+    assert_that(event_tracer).described_as(
+        "Expected telescopeState event with DevState.ON"
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        tmc.central_node, "TelescopeState", DevState.ON
+    )
+
+
+@then("telescopeState is in DevState.OFF")
+def then_central_node_off(event_tracer: TangoEventTracer, tmc: TMCFacade):
+    """Then the Central Node should be in OFF state."""
+
+    assert_that(event_tracer).described_as(
+        "Expected telescopeState event with DevState.OFF"
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        tmc.central_node, "TelescopeState", DevState.OFF
+    )
