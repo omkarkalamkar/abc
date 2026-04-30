@@ -12,3 +12,15 @@ Scenario Outline: telescopeState should be ON if atleast one dish is available
       | STANDBY_FP     | OPERATE        | CONFIG         | STANDBY_FP     |
       | STANDBY_LP     | OPERATE        | SHUTDOWN       | STANDBY_FP     |
       | STANDBY_LP     | SHUTDOWN       | CONFIG         | STANDBY_FP     |
+
+@SKA_mid @XTP-108943 @XTP-28347
+Scenario Outline: telescopeState should be OFF when all dishes are in STANDBY_LP or SHUTDOWN
+    Given A TMC
+    When I invoke the OFF command on the Central Node
+    And all dishes are in <dishmode>
+    Then telescopeState is in DevState.OFF
+
+    Examples:
+      | dishmode       |
+      | STANDBY_LP     |
+      | SHUTDOWN       |

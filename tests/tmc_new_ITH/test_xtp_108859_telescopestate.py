@@ -17,11 +17,22 @@ from tests.resources.test_support.enum import DishMode
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/xtp-108859_telescope_state.feature",
+    "../features/telescope_state_on_off.feature",
     "telescopeState should be ON if atleast one dish is available",
 )
 def test_on_command():
     """BDD scenario for verifying On Command"""
+
+
+@pytest.mark.batch1
+@pytest.mark.SKA_mid
+@scenario(
+    "../features/telescope_state_on_off.feature",
+    "telescopeState should be OFF when all dishes are"
+    " in STANDBY_LP or SHUTDOWN",
+)
+def test_off_command():
+    """BDD scenario for verifying Off Command"""
 
 
 @given("A TMC")
@@ -52,9 +63,17 @@ def given_tmc(
 @when("I invoke the ON command on the Central Node")
 def when_tmc_on(tmc: TMCFacade):
     """
-    Ensure that the TMC and ResourceMonitor devices are available and ON.
+    Ensure that the TMC devices are available and ON.
     """
     tmc.move_to_on(wait_termination=True)
+
+
+@when("I invoke the OFF command on the Central Node")
+def when_tmc_off(tmc: TMCFacade):
+    """
+    Ensure that the TMC devices are available and OFF.
+    """
+    tmc.move_to_off(wait_termination=True)
 
 
 @when(
@@ -89,6 +108,16 @@ def when_dishes_in_dish_mode(
         dish.SetDirectDishMode(dish_mode_enum)
 
 
+@when(parsers.parse("all dishes are in {dishmode}"))
+def when_all_dishes_in_dish_mode(dishes: DishesFacade, dishmode: str):
+    """
+    Ensure that all dishes are in the specified dish mode.
+    """
+    dish_mode_enum = DishMode[dishmode]
+    for dish in dishes.dish_master_list:
+        dish.SetDirectDishMode(dish_mode_enum)
+
+
 @then("telescopeState is in DevState.ON")
 def then_central_node_on(event_tracer: TangoEventTracer, tmc: TMCFacade):
     """Then the Central Node should be in ON state."""
@@ -97,4 +126,15 @@ def then_central_node_on(event_tracer: TangoEventTracer, tmc: TMCFacade):
         "Expected telescopeState event with DevState.ON"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         tmc.central_node, "TelescopeState", DevState.ON
+    )
+
+
+@then("telescopeState is in DevState.OFF")
+def then_central_node_off(event_tracer: TangoEventTracer, tmc: TMCFacade):
+    """Then the Central Node should be in OFF state."""
+
+    assert_that(event_tracer).described_as(
+        "Expected telescopeState event with DevState.OFF"
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        tmc.central_node, "TelescopeState", DevState.OFF
     )
