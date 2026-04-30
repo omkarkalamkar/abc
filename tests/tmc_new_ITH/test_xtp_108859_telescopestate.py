@@ -28,8 +28,7 @@ def test_on_command():
 @pytest.mark.SKA_mid
 @scenario(
     "../features/telescope_state_on_off.feature",
-    "telescopeState should be OFF when all dishes are"
-    " in STANDBY_LP or SHUTDOWN",
+    "telescopeState should be OFF when all dishes are in STANDBY_LP",
 )
 def test_off_command():
     """BDD scenario for verifying Off Command"""
@@ -73,6 +72,7 @@ def when_tmc_off(tmc: TMCFacade):
     """
     Ensure that the TMC devices are available and OFF.
     """
+    tmc.move_to_on(wait_termination=True)
     tmc.move_to_off(wait_termination=True)
 
 
@@ -108,14 +108,13 @@ def when_dishes_in_dish_mode(
         dish.SetDirectDishMode(dish_mode_enum)
 
 
-@when(parsers.parse("all dishes are in {dishmode}"))
+@when("all dishes are in STANDBY_LP")
 def when_all_dishes_in_dish_mode(dishes: DishesFacade, dishmode: str):
     """
     Ensure that all dishes are in the specified dish mode.
     """
-    dish_mode_enum = DishMode[dishmode]
     for dish in dishes.dish_master_list:
-        dish.SetDirectDishMode(dish_mode_enum)
+        dish.SetDirectDishMode(DishMode.STANDBY_LP)
 
 
 @then("telescopeState is in DevState.ON")
