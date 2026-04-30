@@ -109,7 +109,7 @@ def when_dishes_in_dish_mode(
 
 
 @when("all dishes are in STANDBY_LP")
-def when_all_dishes_in_dish_mode(dishes: DishesFacade, dishmode: str):
+def when_all_dishes_in_dish_mode(dishes: DishesFacade):
     """
     Ensure that all dishes are in the specified dish mode.
     """
