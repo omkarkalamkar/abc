@@ -7,10 +7,10 @@ Deployment
 Standard deployment
 ====================
 
-The TMC Mid is packaged as a `helm chart <https://helm.sh/>`_ and can be 
-deployed using helm commands. The default deployment configuration is 
+The TMC Mid is packaged as a `helm chart <https://helm.sh/>`_ and can be
+deployed using helm commands. The default deployment configuration is
 assumed to be the SKA production environment. In the current version,
-TMC supports `one` subarray operation with four dishes. Following list shows 
+TMC supports `one` subarray operation with four dishes. Following list shows
 default number of instances deployed for each of the TMC component.
 
 #. Central Node - 1
@@ -23,8 +23,8 @@ default number of instances deployed for each of the TMC component.
 #. Resource Monitor - 1
 
 
-.. warning:: The number of instances of Central Node, SDP Master Leaf Node and 
-    CSP Master Leaf Node should always be one even 
+.. warning:: The number of instances of Central Node, SDP Master Leaf Node and
+    CSP Master Leaf Node should always be one even
     though it is technically possible to deploy multiple instances.
 
 To deploy the TMC use following command on the terminal:
@@ -33,24 +33,24 @@ To deploy the TMC use following command on the terminal:
 
     helm install my-tmc-release https://artefact.skao.int/repository/helm-internal/ska-tmc-mid --namespace ska-tmc-mid
 
-It is possible to customize the deployment as per need. To do so, the 
-`values.yaml` file in TMC chart needs to be modified. The same can be done by 
-using `--set` option in the command line while using the `helm install` 
+It is possible to customize the deployment as per need. To do so, the
+`values.yaml` file in TMC chart needs to be modified. The same can be done by
+using `--set` option in the command line while using the `helm install`
 command.
 
 Basic Customization options
 ===========================
 
-Number of subarrays 
+Number of subarrays
 --------------------
 
-The number of subarrays can be deployed according to the need. A variable 
-named **subarray_count** need to be set to the desired value. This option 
+The number of subarrays can be deployed according to the need. A variable
+named **subarray_count** need to be set to the desired value. This option
 affects the number of instances of following components.
 
 #. Subarray Node
 #. CSP Subarray Leaf Node
-#. SDP Subarray Leaf Node 
+#. SDP Subarray Leaf Node
 
 global.dishids (changed)
 ----------------------------
@@ -75,15 +75,15 @@ Example:
 Tango host
 ----------
 
-This option allows to specify the desired Tango facility. The variable 
-**tango_host** is used to specify the tango facility. By default, the value 
+This option allows to specify the desired Tango facility. The variable
+**tango_host** is used to specify the tango facility. By default, the value
 of this variable is set to `databaseds-tango-base-test:10000`.
 
 Dish Name
 ---------
 
-This options allows the user to control the dishes deployed with non-standard 
-naming conventions. The variable **dish_name** defined in the global section 
+This options allows the user to control the dishes deployed with non-standard
+naming conventions. The variable **dish_name** defined in the global section
 should be set with comma separated string values of the Dish TRLs.
 
     Default Value for dish leaf node is
@@ -104,9 +104,9 @@ timeout value is preconfigured when the component starts for the first time.
 Logging
 -------
 
-The basic setting for logging allows setting logging level of all TMC devices 
-via ``TMCLoggingLevel`` parameter in **global** section. By default, the 
-logging level is set to 4 (``INFO`` level). To set the logging level of one or  
+The basic setting for logging allows setting logging level of all TMC devices
+via ``TMCLoggingLevel`` parameter in **global** section. By default, the
+logging level is set to 4 (``INFO`` level). To set the logging level of one or
 more specific component, refer to advanced cutomization options.
 
 Usage
@@ -121,41 +121,41 @@ Usage
   - Sets the initial timeout value at startup.
 
 This option sets the timeout value till which the TMC components wait for
-completion of commands invoked on lower level Tango devices. This timeout 
-should be set for each TMC component. To set the desired timeout value, 
-navigate to **deviceServers -> <component name>** in `values.yaml` file. 
-Locate **CommandTimeOutDefault** variable and set an integer value equivalant in 
+completion of commands invoked on lower level Tango devices. This timeout
+should be set for each TMC component. To set the desired timeout value,
+navigate to **deviceServers -> <component name>** in `values.yaml` file.
+Locate **CommandTimeOutDefault** variable and set an integer value equivalant in
 seconds.
 
 .. warning::
     When setting the command timeout values, it is essential to set bigger
-    timeout values for Central Node and Subarray Node than any Leaf Node. This 
-    is because the as per TMC architecture, Central Node and Subarray Node are 
-    higher level in the hierarchy and Leaf Nodes are at lower level. The 
-    commands flow from Central Node, Subarray Node, to Leaf Nodes and then to the 
-    subsystems. The higher level nodes need to factor in the command timeout 
-    set on lower level components.  
+    timeout values for Central Node and Subarray Node than any Leaf Node. This
+    is because the as per TMC architecture, Central Node and Subarray Node are
+    higher level in the hierarchy and Leaf Nodes are at lower level. The
+    commands flow from Central Node, Subarray Node, to Leaf Nodes and then to the
+    subsystems. The higher level nodes need to factor in the command timeout
+    set on lower level components.
 
 DishId-VCC Configuration
 ------------------------
 
-This options allows the user to set the desired version of DishID-VCC map 
-configuration of the system at the time of TMC deployment. To set the desired 
-version, two values are required to be set. Navigate to 
-**deviceServers.centralnode** -> **DishVccConfig** section in the 
-**values.yaml** file. The variable **DishVccConfig** in this 
-section specifies the URI of the DishId-VCC configuration file. Currently, its 
-value defaults to 
+This options allows the user to set the desired version of DishID-VCC map
+configuration of the system at the time of TMC deployment. To set the desired
+version, two values are required to be set. Navigate to
+**deviceServers.centralnode** -> **DishVccConfig** section in the
+**values.yaml** file. The variable **DishVccConfig** in this
+section specifies the URI of the DishId-VCC configuration file. Currently, its
+value defaults to
 "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata".
 
-The variable **DishVccFilePath** specifies the respective file path of the configuration 
-file in the telmodel repo. Currently, its default values is set to 
+The variable **DishVccFilePath** specifies the respective file path of the configuration
+file in the telmodel repo. Currently, its default values is set to
 "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json".
 
 Global Pointing Model Configuration
 -----------------------------------
 
-TMC Mid supports Global Pointing Model (GPM) configuration starting from version 1.9.0. 
+TMC Mid supports Global Pointing Model (GPM) configuration starting from version 1.9.0.
 The following parameters define the GPM setup:
 
 **Key Parameters**:
@@ -170,14 +170,14 @@ The following parameters define the GPM setup:
 
 .. warning::
 
-   All parameters are mandatory — missing or incorrect values may cause the TMC to fail to apply 
+   All parameters are mandatory — missing or incorrect values may cause the TMC to fail to apply
    the specified version of the GPM during initialization.
 
-Except for version, all other parameters remain consistent across deployments and are used by the 
-**SetGlobalPointingModel** command to apply the specified version from the input JSON. Upon redeployment, 
+Except for version, all other parameters remain consistent across deployments and are used by the
+**SetGlobalPointingModel** command to apply the specified version from the input JSON. Upon redeployment,
 only these parameters can be modified.
 
-These parameters are located under the **deviceServers.centralnode.global_pointing_model** section in the 
+These parameters are located under the **deviceServers.centralnode.global_pointing_model** section in the
 **values.yaml** file.
 
 For further information and details, please `click here <https://confluence.skatelescope.org/x/V4TtEQ>`_
@@ -187,9 +187,9 @@ For further information and details, please `click here <https://confluence.skat
 kValue Configuration
 ------------------------
 
-This option is used to set the valid range of dish k values. Navigate to 
-deviceServers.centralnode -> KValueValidRange section in the values.yaml file. 
-Set the **min** and **max** variables to specify lower and upper limit of the 
+This option is used to set the valid range of dish k values. Navigate to
+deviceServers.centralnode -> KValueValidRange section in the values.yaml file.
+Set the **min** and **max** variables to specify lower and upper limit of the
 valid range of dish k values.
 
 Track table specific configuration
@@ -200,8 +200,8 @@ TBD: Add track table related config param here from dish pointing device.
 Advanced Customization options
 =====================================
 
-Following are the advance options. These options are mainly useful for developers 
-and AIV engineers for testing purpose. Customizing these parameters should be 
+Following are the advance options. These options are mainly useful for developers
+and AIV engineers for testing purpose. Customizing these parameters should be
 done carefully.
 
 
@@ -226,15 +226,15 @@ done carefully.
 
 #. **LoggingLevel** : To set the logging level of specific type of TMC component, \
    set this key under **deviceServers -> <component name>** in `values.yaml`. \
-   This is optional parameter. If specified, it takes precedence over the value 
+   This is optional parameter. If specified, it takes precedence over the value
    specified in ``TMCLoggingLevel`` in global section.
 
 
 Component specific configuration
 ---------------------------------
 
-This section specifies the configuration options for individual TMC component. 
-Navigate to **deviceServers.<component>** section in values.yaml file. 
+This section specifies the configuration options for individual TMC component.
+Navigate to **deviceServers.<component>** section in values.yaml file.
 
 Central Node
 ^^^^^^^^^^^^^
@@ -246,6 +246,7 @@ Central Node
     #. **DishVccInitTimeout** : This refers to the timeout (in seconds) for the dish vcc initialization. Currently defaults to 180 seconds.
     #. **family** : This refers to the family name of CentralNode TANGO device. Currently defaults to "central-node".
     #. **member** : This refers to the member of CentralNode TANGO device. Currently defaults to "0".
+    #. **SubarrayPrefix** :  This refers to the prefix for subarray devices. Currently defaults to "mid-tmc/subarray/".
 
 Subarray Node
 ^^^^^^^^^^^^^^
