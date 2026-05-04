@@ -10,8 +10,7 @@
                         "c1": 317.199,
                         "c2": -88.95636
                     }
-                },
-                "projection": {"name": "SIN", "alignment": "AltAz"}
+                }
             }
         ],
       "correction": "UPDATE"
