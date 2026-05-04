@@ -10,6 +10,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Updated
 -------
 * Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+* Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
 
 [1.21.0-rc.1]
 *************
