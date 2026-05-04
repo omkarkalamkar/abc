@@ -7,8 +7,7 @@
                 "field": {
                     "target_name": "Mars",
                     "reference_frame": "special"
-                },
-                "projection": {"name": "SIN", "alignment": "AltAz"}
+                }
             }
         ],
       "correction": "UPDATE"
