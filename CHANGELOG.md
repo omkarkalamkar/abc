@@ -5,12 +5,17 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+*************
+Fixed
+-------
+* Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
+
 [1.21.1-rc.1]
 *************
 Updated
 -------
 * Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
-* Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
 
 [1.21.0-rc.1]
 *************
