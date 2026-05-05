@@ -1,14 +1,16 @@
-release=1.21.1-rc.1
-tag=1.21.1-rc.1
+release=1.22.0-rc.1
+tag=1.22.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.1 to v1.21.1-rc.1**
-        * Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
-
-
+**1. Updated ska-tmc-mid from v1.21.1-rc.1 to v1.22.0-rc.1**
+        * Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
+        * SKB-1314-Fixed DishLN to support ICRS reference frame.
+        * Updated TMC Nodes to support command queuing.
 
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.1 to v1.21.1-rc.1**
-       * Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+**1. Updated ska-tmc-mid from v1.21.0-rc.1 to v1.22.0-rc.1**
+        * Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
+        * SKB-1314-Fixed DishLN to support ICRS reference frame.
+        * Updated TMC Nodes to support command queuing.
