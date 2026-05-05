@@ -12,7 +12,6 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.skip(reason="skip")
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
