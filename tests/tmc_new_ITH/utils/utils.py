@@ -52,6 +52,9 @@ def setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "commandCallInfo")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(
+        tmc.csp_subarray_leaf_node, "CspSubarrayObsState"
+    )
 
     log_events(
         {
@@ -66,6 +69,7 @@ def setup_event_subscriptions(
                 "receiveAddresses",
             ],
             tmc.central_node: ["longRunningCommandResult"],
+            tmc.csp_subarray_leaf_node: ["CspSubarrayObsState"],
         },
         event_enum_mapping={"obsState": ObsState},
     )

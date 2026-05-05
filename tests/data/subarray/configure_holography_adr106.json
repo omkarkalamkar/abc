@@ -18,7 +18,7 @@
                     "name": "fixed",
                     "attrs": {"x": 0.0, "y": 5.0}
                 },
-                "projection": {"name": "SIN", "alignment": "AltAz"}
+                "projection": {"name": "SIN", "alignment": "ICRS"}
             },
             {
             	"receptors": ["SKA001", "SKA063"],
@@ -29,8 +29,7 @@
                        "c1": 317.19966666666666, 
                        "c2": -88.95636111111111
                     }
-                },
-                "projection": {"name": "SIN", "alignment": "AltAz"}
+                }
             }
         ]
     },

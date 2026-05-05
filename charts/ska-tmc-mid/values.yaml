@@ -92,42 +92,42 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 1.7.1
+    tag: 1.10.0
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.29.0
+    tag: 0.30.1
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.43.0
+    tag: 0.45.2
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.43.0
+    tag: 0.45.2
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.44.0
+    tag: 0.45.1
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.9.7
+    tag: 1.11.1
     pullPolicy: IfNotPresent
 
 resource_monitor:

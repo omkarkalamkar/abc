@@ -10,6 +10,17 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Fixed
 -------
 * Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
+* SKB-1314: Fixed DishLN to support ICRS reference frame.
+
+Updated
+-------
+* Updated TMC Nodes to support command queuing.
+  - Dish Leaf Node: v0.45.1
+  - SDP Leaf Node: v0.30.1
+  - CSP Leaf Node: v0.45.2
+  - Central Node: v1.33.0
+  - Subarray Node: v1.10.0
+
 
 [1.21.1-rc.1]
 *************
