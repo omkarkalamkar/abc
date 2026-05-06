@@ -98,7 +98,7 @@ ITANGO_DOCKER_IMAGE = $(CAR_OCI_REGISTRY_HOST)/ska-cicd-k8s-tools-build-deploy:0
 # Test runner - run to completion job in K8s
 # name of the pod running the k8s_tests
 K8S_TEST_RUNNER = test-runner-$(HELM_RELEASE)
-
+k8s_test_src_dir = pyproject.toml $(PYTHON_SRC)/
 CI_PROJECT_PATH_SLUG ?= ska-tmc-integration
 CI_ENVIRONMENT_SLUG ?= ska-tmc-integration
 CSP_SIMULATION_ENABLED ?= true
