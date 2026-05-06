@@ -70,10 +70,20 @@ def _check_abort_flow(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_82860_fault_configure.feature",
-    "Test Restart Command during failure of Configure Command",
+    "Test Restart Command during failure of Configure Command - Part 1",
 )
-def test_verify_fault_after_configure():
-    """Test Restart command behaviour after configure command fails"""
+def test_verify_fault_after_configure_part1():
+    """Test Restart command behaviour after configure command fails - Part 1"""
+
+
+@pytest.mark.SKA_tmc_mid_device_restart
+@pytest.mark.SKA_mid
+@scenario(
+    "../tmc_new_ITH/features/xtp_82860_fault_configure.feature",
+    "Test Restart Command during failure of Configure Command - Part 2",
+)
+def test_verify_fault_after_configure_part2():
+    """Test Restart command behaviour after configure command fails - Part 2"""
 
 
 @given(

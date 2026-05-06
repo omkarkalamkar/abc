@@ -1,9 +1,9 @@
 {
-  "interface":"https://schema.skao.int/ska-tmc-configure/4.2",
+  "interface":"https://schema.skao.int/ska-tmc-configure/5.0",
   "transaction_id":"txn-....-00003",
   "tmc":{
     "partial_configuration":true,
-    "scan_duration":10.0
+    "scan_duration":5.0
   },
   "pointing":{
     "wrap_sector":0,

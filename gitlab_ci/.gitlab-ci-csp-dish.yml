@@ -1,4 +1,5 @@
 k8s-test-csp-dish:
+  stage: pair-wise-tests
   extends:
     - k8s-test
   tags:
@@ -43,7 +44,7 @@ k8s-test-csp-dish:
 
 
 stop-k8s-test-csp-dish:
-  stage: test
+  stage: pair-wise-tests
   extends:
     - mid-on-demand-destroy-mini-skampi
   variables:

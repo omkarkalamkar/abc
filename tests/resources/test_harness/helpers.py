@@ -178,21 +178,33 @@ def get_non_sidereal_json_for_now() -> tuple[str, str]:
     # "lat": -30.71329, "lon": 21.449412 and "h": 1098.074 for dish SKA001
     # based on TelModel-data. Default value is Sun for the negative scenario
     if 8 <= current_time <= 14:
-        configure_input_json["pointing"]["target"]["target_name"] = "Sun"
+        configure_input_json["pointing"]["groups"][0]["field"][
+            "target_name"
+        ] = "Sun"
         return (json.dumps(configure_input_json), "Sun")
     if 3 <= current_time <= 8:
-        configure_input_json["pointing"]["target"]["target_name"] = "Mars"
+        configure_input_json["pointing"]["groups"][0]["field"][
+            "target_name"
+        ] = "Mars"
         return (json.dumps(configure_input_json), "Mars")
     if current_time <= 3 or current_time >= 21:
-        configure_input_json["pointing"]["target"]["target_name"] = "Saturn"
+        configure_input_json["pointing"]["groups"][0]["field"][
+            "target_name"
+        ] = "Saturn"
         return (json.dumps(configure_input_json), "Saturn")
     if 17 <= current_time <= 21:
-        configure_input_json["pointing"]["target"]["target_name"] = "Pluto"
+        configure_input_json["pointing"]["groups"][0]["field"][
+            "target_name"
+        ] = "Pluto"
         return (json.dumps(configure_input_json), "Pluto")
     if 14 <= current_time <= 15:
-        configure_input_json["pointing"]["target"]["target_name"] = "Venus"
+        configure_input_json["pointing"]["groups"][0]["field"][
+            "target_name"
+        ] = "Venus"
         return (json.dumps(configure_input_json), "Venus")
-    configure_input_json["pointing"]["target"]["target_name"] = "Sun"
+    configure_input_json["pointing"]["groups"][0]["field"][
+        "target_name"
+    ] = "Sun"
     return (json.dumps(configure_input_json), "Sun")
 
 

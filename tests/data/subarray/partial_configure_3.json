@@ -1,13 +1,24 @@
 {
-    "interface": "https://schema.skao.int/ska-tmc-configure/2.2",
-    "transaction_id": "txn-....-00004",
-    "pointing": {
-        "target": {
-        "ca_offset_arcsec": 5.0,
-        "ie_offset_arcsec": 0.0
+  "interface":"https://schema.skao.int/ska-tmc-configure/5.0",
+  "transaction_id":"txn-....-00003",
+  "tmc":{
+    "partial_configuration":true,
+    "scan_duration":5.0
+  },
+  "pointing":{
+    "wrap_sector":0,
+    "groups":[
+      {
+        "trajectory":{
+          "name":"fixed",
+          "attrs":{
+            "x":5,
+            "y":0
+          }
         }
-    },
-    "tmc": {
-        "partial_configuration": true
-    }
+      }
+    ],
+    "ca_offset_arcsec": 5.0,
+    "ie_offset_arcsec": 0.0
+  }
 }

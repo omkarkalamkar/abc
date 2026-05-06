@@ -94,16 +94,6 @@ Example:
             },
             "transaction_id": "txn-....-00001",
             "midcbf": {
-                "correlation": {
-                    "processing_regions": [{
-                        "fsp_ids": [1],
-                        "start_freq" : 950000000,
-                        "channel_width" : 13440,
-                        "channel_count" : 40,
-                        "sdp_start_channel_id": 0,
-                        "integration_factor": 1
-                    }]
-                },
                 "pst_bf": {
                     "processing_regions": [{
                         "fsp_ids": [5],
@@ -201,16 +191,6 @@ Example:
             },
             "transaction_id": "txn-....-00001",
             "midcbf": {
-                "correlation": {
-                    "processing_regions": [{
-                        "fsp_ids": [1],
-                        "start_freq" : 950000000,
-                        "channel_width" : 13440,
-                        "channel_count" : 40,
-                        "sdp_start_channel_id": 0,
-                        "integration_factor": 1
-                    }]
-                },
                 "pst_bf": {
                     "processing_regions": [{
                         "fsp_ids": [5],
@@ -307,16 +287,6 @@ Example:
             },
             "transaction_id": "txn-....-00001",
             "midcbf": {
-                "correlation": {
-                    "processing_regions": [{
-                        "fsp_ids": [1],
-                        "start_freq" : 950000000,
-                        "channel_width" : 13440,
-                        "channel_count" : 40,
-                        "sdp_start_channel_id": 0,
-                        "integration_factor": 1
-                    }]
-                },
                 "pst_bf": {
                     "processing_regions": [{
                         "fsp_ids": [5],
@@ -408,16 +378,6 @@ Example:
             },
             "transaction_id": "txn-....-00001",
             "midcbf": {
-                "correlation": {
-                    "processing_regions": [{
-                        "fsp_ids": [1],
-                        "start_freq" : 950000000,
-                        "channel_width" : 13440,
-                        "channel_count" : 40,
-                        "sdp_start_channel_id": 0,
-                        "integration_factor": 1
-                    }]
-                },
                 "pst_bf": {
                     "processing_regions": [{
                         "fsp_ids": [5],

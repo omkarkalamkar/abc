@@ -190,7 +190,7 @@ def when_gust_speed_exceeds_threshold(
     dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
-    dish_leaf_node.maxAllowedGustWindpeed = 22.0
+    dish_leaf_node.maxAllowedGustWindspeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
 

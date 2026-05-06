@@ -1,4 +1,5 @@
 k8s-test-mid-with-csp-new-ith:
+  stage: pair-wise-tests
   extends:
     - k8s-test
   variables:
@@ -18,6 +19,7 @@ k8s-test-mid-with-csp-new-ith:
 
 
 stop-k8s-test-mid-with-csp-new-ith:
+  stage: pair-wise-tests
   extends:
     - stop-k8s-test
   variables:

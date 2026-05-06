@@ -61,6 +61,10 @@ from tests.resources.test_support.constant import (
     tmc_dish_leaf_node2,
     tmc_dish_leaf_node3,
     tmc_dish_leaf_node4,
+    tmc_dish_pointing_device1,
+    tmc_dish_pointing_device2,
+    tmc_dish_pointing_device3,
+    tmc_dish_pointing_device4,
     tmc_sdp_subarray_leaf_node,
     tmc_sdp_subarrayln_prefix,
     tmc_subarraynode1,
@@ -147,7 +151,12 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
-
+        self.dish_pointing_device = [
+            DeviceProxy(tmc_dish_pointing_device1),
+            DeviceProxy(tmc_dish_pointing_device2),
+            DeviceProxy(tmc_dish_pointing_device3),
+            DeviceProxy(tmc_dish_pointing_device4),
+        ]
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
 
@@ -625,12 +634,14 @@ class SubarrayNodeWrapper(object):
             "scan_mid", command_input_factory
         )
 
-        for partial_configure_json in [
+        partial_configure_list = [
             partial_configure_1,
             partial_configure_2,
             partial_configure_3,
             partial_configure_4,
-        ]:
+        ]
+
+        for idx, partial_configure_json in enumerate(partial_configure_list):
             if correction_key == CorrectionKey.UPDATE:
                 input_json = json.loads(partial_configure_json)
                 input_json["pointing"]["correction"] = "UPDATE"
@@ -682,22 +693,111 @@ class SubarrayNodeWrapper(object):
             event_tracer.clear_events()
 
             # assert sourceOffset gets populated as expected
+            ca_offset, ie_offset = 0.0, 0.0
             if correction_key == CorrectionKey.UPDATE:
-                ca_offset, ie_offset = (
-                    json.loads(partial_configure_json)["pointing"]["target"][
-                        key
+                # For partial_configure_1 and partial_configure_3 ,
+                # extract x,y from trajectory attrs
+                if idx in (0, 2):
+                    pointing_data = json.loads(partial_configure_json)[
+                        "pointing"
                     ]
-                    for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-                )
+                    ca_offset = pointing_data["groups"][0]["trajectory"][
+                        "attrs"
+                    ]["x"]
+                    ie_offset = pointing_data["groups"][0]["trajectory"][
+                        "attrs"
+                    ]["y"]
+                else:
+                    ca_offset, ie_offset = (
+                        json.loads(partial_configure_json)["pointing"][key]
+                        for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+                    )
             elif correction_key == CorrectionKey.RESET:
                 ca_offset, ie_offset = 0.0, 0.0
-            for dish_leaf_node in self.dish_leaf_node_list:
-                assert wait_and_validate_device_attribute_value(
-                    dish_leaf_node,
-                    "sourceOffset",
-                    f"{[ca_offset, ie_offset]}",
-                    is_list=True,
+            LOGGER.info(
+                "Asserting sourceOffset attribute value on dish leaf nodes %s",
+                [
+                    dish_leaf_node.sourceOffset
+                    for dish_leaf_node in self.dish_leaf_node_list
+                ],
+            )
+            expected_offset = [float(ca_offset), float(ie_offset)]
+            assigned_dish_leaf_nodes = self.get_assigned_dish_leaf_nodes_list()
+            dish_leaf_nodes_to_check = [
+                dish_leaf_node
+                for dish_leaf_node in assigned_dish_leaf_nodes
+                if "ska036" in dish_leaf_node.dev_name()
+                or "ska100" in dish_leaf_node.dev_name()
+            ]
+            dish_pointing_devices_to_check = [
+                dish_pointing_device
+                for dish_pointing_device in self.dish_pointing_device
+                if "ska036" in dish_pointing_device.dev_name()
+                or "ska100" in dish_pointing_device.dev_name()
+            ]
+            LOGGER.info(
+                "Validating sourceOffset on dish leaf nodes %s",
+                [
+                    dish_leaf_node.name()
+                    for dish_leaf_node in dish_leaf_nodes_to_check
+                ],
+            )
+            for dish_leaf_node in dish_leaf_nodes_to_check:
+                retries = 0
+                current_offset = list(dish_leaf_node.sourceOffset)
+                while retries < 6:
+                    current_offset = list(dish_leaf_node.sourceOffset)
+                    if current_offset == expected_offset:
+                        break
+                    time.sleep(2)
+                    retries += 1
+
+                assert current_offset == expected_offset, (
+                    f"{dish_leaf_node.name()} sourceOffset {current_offset} "
+                    f"does not match expected {expected_offset}"
                 )
+
+            LOGGER.info(
+                "Validating targetData trajectory offsets on "
+                "dish pointing devices %s",
+                [
+                    dish_pointing_device.name()
+                    for dish_pointing_device in dish_pointing_devices_to_check
+                ],
+            )
+            expected_target_data = {
+                "x": float(ca_offset),
+                "y": float(ie_offset),
+            }
+            for dish_pointing_device in dish_pointing_devices_to_check:
+                retries = 0
+                current_target_data = {}
+                while retries < 6:
+                    current_target_data = json.loads(
+                        dish_pointing_device.targetData
+                    )["pointing"]["trajectory"]["attrs"]
+                    if current_target_data == expected_target_data:
+                        break
+                    time.sleep(2)
+                    retries += 1
+
+                assert current_target_data == expected_target_data, (
+                    f"{dish_pointing_device.name()} targetData trajectory "
+                    f"{current_target_data} does not match expected "
+                    f"{expected_target_data}"
+                )
+
+                program_track_table = json.loads(
+                    dish_pointing_device.pointingprogramtracktable
+                )
+                LOGGER.info(
+                    "Validating pointingProgramTrackTable on "
+                    f"{dish_pointing_device.name()}, "
+                    f"pointingProgramTrackTable: {program_track_table}"
+                    f" and length of "
+                    f"pointingProgramTrackTable: {len(program_track_table)}",
+                )
+                assert len(program_track_table) == 15
 
             # Scan
             self.execute_transition("Scan", scan_json)

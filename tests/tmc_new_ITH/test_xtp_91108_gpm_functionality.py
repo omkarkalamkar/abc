@@ -9,6 +9,9 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_integration_test_harness.actions.utils.generate_eb_pb_ids import (
+    generate_eb_pb_ids,
+)
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.json_input import DictJSONInput
@@ -80,8 +83,8 @@ def given_a_tmc(
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC"""
-
     event_tracer.clear_events()
+    event_tracer.subscribe_event(tmc.subarray_node, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.central_node, "GlobalPointingModelStatus")
     log_events(
@@ -90,12 +93,14 @@ def given_a_tmc(
                 "longRunningCommandResult",
                 "GlobalPointingModelStatus",
             ],
+            tmc.subarray_node: ["obsState"],
         }
     )
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
     # Setup TMC for testing negative scenarios
     # before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
+    assign_input = generate_eb_pb_ids(assign_input)
     assign_input = json.loads(assign_input.as_str())
     assign_input["dish"]["receptor_ids"] = ["SKA036"]
     assign_input["sdp"]["resources"]["receptors"] = ["SKA036"]
@@ -231,6 +236,15 @@ def tmc_reports_gpm_status_on_dish(
             )
 
     dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
+
     release_input = MyFileJSONInput("centralnode", "release_resources_mid")
-    tmc.release_resources(release_input)
     event_tracer.clear_events()
+
+    tmc.release_resources(release_input, wait_termination=False)
+    assert_that(event_tracer).described_as(
+        f"TMC Subarray Node device ({tmc.subarray_node})"
+        "ObsState attribute values should move "
+        f"from IDLE to EMPTY."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node, "obsState", ObsState.EMPTY
+    )

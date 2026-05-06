@@ -36,7 +36,7 @@ def test_command_not_allowed_admin_mode_subarray():
         "the adminmode of subsystem controller {subsystem} is {adminmode}"
     )
 )
-def set_admin_mode(subsystem, adminmode):
+def set_admin_mode(tmc: TMCFacade, subsystem, adminmode):
     """Set the admin mode of a given subsystem."""
     device_name = SUBSYSTEM_DEVICES[subsystem]
     proxy = tango.DeviceProxy(device_name)

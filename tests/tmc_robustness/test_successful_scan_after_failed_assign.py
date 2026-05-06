@@ -193,7 +193,7 @@ def tmc_accepts_configure_command_with_valid_json(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(configure_input_json)
-    configure_input_json["tmc"]["scan_duration"] = 10.0
+    configure_input_json["tmc"]["scan_duration"] = 5.0
 
     _, unique_id = subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)

@@ -2,15 +2,15 @@
     "interface": "https://schema.skao.int/ska-tmc-configure/4.1",
     "transaction_id": "",
     "pointing": {
-        "target": {
-            "reference_frame": "special",
-            "target_name": "Mars",
-            "ra": "21:08:47.92",
-            "dec": "-88:57:22.9",
-            "ca_offset_arcsec": 0.0,
-            "ie_offset_arcsec": 0.0
-        },
-        "correction": "UPDATE"
+       "groups": [
+            {
+                "field": {
+                    "target_name": "Mars",
+                    "reference_frame": "special"
+                }
+            }
+        ],
+      "correction": "UPDATE"
     },
     "dish": {
         "receiver_band": "1"
@@ -42,7 +42,7 @@
         "scan_type": "target:a"
     },
     "tmc": {
-        "scan_duration": 10.0,
+        "scan_duration": 5.0,
         "partial_configuration": false
     }
   }

@@ -1,6 +1,8 @@
 """Configurations needed for the tests using the new harness."""
 
+import json
 import os
+import time
 from dataclasses import dataclass
 from typing import Any
 
@@ -24,6 +26,7 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 )
 from ska_tango_testing.integration import TangoEventTracer
 
+from tests.conftest import LOGGER
 from tests.resources.test_support.constant import TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
@@ -258,3 +261,43 @@ def get_abort_command_timeout() -> int:
             "AbortCommandTimeOut"
         ][0]
     )
+
+
+def wait_for_target_data(device, expected_x, expected_y, timeout=5):
+    """
+    Waits for the targetData attribute to contain the
+    specified x and y values under the trajectory key.
+
+    Args:
+        device (DeviceProxy): The Tango device proxy object.
+        expected_x (float): The expected x value under the trajectory key.
+        expected_y (float): The expected y value under the trajectory key.
+        timeout (int, optional): The maximum time to wait in seconds.
+
+    Returns:
+        bool: True if the expected values are found within the timeout
+    """
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        target_data = device.targetData
+        try:
+            target_data_dict = json.loads(target_data)
+            trajectory = target_data_dict.get("pointing", {}).get(
+                "trajectory", {}
+            )
+            if (
+                trajectory.get("attrs", {}).get("x") == expected_x
+                and trajectory.get("attrs", {}).get("y") == expected_y
+            ):
+                return True
+        except (json.JSONDecodeError, AttributeError) as e:
+            LOGGER.debug("Error reading targetData: %s", e)
+        time.sleep(1)
+
+    LOGGER.warning(
+        "Timeout after %s  waiting for targetData to contain x=%s, y=%s",
+        timeout,
+        expected_x,
+        expected_y,
+    )
+    return False

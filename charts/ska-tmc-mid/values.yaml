@@ -85,49 +85,49 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.29.2
+    tag: 1.3.3
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.51.2
+    tag: 1.10.0
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.27.0
+    tag: 0.30.1
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.40.0
+    tag: 0.45.2
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.40.0
+    tag: 0.45.2
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.30.1
+    tag: 0.45.1
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.9.5
+    tag: 1.11.1
     pullPolicy: IfNotPresent
 
 resource_monitor:
@@ -140,7 +140,7 @@ resource_monitor:
 resources:
   requests:
     cpu: 200m
-    memory:
+    memory: 500Mi
 
 deviceServers:
   centralnode:
@@ -166,11 +166,12 @@ deviceServers:
     family: "central-node"
     member: "0"
     global_pointing_model:
-      version: "1.0.0"
+      version: "1.9.7"
       interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
       data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
     LoggingLevel: "4"
+    SubarrayPrefix: "mid-tmc/subarray/"
 
   subarraynode:
     enabled: true
@@ -267,12 +268,12 @@ deviceServers:
     DishAvailabilityCheckTimeout: 30
     family: "leaf-node-dish"
     prefix_member: "SKA"
-    weather_station_device_names: 
+    weather_station_device_names:
       - "ska-mid/weather-monitoring/s1"
       - "ska-mid/weather-monitoring/s2"
     max_allowed_wind_speed: 13.5
     max_allowed_ops_wind_speed: 10
-    max_allowed_gust_wind_speed: 20 
+    max_allowed_gust_wind_speed: 20
     max_allowed_wind_speed_difference: 4.5
     wind_speed_measurement_time_window: 1000
     gust_wind_speed_measurement_time_window: 3
@@ -281,7 +282,7 @@ deviceServers:
     max_temp_threshold: 40.0
     min_temp_threshold: -5
     time_delta: 1000.0
-    temp_delta: 4.5 
+    temp_delta: 4.5
     enable_auto_stow: true
     LoggingLevel: "4"
 
@@ -302,6 +303,7 @@ deviceServers:
         cpu: 500m
         memory: 500Mi
     LoggingLevel: "4"
+    ProgramTrackTableSize: 50
 
   resourcemonitor:
     enabled: true
@@ -323,14 +325,6 @@ deviceServers:
     dish: false
     csp: false
     sdp: false
-
-mid_wms:
-  legacy_compatibility: true
-  dev-name: "ska-mid/weather-monitoring/s1"
-  ska-tango-base:
-    enabled: false
-    itango:
-      enabled: false
 
 nodeSelector: {}
 

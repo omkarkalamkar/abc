@@ -1,0 +1,119 @@
+{
+    "interface": "https://schema.skao.int/ska-tmc-configure/6.1",
+    "transaction_id": "txn-....-00001",
+    "pointing": {
+        "groups": [
+            {
+                "receptors": ["SKA036","SKA100"],
+                "field": {
+                    "target_name": "Polaris Australis",
+                    "reference_frame": "ICRS",
+                    "attrs": {
+                        "c1": 317.199,
+                        "c2": -88.95636
+                    }
+                },
+                "trajectory": {
+                    "name": "pos_vel_time",
+                    "attrs": {
+                        "time_offsets": [0, 1, 2, 3, 4],
+                        "x_offsets": [0.0, 0.0, 0.0, 0.0, 0.0],
+                        "y_offsets": [0.0, 0.0, 0.0, 0.0, 0.0],
+                        "x_velocities": [0.0, 0.0, 0.0, 0.0, 0.0],
+                        "y_velocities": [0.0, 0.0, 0.0, 0.0, 0.0]
+                    }
+                },
+                "projection": {"name": "SSN", "alignment": "AltAz"}
+            },
+            {
+                "receptors": ["SKA001", "SKA063"],
+                "field": {
+                    "target_name": "Polaris Australis",
+                    "reference_frame": "ICRS",
+                    "attrs": {
+                        "c1": 317.199,
+                        "c2": -88.95636
+                    }
+                },
+                "projection": {"name": "SSN", "alignment": "AltAz"}
+            }
+        ]
+    },
+    "dish": {"receiver_band": "1", "interface": "https://schema.skao.int/ska-dish-configure/1.0"},
+    "csp": {
+        "interface": "https://schema.skao.int/ska-csp-configurescan/8.3",
+        "common": {
+            "config_id": "sbi-mvp01-20200325-00001-science_A",
+            "frequency_band": "1"
+        },
+        "pst": {
+            "beams": [{
+            "beam_id": 1,
+            "scan": {
+                "centre_frequency": 10550000000.0,
+                "total_bandwidth": 2496345600.0,
+                "observer_id": "jdoe",
+                "project_id": "project1",
+                "receiver_id": "receiver3",
+                "max_scan_length": 20000.0,
+                "subint_duration": 30.0,
+                "receptors": ["SKA001", "SKA036"],
+                "receptor_weights": [0.4, 0.6],
+                "pst_processing_mode": "VOLTAGE_RECORDER",
+                "target": {
+                    "target_name": "J1921+2153",
+                    "reference_frame": "icrs",
+                    "attrs": {
+                        "c1": 290.43672917,
+                        "c2": 21.884,
+                        "epoch": 2000.0
+                    }
+                }
+            }
+        }]
+        },
+        "midcbf": {
+            "correlation": {
+                "processing_regions": [
+                    {
+                        "fsp_ids": [1, 2, 3, 4],
+                        "receptors": ["SKA001","SKA036","SKA100"],
+                        "start_freq": 350000000,
+                        "channel_width": 13440,
+                        "channel_count": 52080,
+                        "sdp_start_channel_id": 0,
+                        "integration_factor": 1
+                    },
+                    {
+                        "fsp_ids": [1, 2, 3, 4],
+                        "receptors": ["SKA001","SKA036","SKA100"],
+                        "start_freq": 548437600,
+                        "channel_width": 13440,
+                        "channel_count": 14880,
+                        "sdp_start_channel_id": 1,
+                        "integration_factor": 10
+                    }
+                ]
+            },
+            "pst_bf": {
+                  "processing_regions": [{
+                      "fsp_ids": [5],
+                      "start_freq": 495075840,
+                      "channel_count": 3700,
+                      "timing_beams": [{
+                          "timing_beam_id": 1,
+                          "receptors": ["SKA001", "SKA036"]
+                      }]
+                  }]
+            },
+            "vlbi": {}
+        }
+    },
+    "sdp": {
+        "interface": "https://schema.skao.int/ska-sdp-configure/0.4",
+        "scan_type": "target:a"
+    },
+    "tmc": {
+        "scan_duration": 5.0
+    }
+}

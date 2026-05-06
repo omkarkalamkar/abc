@@ -31,11 +31,14 @@ LOGGER = logging.getLogger(__name__)
 
 COMMAND_RESULT_CSP = (
     '[3, "Exception occurred on the following devices: '
-    'mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
+    "mid-tmc/subarray-leaf-node-csp/01: Exception occurred on devices: "
+    'mid-csp/subarray/01: Exception occurred, command failed."]'
 )
+
 COMMAND_RESULT_SDP = (
     '[3, "Exception occurred on the following devices: '
-    'mid-tmc/subarray-leaf-node-sdp/01: Exception occurred, command failed"]'
+    "mid-tmc/subarray-leaf-node-sdp/01: Exception occurred on devices: "
+    'mid-sdp/subarray/01: Exception occurred, command failed"]'
 )
 
 
@@ -57,6 +60,12 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(
+        tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
+    )
+    event_tracer.subscribe_event(
+        tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+    )
 
     log_events(
         {
@@ -182,8 +191,21 @@ def verify_error_message(
 
         # tear_down as TMC is inconsistent state. Also
         # no command is allowed in RESTARTING obsState
-        csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+        csp.csp_subarray.SetDefective(
+            json.dumps({"enabled": False, "fault_type": 0})
+        )
         csp.csp_subarray.Restart()
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the tmc subarray must be in the RESTARTING obsState' "
+            "TMC Subarray device"
+            f"({tmc.subarray_node.dev_name()}) "
+            "is expected to be in FAULT obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.subarray_node,
+            "obsState",
+            ObsState.FAULT,
+        )
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the csp subarray must be in the EMPTY obsState'"
@@ -195,6 +217,7 @@ def verify_error_message(
             "obsState",
             ObsState.EMPTY,
         )
+        csp.csp_subarray.SetDirectObsState(ObsState.EMPTY)
 
     if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
@@ -211,8 +234,21 @@ def verify_error_message(
         )
         # tear_down as TMC is inconsistent state. Also
         # no command is allowed in RESTARTING obsState
-        sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
+        sdp.sdp_subarray.SetDefective(
+            json.dumps({"enabled": False, "fault_type": 0})
+        )
         sdp.sdp_subarray.Restart()
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the tmc subarray must be in the RESTARTING obsState' "
+            "TMC Subarray device"
+            f"({tmc.subarray_node.dev_name()}) "
+            "is expected to be in FAULT obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.subarray_node,
+            "obsState",
+            ObsState.FAULT,
+        )
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the sdp subarray must be in the EMPTY obsState'"
@@ -224,3 +260,4 @@ def verify_error_message(
             "obsState",
             ObsState.EMPTY,
         )
+        sdp.sdp_subarray.SetDirectObsState(ObsState.EMPTY)

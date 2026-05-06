@@ -672,34 +672,40 @@ class TestSubarrayHealthState(object):
             csp_sa_sim,
             "healthState",
             csp_subarray_health_state,
+            lookahead=2,
         )
 
         assert event_recorder.has_change_event_occurred(
             sdp_sa_sim,
             "healthState",
             sdp_subarray_health_state,
+            lookahead=2,
         )
 
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_1,
             "healthState",
             dish_master1_health_state,
+            lookahead=2,
         )
 
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_2,
             "healthState",
             dish_master2_health_state,
+            lookahead=2,
         )
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_3,
             "healthState",
             dish_master3_health_state,
+            lookahead=2,
         )
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_4,
             "healthState",
             dish_master4_health_state,
+            lookahead=2,
         )
         dish_states = [
             dish_master1_health_state,
@@ -725,6 +731,7 @@ class TestSubarrayHealthState(object):
             subarray_node.subarray_node,
             "healthState",
             expected_state,
+            lookahead=10,
         ), "Expected Subarray Node HealthState to be UNKNOWN"
 
     @pytest.mark.parametrize(
@@ -833,34 +840,40 @@ class TestSubarrayHealthState(object):
             csp_sa_sim,
             "healthState",
             csp_subarray_health_state,
+            lookahead=2,
         )
 
         assert event_recorder.has_change_event_occurred(
             sdp_sa_sim,
             "healthState",
             sdp_subarray_health_state,
+            lookahead=2,
         )
 
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_1,
             "healthState",
             dish_master1_health_state,
+            lookahead=2,
         )
 
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_2,
             "healthState",
             dish_master2_health_state,
+            lookahead=2,
         )
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_3,
             "healthState",
             dish_master3_health_state,
+            lookahead=2,
         )
         assert event_recorder.has_change_event_occurred(
             dish_master_sim_4,
             "healthState",
             dish_master4_health_state,
+            lookahead=2,
         )
 
         if (
@@ -873,12 +886,14 @@ class TestSubarrayHealthState(object):
                 subarray_node.subarray_node,
                 "healthState",
                 HealthState.FAILED,
+                lookahead=10,
             ), "Expected Subarray Node HealthState to be DEGRADED"
         else:
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node,
                 "healthState",
                 HealthState.DEGRADED,
+                lookahead=10,
             ), "Expected Subarray Node HealthState to be DEGRADED"
 
     def _assign_dishes_to_subarray(
@@ -888,12 +903,13 @@ class TestSubarrayHealthState(object):
         command_input_factory,
         event_recorder,
     ):
-        central_node_mid.move_to_on()
-        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-        subarray_id = 1
         event_recorder.subscribe_event(
             central_node_mid.central_node, "longRunningCommandResult"
         )
+        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+        central_node_mid.move_to_on()
+        subarray_id = 1
+
         assign_input_json = prepare_json_args_for_centralnode_commands(
             "assign_resources_mid", command_input_factory
         )

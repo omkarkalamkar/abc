@@ -52,6 +52,24 @@ tmc-mid:
   enabled: true
 
   deviceServers:
+    centralnode:
+      LoggingLevel: "5"
+
+    subarraynode:
+      LoggingLevel: "5"
+
+    sdpsubarrayleafnode:
+      LoggingLevel: "5"
+
+    sdpmasterleafnode:
+      LoggingLevel: "5"
+
+    cspmasterleafnode:
+      LoggingLevel: "5"
+
+    cspsubarrayleafnode:
+      LoggingLevel: "5"
+
     dishleafnode:
       max_allowed_wind_speed: 20
       max_allowed_ops_wind_speed: 20
@@ -66,6 +84,13 @@ tmc-mid:
       time_delta: 1000.0
       temp_delta: 40.0
       enable_auto_stow: true
+      LoggingLevel: "5"
+
+    dishpointingdevice:
+      LoggingLevel: "5"
+
+    resourcemonitor:
+      LoggingLevel: "5"
     mocks:
       enabled: true
       dish: true
@@ -115,19 +140,6 @@ ska-tango-alarmhandler:
   enabled: true
   legacy_compatibility: true
 
-ska-tmc-simulators:
-  labels: 
-    app: ska-tmc-integration
-  enabled: true
-  deviceServers:
-    cspmastersimulator:
-      enabled: false
-    
-    weatherstation:
-      enabled: false
-    
-    powersupplysimulator:
-      enabled: false
 
 ska-csp-lmc-mid:
   labels: 
@@ -141,7 +153,6 @@ ska-mid-cbf-mcs:
 ska-mid-cbf-tmleafnode:
   labels: 
     app: ska-tmc-integration
-
 
 ska-tango-tangogql-ariadne:
   enabled: true
@@ -160,7 +171,7 @@ simulator:
     image: ska-telescope/ska-mid-wms-interface/ska-mid-wms-interface
     tag: 966329b7
     pullPolicy: IfNotPresent
-    
+
 mid_wms:
   deviceServers:
     wms:
@@ -174,9 +185,4 @@ mid_wms:
     enabled: false
   simulator:
     enabled: false
-    name: wms-sim
-    containers:
-      registry: registry.gitlab.com
-      image: ska-telescope/ska-mid-wms-interface/ska-mid-wms-interface
-      tag: 966329b7
-      pullPolicy: IfNotPresent
+

@@ -2,16 +2,20 @@
   "interface": "https://schema.skao.int/ska-tmc-configure/4.1",
   "transaction_id": "",
   "pointing": {
-      "target": {
-          "reference_frame": "ICRS",
-          "target_name": "Polaris Australis",
-          "ra": "21:08:47.92",
-          "dec": "-88:57:22.9",
-          "ca_offset_arcsec": 0.0,
-          "ie_offset_arcsec": 0.0
-      },
+       "groups": [
+            {
+                "field": {
+                    "target_name": "Polaris Australis",
+                    "reference_frame": "ICRS",
+                    "attrs": {
+                        "c1": 317.199,
+                        "c2": -88.95636
+                    }
+                }
+            }
+        ],
       "correction": "UPDATE"
-  },
+   },
   "dish": {
       "receiver_band": "1"
   },

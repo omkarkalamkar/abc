@@ -69,8 +69,14 @@ def a_configured_subarray(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+    configure_input_json = prepare_json_args_for_commands(
+        "configure_holography_adr106", command_input_factory
+    )
+
     subarray_node.force_change_of_obs_state(
-        "READY", assign_input_json=assign_input_json
+        "READY",
+        assign_input_json=assign_input_json,
+        configure_input_json=configure_input_json,
     )
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "

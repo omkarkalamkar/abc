@@ -41,6 +41,10 @@ ABORT_COMMAND_TIMEOUT = get_abort_command_timeout()
 # once command timeout is captured on the subarraynode
 ASSERTIONS_TIMEOUT = ABORT_COMMAND_TIMEOUT + 10
 
+# Delay multiplier: In CI (60s timeout), use 1.2x;
+# In local builds (130s timeout), use 1.05x to avoid unnecessary waiting
+DELAY_MULTIPLIER = 1.2 if ABORT_COMMAND_TIMEOUT < 100 else 1.05
+
 
 def _setup_event_subscriptions(
     tmc: TMCFacade,
@@ -58,6 +62,12 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(tmc.subarray_node, "obsState")
     event_tracer.subscribe_event(csp.csp_subarray, "obsState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
+    event_tracer.subscribe_event(
+        tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
+    )
+    event_tracer.subscribe_event(
+        tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+    )
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
 
@@ -69,13 +79,14 @@ def _setup_event_subscriptions(
             ],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState"],
+            tmc.csp_subarray_leaf_node: ["cspSubarrayObsState"],
+            tmc.sdp_subarray_leaf_node: ["sdpSubarrayObsState"],
             tmc.central_node: ["longRunningCommandResult"],
         },
         event_enum_mapping={"obsState": ObsState},
     )
 
 
-@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
@@ -125,7 +136,8 @@ def send_restart_command(
     """
     # Delay is set more than Restart command timeout to
     # generate restart command timeout on the subarray node
-    delay = ABORT_COMMAND_TIMEOUT + 5
+    # Use DELAY_MULTIPLIER to scale with timeout
+    delay = int(ABORT_COMMAND_TIMEOUT * DELAY_MULTIPLIER)
     if subsystem == "CSP":
         csp.csp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     if subsystem == "SDP":
@@ -167,7 +179,38 @@ def verify_error_message(
     )
     if subsystem == "CSP":
         csp.csp_subarray.ResetDelayInfo()
-    if subsystem == "SDP":
+    elif subsystem == "SDP":
         sdp.sdp_subarray.ResetDelayInfo()
 
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the tmc subarray must be in the RESTARTING obsState' "
+        "TMC Subarray device"
+        f"({tmc.subarray_node.dev_name()}) "
+        "is expected to be in FAULT obstate",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "obsState",
+        ObsState.FAULT,
+    )
     event_tracer.clear_events()
+    if subsystem == "CSP":
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            f"({tmc.csp_subarray_leaf_node.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.csp_subarray_leaf_node,
+            "cspSubarrayObsState",
+            ObsState.EMPTY,
+        )
+    elif subsystem == "SDP":
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            f"({tmc.sdp_subarray_leaf_node.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.sdp_subarray_leaf_node,
+            "sdpSubarrayObsState",
+            ObsState.EMPTY,
+        )

@@ -77,7 +77,10 @@ class Waiter:
 
                 # PoinitngState Event will not be pushed if command is complete
                 # Hence this assertion is skipped.
-                if attribute_name not in ["pointingState"]:
+                if (
+                    attribute_name not in ["pointingState"]
+                    and self.dish_leaf_node_list[index].dishMode != state_name
+                ):
                     self.waits.append(
                         watch(
                             Resource(self.dish_leaf_node_list[index])

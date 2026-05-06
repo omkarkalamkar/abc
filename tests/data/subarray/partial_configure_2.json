@@ -1,11 +1,9 @@
 {
-    "interface": "https://schema.skao.int/ska-tmc-configure/2.2",
+    "interface": "https://schema.skao.int/ska-tmc-configure/5.0",
     "transaction_id": "txn-....-00003",
     "pointing": {
-        "target": {
         "ca_offset_arcsec": 0.0,
         "ie_offset_arcsec": -5.0
-        }
     },
     "tmc": {
         "partial_configuration": true

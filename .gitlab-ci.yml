@@ -24,6 +24,7 @@ stages:
   - build
   - scaling
   - on-demand
+  - pair-wise-tests
   - test
   - integration
   - publish
@@ -37,15 +38,15 @@ include:
   - project: "ska-telescope/templates-repository"
     file: "gitlab-ci/includes/docs.gitlab-ci.yml"
 
-  # Release Automation
+  # # Release Automation
   - project: "ska-telescope/templates-repository"
     file: "gitlab-ci/includes/release.gitlab-ci.yml"
 
-  # Python packages build,lint, test and publish
+  # # Python packages build,lint, test and publish
   - project: "ska-telescope/templates-repository"
     file: "gitlab-ci/includes/python-lint.gitlab-ci.yml"
 
-  # # Helm Chart linting and Publish
+  # # # Helm Chart linting and Publish
   - project: "ska-telescope/templates-repository"
     file: "gitlab-ci/includes/helm-chart.gitlab-ci.yml"
 
@@ -82,9 +83,12 @@ k8s-test:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
+    SUBARRAY_COMMAND_TIMEOUT: 50
+    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     COUNT: 1
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
-    CI_KEEP_NAMESPACE: true
   script:
     - make k8s-test MARK="batch1"
   before_script:
@@ -92,7 +96,6 @@ k8s-test:
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - make k8s-install-chart
     - make k8s-wait
-
   after_script:
     - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
@@ -155,8 +158,11 @@ k8s-test-batch2:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
+    SUBARRAY_COMMAND_TIMEOUT: 50
+    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
-    CI_KEEP_NAMESPACE: true
   script:
     - make k8s-test MARK="batch2"
   environment:
@@ -186,7 +192,6 @@ k8s-tmc-scaling:
     SUBARRAY_COUNT: 4
     COUNT: 1
     KUBE_NAMESPACE: "staging-ska-tmc-mid"
-    CI_KEEP_NAMESPACE: true
     K8S_TIMEOUT: "1800s"
     TARANTA_ENABLED: "true"
   script:

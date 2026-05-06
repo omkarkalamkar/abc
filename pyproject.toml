@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ska-tmc-mid-integration"
-version = "1.17.0"
+version = "1.22.0-rc.1"
 description = "Repository for integration of TMC components"
 authors = ["Team Himalaya", "Team Sahyadri"]
 license = "BSD-3-Clause"
@@ -20,10 +20,10 @@ url = 'https://pypi.org/simple'
 [tool.poetry.dependencies]
 python = "^3.10"
 ska-control-model=">=1.0.0,<2.0.0"
-ska-tango-base="1.0.0"
-pytango = "9.5.0"
+ska-tango-base="1.4.0"
+pytango = "10.1.2"
 numpy = ">=1.26.0"
-ska-tango-testing = "0.7.2"
+ska-tango-testing = "0.8.0"
 ska-ser-logging = ">=0.4.3,<0.5.0"
 httpx = "^0.19.0"
 msgpack = "1.0.7"
@@ -31,7 +31,7 @@ msgpack_numpy = "0.4.8"
 astropy = "^5.0.4"
 ska-telmodel = "1.31.0"
 ska-ser-xray = "^0.6.0"
-ska-integration-test-harness = "^0.2.4"
+ska-integration-test-harness = "0.4.2"
 assertpy = "^1.1"
 
 [tool.poetry.group.dev.dependencies]
