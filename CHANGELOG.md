@@ -10,7 +10,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Added
 -----
 * This is the final version of TMC Mid delivering features SP-6503.
-  Both the features improve TMC robustness by Improve TMC Healthstate Reporting.
+  The features improve TMC robustness by improve TMC Healthstate Reporting.
 * Added HealthInfo aggregation support in the ska-tmc-mid-integration node.
   The node now processes HealthInfo events from SA, Dish, CSP and SDP devices and updates the aggregated healthInfo attribute accordingly.
 
