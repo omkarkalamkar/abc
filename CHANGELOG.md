@@ -5,6 +5,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+
 [1.22.0-rc.1]
 *************
 Fixed
@@ -101,6 +102,23 @@ Updated
 * Upgraded TMC components to base class v1.4.0 and pytango to v10.1.2.
 * Integrate CSP Subarray Leaf Node (v0.41.0) with static delays improvements.
 
+[1.17.0]
+*************
+Added
+-----
+* This is the final version of TMC Mid delivering features SP-6503.
+  The features improve TMC robustness by improve TMC Healthstate Reporting.
+* Added HealthInfo aggregation support in the ska-tmc-mid-integration node.
+  The node now processes HealthInfo events from SA, Dish, CSP and SDP devices and updates the aggregated healthInfo attribute accordingly.
+
+Updated
+--------
+* The basic setting for logging allows setting logging level of all TMC  devices via ``TMCLoggingLevel`` parameter in global section.
+* Updated component versions to align with HealthInfo support:
+  * SubarrayNode: 0.51.2
+  * SDP Leaf Node: 0.27.0
+  * CSP Leaf Node: 0.40.0
+  * Dish Leaf Node: 0.30.0
 
 [1.17.0-rc.1]
 *************
