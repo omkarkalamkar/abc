@@ -59,7 +59,8 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
-    "myst_parser"
+    "myst_parser",
+    "sphinx.ext.intersphinx"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -196,3 +197,14 @@ epub_exclude_files = ["search.html"]
 
 
 # -- Extension configuration -------------------------------------------------
+
+intersphinx_mapping = {
+    "centralnode": (
+        "https://developer.skao.int/projects/ska-tmc-centralnode/en/latest/",
+        None,
+    ),
+    "subarraynode": (
+        "https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode/-/jobs/14252941972/artifacts/file/docs/build/html/",
+        None,
+    ),
+}
