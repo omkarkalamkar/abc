@@ -59,7 +59,7 @@ class TestSubarrayNodeObsStateTransitions(object):
             dish_sim_4,
         ) = get_device_simulators(simulator_factory)
 
-        obs_state_transition_duration_sec = 30
+        obs_state_transition_duration_sec = 20
 
         delay_command_params_str = '{"%s": %s}' % (
             trigger,
@@ -95,8 +95,8 @@ class TestSubarrayNodeObsStateTransitions(object):
 
         subarray_node.execute_transition(trigger)
 
-        # As we set Obs State transition duration to 30 so wait timeout here
-        # provided as 32 sec. It validate after 32 sec excepted
+        # As we set Obs State transition duration to 20 so wait timeout here
+        # provided as 22 sec. It validate after 22 sec excepted
         # obs state change
         expected_timeout_sec = obs_state_transition_duration_sec + 2
 

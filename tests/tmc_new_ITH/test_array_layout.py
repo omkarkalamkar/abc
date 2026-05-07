@@ -281,7 +281,7 @@ def dish_that_is_tracking(
             "SKA001"
         )
         LOGGER.info("Value for programTrackTable is: %s", programTrackTable)
-        assert len(programTrackTable) == 150
+        assert len(programTrackTable) == 15
     else:
         LOGGER.info("No source is visible within Elevation limits right now")
 

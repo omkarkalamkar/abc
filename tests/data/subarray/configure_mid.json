@@ -39,7 +39,7 @@
       }
     },
     "tmc": {
-      "scan_duration": 10.0
+      "scan_duration": 5.0
     },
     "dish": {
       "receiver_band": "1"

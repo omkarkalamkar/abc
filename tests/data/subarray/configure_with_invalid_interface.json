@@ -46,7 +46,7 @@
       "scan_type": "zzzzzzz_Z"
   },
   "tmc": {
-      "scan_duration": 10.0,
+      "scan_duration": 5.0,
       "partial_configuration": false
   }
 }

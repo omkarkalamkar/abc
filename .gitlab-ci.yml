@@ -83,6 +83,10 @@ k8s-test:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
+    SUBARRAY_COMMAND_TIMEOUT: 50
+    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     COUNT: 1
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
   script:
@@ -95,7 +99,7 @@ k8s-test:
   after_script:
     - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
-    
+
 k8s-test-mid-restart:
   extends:
     - k8s-test
@@ -154,6 +158,10 @@ k8s-test-batch2:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
+    SUBARRAY_COMMAND_TIMEOUT: 50
+    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
   script:
     - make k8s-test MARK="batch2"

@@ -1,6 +1,6 @@
 #This test covers scenarios of Restart command flow when Configure command fails and TMC Subarray transitions to FAULT observation state.
 @XTP-82860 @XTP-82747 @TEAM_HIMALAYA
-Scenario Outline: Test Restart Command during failure of Configure Command
+Scenario Outline: Test Restart Command during failure of Configure Command - Part 1
     Given CSP, SDP and DISH in <csp_obsstate>,<sdp_obsstate>,<dish_pointingstates> and <dish_dishmodes> after <command>
     And TMC Subarray in observation state FAULT
     When I invoke Restart Command on the TMC Subarray
@@ -33,6 +33,17 @@ Scenario Outline: Test Restart Command during failure of Configure Command
           | Configure | CONFIGURING  | FAULT        | TRACK,TRACK,TRACK,TRACK | OPERATE,OPERATE,OPERATE,OPERATE             |
           | Configure | CONFIGURING  | FAULT        | TRACK,TRACK,TRACK,TRACK | OPERATE,OPERATE,OPERATE,OPERATE             |
           | Configure | CONFIGURING  | FAULT        | TRACK,TRACK,TRACK,READY | OPERATE,OPERATE,OPERATE,STANDBY_FP          |
+
+@XTP-82860 @XTP-82747 @TEAM_HIMALAYA
+Scenario Outline: Test Restart Command during failure of Configure Command - Part 2
+    Given CSP, SDP and DISH in <csp_obsstate>,<sdp_obsstate>,<dish_pointingstates> and <dish_dishmodes> after <command>
+    And TMC Subarray in observation state FAULT
+    When I invoke Restart Command on the TMC Subarray
+    Then CSP and SDP transitions to observation state EMPTY
+    And Dish transitions to dishMode StandbyFP and PointingState READY
+    And TMC subarray transitions to observation state EMPTY
+    Examples:
+          | command   | csp_obsstate | sdp_obsstate | dish_pointingstates     | dish_dishmodes                              |
           | Configure | CONFIGURING  | READY        | TRACK,TRACK,TRACK,TRACK | OPERATE,OPERATE,OPERATE,OPERATE             |
           | Configure | CONFIGURING  | READY        | READY,READY,READY,READY | STANDBY_FP,STANDBY_FP,STANDBY_FP,STANDBY_FP |
           | Configure | CONFIGURING  | READY        | TRACK,TRACK,TRACK,TRACK | OPERATE,OPERATE,OPERATE,OPERATE             |

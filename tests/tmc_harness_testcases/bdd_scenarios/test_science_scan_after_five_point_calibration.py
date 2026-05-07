@@ -28,8 +28,8 @@ from tests.resources.test_support.constant import (
 TIMEOUT = 110
 
 
-@pytest.mark.SKA_mid
 @pytest.mark.batch1
+@pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC implements five point calibration scan: TMC executes Science scan "
@@ -154,7 +154,7 @@ def a_subarray_after_five_point_calibration(
 
     # Configure command
     configure_input_json = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
+        "configure_holography_adr106", command_input_factory
     )
     _, unique_id = subarray_node.execute_transition(
         "Configure", configure_input_json

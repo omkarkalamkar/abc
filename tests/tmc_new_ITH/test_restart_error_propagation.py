@@ -31,11 +31,14 @@ LOGGER = logging.getLogger(__name__)
 
 COMMAND_RESULT_CSP = (
     '[3, "Exception occurred on the following devices: '
-    'mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
+    "mid-tmc/subarray-leaf-node-csp/01: Exception occurred on devices: "
+    'mid-csp/subarray/01: Exception occurred, command failed."]'
 )
+
 COMMAND_RESULT_SDP = (
     '[3, "Exception occurred on the following devices: '
-    'mid-tmc/subarray-leaf-node-sdp/01: Exception occurred, command failed"]'
+    "mid-tmc/subarray-leaf-node-sdp/01: Exception occurred on devices: "
+    'mid-sdp/subarray/01: Exception occurred, command failed"]'
 )
 
 

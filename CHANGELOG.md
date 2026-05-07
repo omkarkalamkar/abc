@@ -11,6 +11,83 @@ Fixed
 -----
 * Updated dish leaf node availability attribute to fix SKB-1306.
 
+[1.22.0-rc.1]
+*************
+Fixed
+-------
+* Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
+* SKB-1314: Fixed DishLN to support ICRS reference frame.
+
+Updated
+-------
+* Updated TMC Nodes to support command queuing.
+  - Dish Leaf Node: v0.45.1
+  - SDP Leaf Node: v0.30.1
+  - CSP Leaf Node: v0.45.2
+  - Central Node: v1.33.0
+  - Subarray Node: v1.10.0
+
+
+[1.21.1-rc.1]
+*************
+Updated
+-------
+* Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+
+[1.21.0-rc.1]
+*************
+Updated
+-------
+
+* Support for Position Velocity Time pattern added.
+* programTrackTable size is now configurable via `ProgramTrackTableSize` property in dish pointing device.
+
+[1.20.0-rc.1]
+*************
+Added
+-----
+
+* Full support for pointing.field key in the Configure command.
+* TMC DishLeafNode to support reference frame (TLE, AltAz) with old and ADR-63 json
+* Enabled plane_to_sphere conversion and fixed x/y offset support for mapping scans.
+* Integrated refactored BaseScanMapping (added build_data_for_observation, get_projection, get_trajectory_name, and get_radec_from_plane_to_sphere).
+
+[1.19.0-rc.2]
+*************
+Fixed
+-----
+
+* Fix indentation issue in Changelog.md file causing error in docs job.
+
+
+[1.19.0-rc.1]
+*************
+Fixed
+-----
+
+* HM-859:
+    * Fixed an issue where SubarrayNode could remain stuck in CONFIGURING when
+      a Configure command failed and command_in_progress was cleared before
+      aggregation was triggered.
+
+    * Fixed incorrect ObsState aggregation in scenarios where a subsystem
+      command returned FAILED but no subsequent event triggered aggregation,
+      preventing transition out of CONFIGURING (e.g. to FAULT).
+
+    * Added a FAULT rule so FAILED results correctly propagate to a FAULT
+      ObsState when applicable.
+
+Updated
+--------
+
+* SAH-1882: Utilised following leaf node tags with log improvements,
+  * ska-tmc-centralnode  - 1.1.0
+  * ska-tmc-sdpleafnode  - 0.29.0
+  * ska-tmc-cspleafnode  - 0.43.0
+  * ska-tmc-dishleafnode - 0.41.2
+  * ska-tmc-subarraynode - 1.2.2
+
+
 [1.18.0-rc.2]
 *************
 Fixed
@@ -30,12 +107,29 @@ Updated
 * Upgraded TMC components to base class v1.4.0 and pytango to v10.1.2.
 * Integrate CSP Subarray Leaf Node (v0.41.0) with static delays improvements.
 
+[1.17.0]
+*************
+Added
+-----
+* This is the final version of TMC Mid delivering features SP-6503.
+  The features improve TMC robustness by improve TMC Healthstate Reporting.
+* Added HealthInfo aggregation support in the ska-tmc-mid-integration node.
+  The node now processes HealthInfo events from SA, Dish, CSP and SDP devices and updates the aggregated healthInfo attribute accordingly.
+
+Updated
+--------
+* The basic setting for logging allows setting logging level of all TMC  devices via ``TMCLoggingLevel`` parameter in global section.
+* Updated component versions to align with HealthInfo support:
+  * SubarrayNode: 0.51.2
+  * SDP Leaf Node: 0.27.0
+  * CSP Leaf Node: 0.40.0
+  * Dish Leaf Node: 0.30.0
 
 [1.17.0-rc.1]
 *************
 Added
 -----
-* Added HealthInfo aggregation support in the ska-tmc-mid-integration node. 
+* Added HealthInfo aggregation support in the ska-tmc-mid-integration node.
   The node now processes HealthInfo events from SA, Dish, CSP and SDP devices and updates the aggregated healthInfo attribute accordingly.
 
 Updated
@@ -60,7 +154,7 @@ Added
 * TMC is now able to stow the dish manually using SetStowMode command.
 * Automatically using weather station data.
 * Follwing are the properties introduced in dishleafnode
-          weather_station_device_names: 
+          weather_station_device_names:
           max_allowed_wind_speed
           max_allowed_ops_wind_speed
           max_allowed_gust_wind_speed
@@ -72,7 +166,7 @@ Added
           max_temp_threshold
           min_temp_threshold
           time_delta
-          temp_delta 
+          temp_delta
           enable_auto_stow
 
 
@@ -94,7 +188,7 @@ Updated
 *************
 Updated
 -------
-* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error. 
+* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error.
 
 [1.13.0-rc.2]
 *************

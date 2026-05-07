@@ -13,9 +13,7 @@
     "execution_block": {
       "eb_id": "eb-mvp01-20210623-00000",
       "max_length": 100.0,
-      "context": {
-
-      },
+      "context": {},
       "beams": [
         {
           "beam_id": "vis0",
@@ -118,7 +116,6 @@
             }
           }
         }
-
       ],
       "channels": [
         {
@@ -224,7 +221,7 @@
               80,
               0.1
             ],
-            "reference_time": "...",
+            "reference_time": "2025-12-21T15:34:37.727590Z",
             "reference_frame": "ICRF3"
           },
           "pointing_fqdn": "low-tmc/telstate/0/pointing"
@@ -242,9 +239,7 @@
         "sbi_ids": [
           "sbi-mvp01-20210623-00000"
         ],
-        "parameters": {
-
-        }
+        "parameters": {}
       }
     ],
     "resources": {
@@ -255,8 +250,8 @@
         4
       ],
       "receptors": [
-      "SKA001",
-      "SKA036"
+        "SKA001",
+        "SKA036"
       ],
       "receive_nodes": 10
     }

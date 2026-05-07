@@ -18,6 +18,7 @@ server:
   {{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }}
   {{- $AzimuthMaxLimit := .Values.deviceServers.dishpointingdevice.AzimuthMaxLimit }}
   {{- $AzimuthMinLimit := .Values.deviceServers.dishpointingdevice.AzimuthMinLimit }}
+  {{- $ProgramTrackTableSize := .Values.deviceServers.dishpointingdevice.ProgramTrackTableSize }}
   {{- $WeatherStationDeviceNames := .Values.deviceServers.dishleafnode.weather_station_device_names}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.dishleafnode.EventSubscriptionCheckPeriod }}
   {{- $instance_list := list -}}
@@ -84,6 +85,9 @@ server:
             - name: "EventSubscriptionCheckPeriod"
               values:
                 - "{{ $EventSubscriptionCheckPeriod }}"
+            - name: "ProgramTrackTableSize"
+              values:
+                - "{{ $ProgramTrackTableSize }}"
   {{- end }}
 
 depends_on:

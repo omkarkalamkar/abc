@@ -217,7 +217,7 @@ def validate_subarray_health_and_info(
     # -------- HealthInfo expectation based on scenario --------
     if expected_health_state == HealthState.DEGRADED:
         expected_health_info_for_ska001 = [
-            "Requested band B1 is in state UNAVAILABLE (not fully available)"
+            "Band B1 state: UNAVAILABLE (not fully available)"
         ]
     else:
         expected_health_info_for_ska001 = []

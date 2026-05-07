@@ -41,6 +41,10 @@ ABORT_COMMAND_TIMEOUT = get_abort_command_timeout()
 # once command timeout is captured on the subarraynode
 ASSERTIONS_TIMEOUT = ABORT_COMMAND_TIMEOUT + 10
 
+# Delay multiplier: In CI (60s timeout), use 1.2x;
+# In local builds (130s timeout), use 1.05x to avoid unnecessary waiting
+DELAY_MULTIPLIER = 1.2 if ABORT_COMMAND_TIMEOUT < 100 else 1.05
+
 
 def _setup_event_subscriptions(
     tmc: TMCFacade,
@@ -132,7 +136,8 @@ def send_restart_command(
     """
     # Delay is set more than Restart command timeout to
     # generate restart command timeout on the subarray node
-    delay = ABORT_COMMAND_TIMEOUT + 1
+    # Use DELAY_MULTIPLIER to scale with timeout
+    delay = int(ABORT_COMMAND_TIMEOUT * DELAY_MULTIPLIER)
     if subsystem == "CSP":
         csp.csp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     if subsystem == "SDP":

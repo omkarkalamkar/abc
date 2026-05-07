@@ -3,14 +3,9 @@
 import json
 
 import pytest
-from ska_tango_base.control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_harness.helpers import (
-    device_received_this_command,
-    get_recorded_commands,
-    prepare_json_args_for_commands,
-)
+from tests.resources.test_harness.helpers import prepare_json_args_for_commands
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
     INTERMEDIATE_STATE_DEFECT,
@@ -68,89 +63,3 @@ class TestSubarrayNodeNegative(object):
         )
 
         csp_sim.SetDefective(RESET_DEFECT)
-
-    @pytest.mark.skip(reason="Duplicate scenario")
-    @pytest.mark.SKA_mid
-    def test_subarray_configure_when_csp_stuck_in_configuring(
-        self,
-        subarray_node,
-        command_input_factory,
-        simulator_factory,
-        event_recorder,
-    ):
-        input_json = prepare_json_args_for_commands(
-            "configure_mid", command_input_factory
-        )
-        csp_input_json = prepare_json_args_for_commands(
-            "csp_configure_mid", command_input_factory
-        )
-        csp_sim = simulator_factory.get_or_create_simulator_device(
-            SimulatorDeviceType.MID_CSP_DEVICE
-        )
-
-        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-        event_recorder.subscribe_event(csp_sim, "commandCallInfo")
-        subarray_node.move_to_on()
-        subarray_node.force_change_of_obs_state("IDLE")
-
-        # CSP should go to configuring in no more than 0.1 sec
-        obs_state_duration_params = '[["CONFIGURING",0.1]]'
-        csp_sim.AddTransition(obs_state_duration_params)
-
-        subarray_node.execute_transition("Configure", argin=input_json)
-
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_node, "obsState", ObsState.CONFIGURING
-        )
-
-        with pytest.raises(AssertionError):
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node, "obsState", ObsState.READY
-            )
-
-        # Add assert for commandCallInfo data
-        assert device_received_this_command(
-            csp_sim, "Configure", csp_input_json
-        )
-
-    @pytest.mark.skip(reason="Duplicate scenario")
-    @pytest.mark.SKA_mid
-    def test_subarray_configure_when_sdp_stuck_in_configuring(
-        self,
-        subarray_node,
-        command_input_factory,
-        simulator_factory,
-        event_recorder,
-    ):
-        input_json = prepare_json_args_for_commands(
-            "configure_mid", command_input_factory
-        )
-        sdp_input_json = prepare_json_args_for_commands(
-            "sdp_configure_mid", command_input_factory
-        )
-        sdp_sim = simulator_factory.get_or_create_simulator_device(
-            SimulatorDeviceType.MID_SDP_DEVICE
-        )
-
-        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-        event_recorder.subscribe_event(sdp_sim, "commandCallInfo")
-        subarray_node.move_to_on()
-        subarray_node.force_change_of_obs_state("IDLE")
-
-        # SDP should go to configuring in no more than 0.1 sec
-        obs_state_duration_params = '[["CONFIGURING",0.1]]'
-        sdp_sim.AddTransition(obs_state_duration_params)
-
-        subarray_node.execute_transition("Configure", argin=input_json)
-
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_node, "obsState", ObsState.CONFIGURING
-        )
-        with pytest.raises(AssertionError):
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node, "obsState", ObsState.READY
-            )
-        assert device_received_this_command(
-            sdp_sim, "Configure", sdp_input_json
-        )
-        assert len(get_recorded_commands(sdp_sim)) == 1

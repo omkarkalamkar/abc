@@ -45,7 +45,7 @@ def invoke_load_dish_cfg(
     )
     # Prepare input for load dish configuration
     load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
-        "same_kvalue", command_input_factory
+        "all_different_kvalues", command_input_factory
     )
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
