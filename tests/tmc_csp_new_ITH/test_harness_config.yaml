@@ -35,6 +35,6 @@ dishes:
   # Expected device names (Required)
   dish_master1_name: "mid-dish/dish-manager/SKA001"
   dish_master2_name: "mid-dish/dish-manager/SKA036"
-  dish_master3_name: "mid-dish/dish-manager/SKA063"
+  dish_master3_name: "mid-dish/dish-manager/SKA077"
   dish_master4_name: "mid-dish/dish-manager/SKA100"
 
