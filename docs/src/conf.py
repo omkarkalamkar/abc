@@ -204,7 +204,7 @@ intersphinx_mapping = {
         None,
     ),
     "subarraynode": (
-        "https://ska-telescope.gitlab.io/-/ska-tmc/ska-tmc-subarraynode/-/jobs/14256370704/artifacts/docs/build/html/",
+        "https://developer.skao.int/projects/ska-tmc-subarraynode/en/latest/",
         None,
     ),
 }
