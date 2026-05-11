@@ -17,4 +17,4 @@ Feature: Apply GPM configuration to dishes via TMC Mid Telescope
       | SKA001  | GPM Applied  | Completed                              |
       | SKA036  | GPM Failed   | Dish is assigned to subarray           |
       | SKA093  | GPM Failed   | Dish is unreachable                    |
-      | SKA077  | GPM Failed   | Completed                              |
+      | SKA077  | GPM Applied  | Completed                              |
