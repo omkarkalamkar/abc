@@ -166,7 +166,7 @@ deviceServers:
     family: "central-node"
     member: "0"
     global_pointing_model:
-      version: "1.9.7"
+      version: "hm-912"
       interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
       data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
