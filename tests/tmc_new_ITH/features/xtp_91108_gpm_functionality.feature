@@ -10,11 +10,11 @@ Feature: Apply GPM configuration to dishes via TMC Mid Telescope
       | SKA001  | Band_1, Band_5a |
       | SKA036  | Band_2          |
       | SKA093  | Band_5b         |
-      | SKA077  | Band_4, Band_3  |
+      | SKA077  | Band_1, Band_2  |
     When the GPM configuration is applied via TMC
     Then TMC reports the status as below for the respective dish id:
       | Dish_ID | Status       | Reason                                 |
       | SKA001  | GPM Applied  | Completed                              |
       | SKA036  | GPM Failed   | Dish is assigned to subarray           |
       | SKA093  | GPM Failed   | Dish is unreachable                    |
-      | SKA077  | GPM Failed   | not found on gitlab,Exception occurred |
+      | SKA077  | GPM Failed   | Completed                              |
