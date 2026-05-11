@@ -10,7 +10,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Fixed
 -------
 * Updated CentralNode tag to v1.3.3 with SKB-1282 fix.
-* SKB-1314: Fixed DishLN to support ICRS reference frame
+* SKB-1314: Fixed DishLN to support ICRS reference frame.
 
 Updated
 -------
