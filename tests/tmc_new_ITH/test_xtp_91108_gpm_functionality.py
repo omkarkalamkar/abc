@@ -226,14 +226,12 @@ def tmc_reports_gpm_status_on_dish(
             global_pointing_model_status = json.loads(
                 tmc.central_node.globalpointingmodelstatus
             )
-            assert (
-                gpm_config["version"]
-                == global_pointing_model_status[dish_id]["Band_1"]
-            )
-            assert (
-                gpm_config["version"]
-                == global_pointing_model_status[dish_id]["Band_5a"]
-            )
+            expected_bands = gpm_config["receptors"].get(dish_id, [])
+            for band in expected_bands:
+                assert (
+                    gpm_config["version"]
+                    == global_pointing_model_status[dish_id][band]
+                )
 
     dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
 
