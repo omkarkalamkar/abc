@@ -41,6 +41,7 @@ from tests.resources.test_support.constant import (
     dish_master2,
     dish_master3,
     dish_master4,
+    dish_master5,
     sdp_master,
     sdp_subarray1,
     tmc_csp_master_leaf_node,
@@ -49,6 +50,7 @@ from tests.resources.test_support.constant import (
     tmc_dish_leaf_node2,
     tmc_dish_leaf_node3,
     tmc_dish_leaf_node4,
+    tmc_dish_leaf_node5,
     tmc_sdp_master_leaf_node,
     tmc_sdp_subarrayln_prefix,
     tmc_subarray_prefix,
@@ -61,6 +63,7 @@ LOGGER = logging.getLogger(__name__)
 REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
 REAL_DISH36_FQDN = os.getenv("DISH_NAME_36")
 REAL_DISH63_FQDN = os.getenv("DISH_NAME_63")
+REAL_DISH77_FQDN = os.getenv("DISH_NAME_77")
 REAL_DISH100_FQDN = os.getenv("DISH_NAME_100")
 
 
@@ -91,6 +94,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn001 = REAL_DISH1_FQDN
             dish_fqdn036 = REAL_DISH36_FQDN
             dish_fqdn063 = REAL_DISH63_FQDN
+            dish_fqdn077 = REAL_DISH77_FQDN
             dish_fqdn100 = REAL_DISH100_FQDN
 
             # creating spfrx device fqdn
@@ -129,12 +133,14 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
             dish_fqdn063 = dish_master3
-            dish_fqdn100 = dish_master4
+            dish_fqdn077 = dish_master4
+            dish_fqdn100 = dish_master5
 
         self.dish_master_list = [
             DeviceProxy(dish_fqdn001),
             DeviceProxy(dish_fqdn036),
             DeviceProxy(dish_fqdn063),
+            DeviceProxy(dish_fqdn077),
             DeviceProxy(dish_fqdn100),
         ]
 
@@ -142,6 +148,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA001": DeviceProxy(dish_fqdn001),
             "SKA036": DeviceProxy(dish_fqdn036),
             "SKA063": DeviceProxy(dish_fqdn063),
+            "SKAO77": DeviceProxy(dish_fqdn077),
             "SKA100": DeviceProxy(dish_fqdn100),
         }
         self.dish_leaf_node_list = [
@@ -149,6 +156,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(tmc_dish_leaf_node2),
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
+            DeviceProxy(tmc_dish_leaf_node5),
         ]
 
         self.central_node.set_timeout_millis(5000)
@@ -160,7 +168,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA001": DeviceProxy(tmc_dish_leaf_node1),
             "SKA036": DeviceProxy(tmc_dish_leaf_node2),
             "SKA063": DeviceProxy(tmc_dish_leaf_node3),
-            "SKA100": DeviceProxy(tmc_dish_leaf_node4),
+            "SKAO77": DeviceProxy(tmc_dish_leaf_node4),
+            "SKA100": DeviceProxy(tmc_dish_leaf_node5),
         }
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()

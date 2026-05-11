@@ -146,8 +146,8 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
-    dish_63 = dishes.dish_master_dict["dish_063"]
-    dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
+    dish_77 = dishes.dish_master_dict["dish_077"]
+    dish_77.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -245,7 +245,7 @@ def tmc_reports_gpm_status_on_dish(
                 gpm_config, global_pointing_model_status, dish_id
             )
 
-    dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
+    dishes.dish_master_dict["dish_077"].SetDefective(RESET_DEFECT)
 
     event_tracer.clear_events()
 
