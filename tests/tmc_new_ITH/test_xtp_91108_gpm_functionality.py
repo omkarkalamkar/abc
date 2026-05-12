@@ -32,6 +32,26 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 logger = logging.getLogger(__name__)
 
 
+def get_dish_master_proxy(dishes: DishesFacade, dish_id: str):
+    """Return dish proxy for a dish id supporting multiple key styles."""
+
+    suffix = dish_id[-3:]
+    candidate_keys = [
+        f"dish_{suffix}",
+        f"SKA{suffix}",
+        f"ska{suffix}",
+    ]
+    for key in candidate_keys:
+        if key in dishes.dish_master_dict:
+            return dishes.dish_master_dict[key]
+
+    available_keys = ", ".join(sorted(dishes.dish_master_dict.keys()))
+    raise KeyError(
+        f"Dish {dish_id} not found in dish_master_dict. "
+        f"Tried keys: {candidate_keys}. Available keys: {available_keys}"
+    )
+
+
 def get_gpm_report(table):
     """Generates GPM report from table data for test validation."""
 
@@ -109,7 +129,7 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
-    dish_77 = dishes.dish_master_dict["dish_077"]
+    dish_77 = get_dish_master_proxy(dishes, "SKA077")
     dish_77.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
@@ -235,7 +255,7 @@ def tmc_reports_gpm_status_on_dish(
                 == global_pointing_model_status[dish_id]["Band_5a"]
             )
 
-    dishes.dish_master_dict["dish_077"].SetDefective(RESET_DEFECT)
+    get_dish_master_proxy(dishes, "SKA077").SetDefective(RESET_DEFECT)
 
     release_input = MyFileJSONInput("centralnode", "release_resources_mid")
     event_tracer.clear_events()
