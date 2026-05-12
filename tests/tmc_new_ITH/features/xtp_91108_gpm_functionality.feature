@@ -14,7 +14,7 @@ Feature: Apply GPM configuration to dishes via TMC Mid Telescope
     When the GPM configuration is applied via TMC
     Then TMC reports the status as below for the respective dish id:
       | Dish_ID | Status       | Reason                                 |
-      | SKA001  | GPM Applied  | not found on gitlab,Exception occurred |
+      | SKA001  | GPM Failed   | not found on gitlab,Exception occurred |
       | SKA036  | GPM Failed   | Dish is assigned to subarray           |
       | SKA093  | GPM Failed   | Dish is unreachable                    |
       | SKA077  | GPM Applied  | Completed                              |
