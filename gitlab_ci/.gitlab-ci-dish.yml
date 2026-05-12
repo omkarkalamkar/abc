@@ -40,21 +40,21 @@ dish-lmc-dish036:
   when: manual
 
 
-dish-lmc-dish063:
+dish-lmc-dish077:
   stage: pair-wise-tests
   extends:
     - k8s-test
   extends:
     - dish-lmc-dish001
   variables:
-    DISH_INDEX: "063"
+    DISH_INDEX: "077"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
     DISH_HELM_RELEASE: "7.0.1"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
-    name: test/d063-$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-dish-lmc-063
+    name: test/d077-$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-dish-lmc-077
   when: manual
 
 
@@ -103,15 +103,15 @@ stop-k8s-dish-lmc-036:
   environment:
     name: test/d036-$CI_COMMIT_REF_SLUG
     action: stop
-stop-k8s-dish-lmc-063:
+stop-k8s-dish-lmc-077:
   extends:
     - stop-k8s-dish-lmc-001
   variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-063"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-077"
     DISH_HELM_RELEASE: "7.0.1"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
-    name: test/d063-$CI_COMMIT_REF_SLUG
+    name: test/d077-$CI_COMMIT_REF_SLUG
     action: stop
 stop-k8s-dish-lmc-100:
   extends:

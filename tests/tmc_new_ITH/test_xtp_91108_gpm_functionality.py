@@ -65,7 +65,7 @@ def extract_gpm_failure_details(events_tracer):
     return ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1])
 
 
-@pytest.mark.batch1
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_91108_gpm_functionality.feature",
@@ -109,8 +109,8 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
-    dish_63 = dishes.dish_master_dict["dish_063"]
-    dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
+    dish_77 = dishes.dish_master_dict["dish_077"]
+    dish_77.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -235,7 +235,7 @@ def tmc_reports_gpm_status_on_dish(
                 == global_pointing_model_status[dish_id]["Band_5a"]
             )
 
-    dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
+    dishes.dish_master_dict["dish_077"].SetDefective(RESET_DEFECT)
 
     release_input = MyFileJSONInput("centralnode", "release_resources_mid")
     event_tracer.clear_events()

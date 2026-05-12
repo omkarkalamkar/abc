@@ -103,7 +103,7 @@ def given_subarray_idle(
     central_node_mid.set_subarray_id("2")
     assign_data = json.loads(assign_input_json)
     assign_data["subarray_id"] = 2
-    assign_data["dish"]["receptor_ids"] = ["SKA063", "SKA100"]
+    assign_data["dish"]["receptor_ids"] = ["SKA077", "SKA100"]
     central_node_mid.perform_action("AssignResources", json.dumps(assign_data))
     assert_that(event_tracer).described_as(
         "TMC subarray device"
@@ -130,7 +130,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     resource_monitor = pytest.resource_monitor
     # Retrieve stored resources for both subarrays
     assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036"]
-    assigned_sa2 = pytest.assign_sa2  # ["SKA063", "SKA100"]
+    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100"]
 
     expected_dishes_data = {}
 
@@ -199,7 +199,7 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     resource_monitor = pytest.resource_monitor
     # Retrieve previously assigned dishes for both subarrays
     assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036"]
-    assigned_sa2 = pytest.assign_sa2  # ["SKA063", "SKA100"]
+    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100"]
     # Combine all dishes
     all_assigned_dishes = assigned_sa1 + assigned_sa2
     expected_dishes_data = {}

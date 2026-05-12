@@ -112,7 +112,7 @@ def tmc_pass_configuration_to_csp_controller(simulator_factory):
         "dish_parameters": {
             "SKA001": {"k": 119, "vcc": 1},
             "SKA036": {"k": 1127, "vcc": 2},
-            "SKA063": {"k": 620, "vcc": 3},
+            "SKA077": {"k": 620, "vcc": 3},
             "SKA100": {"k": 101, "vcc": 4},
         },
     }
@@ -133,7 +133,7 @@ def validate_dish_vcc_config_attribute_set(central_node_mid):
             "dish_parameters": {
                 "SKA001": {"k": 119, "vcc": 1},
                 "SKA036": {"k": 1127, "vcc": 2},
-                "SKA063": {"k": 620, "vcc": 3},
+                "SKA077": {"k": 620, "vcc": 3},
                 "SKA100": {"k": 101, "vcc": 4},
             },
         }

@@ -31,16 +31,16 @@ sdp_master = "mid-sdp/control/0"
 csp_master = "mid-csp/control/0"
 dish_master1 = "mid-dish/dish-manager/ska001"
 dish_master2 = "mid-dish/dish-manager/ska036"
-dish_master3 = "mid-dish/dish-manager/ska063"
+dish_master3 = "mid-dish/dish-manager/ska077"
 dish_master4 = "mid-dish/dish-manager/ska100"
 alarm_handler1 = "alarm/handler/01"
 tmc_dish_leaf_node1 = "mid-tmc/leaf-node-dish/ska001"
 tmc_dish_leaf_node2 = "mid-tmc/leaf-node-dish/ska036"
-tmc_dish_leaf_node3 = "mid-tmc/leaf-node-dish/ska063"
+tmc_dish_leaf_node3 = "mid-tmc/leaf-node-dish/ska077"
 tmc_dish_leaf_node4 = "mid-tmc/leaf-node-dish/ska100"
 tmc_dish_pointing_device1 = "mid-tmc/dish-pointing/ska001"
 tmc_dish_pointing_device2 = "mid-tmc/dish-pointing/ska036"
-tmc_dish_pointing_device3 = "mid-tmc/dish-pointing/ska063"
+tmc_dish_pointing_device3 = "mid-tmc/dish-pointing/ska077"
 tmc_dish_pointing_device4 = "mid-tmc/dish-pointing/ska100"
 tmc_subarray_prefix = "mid-tmc/subarray"
 tmc_csp_subarrayln_prefix = "mid-tmc/subarray-leaf-node-csp"
@@ -753,7 +753,7 @@ expected_json_spfrx_param_case_all_different = {
                 },
             },
             {
-                "dishes": ["SKA063"],
+                "dishes": ["SKA077"],
                 "sync_pps": True,
                 "attenuation_pol_x": 18,
                 "attenuation_pol_y": 18,

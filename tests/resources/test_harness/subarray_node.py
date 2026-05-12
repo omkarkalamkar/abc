@@ -9,6 +9,7 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
+from tests.resources.test_harness.central_node_mid import REAL_DISH77_FQDN
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
@@ -76,7 +77,7 @@ LOGGER = logging.getLogger(__name__)
 TIMEOUT = 110
 REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
 REAL_DISH36_FQDN = os.getenv("DISH_NAME_36")
-REAL_DISH63_FQDN = os.getenv("DISH_NAME_63")
+REAL_DISH77_FQDN = os.getenv("DISH_NAME_77")
 REAL_DISH100_FQDN = os.getenv("DISH_NAME_100")
 
 device_dict = {
@@ -124,24 +125,24 @@ class SubarrayNodeWrapper(object):
         ):
             dish_fqdn001 = REAL_DISH1_FQDN
             dish_fqdn036 = REAL_DISH36_FQDN
-            dish_fqdn063 = REAL_DISH63_FQDN
+            dish_fqdn077 = REAL_DISH77_FQDN
             dish_fqdn100 = REAL_DISH100_FQDN
         else:
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
-            dish_fqdn063 = dish_master3
+            dish_fqdn077 = dish_master3
             dish_fqdn100 = dish_master4
 
         self.dish_master_list = [
             DeviceProxy(dish_fqdn001),
             DeviceProxy(dish_fqdn036),
-            DeviceProxy(dish_fqdn063),
+            DeviceProxy(dish_fqdn077),
             DeviceProxy(dish_fqdn100),
         ]
         self.dish_master_name_list = [
             dish_fqdn001,
             dish_fqdn036,
-            dish_fqdn063,
+            dish_fqdn077,
             dish_fqdn100,
         ]
 

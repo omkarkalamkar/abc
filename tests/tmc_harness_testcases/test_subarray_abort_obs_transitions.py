@@ -61,7 +61,7 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
         assign_input["dish"]["receptor_ids"] = [
             "SKA001",
             "SKA036",
-            "SKA063",
+            "SKA077",
             "SKA100",
         ]
         logging.info("assign_input: %s", assign_input)

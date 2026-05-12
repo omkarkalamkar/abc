@@ -126,7 +126,7 @@ def check_value_of_isdishvccconfigset_on_central_node(tmc_mid):
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
         "SKA036": "k-value not identical",
-        "SKA063": "k-value not identical",
+        "SKA077": "k-value not identical",
         tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     assert wait_and_validate_device_attribute_value(

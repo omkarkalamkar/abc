@@ -21,7 +21,7 @@
                 "projection": {"name": "SIN", "alignment": "ICRS"}
             },
             {
-            	"receptors": ["SKA001", "SKA063"],
+            	"receptors": ["SKA001", "SKA077"],
                 "field": {
                     "target_name": "Cen-A",
                     "reference_frame": "ICRS",

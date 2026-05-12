@@ -103,5 +103,5 @@ class TestMidCentralNodeAssignResources(object):
         )
         assert check_assigned_resources(
             central_node_mid.subarray_node,
-            ("SKA001", "SKA036", "SKA063", "SKA100"),
+            ("SKA001", "SKA036", "SKA077", "SKA100"),
         )
