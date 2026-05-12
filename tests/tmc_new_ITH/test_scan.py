@@ -42,16 +42,12 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "commandCallInfo")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
-    event_tracer.subscribe_event(tmc.subarray_node, "scanID")
-    event_tracer.subscribe_event(tmc.subarray_node, "scanDuration")
 
     log_events(
         {
             tmc.subarray_node: [
                 "obsState",
                 "longRunningCommandResult",
-                "scanID",
-                "scanDuration",
             ],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: [
