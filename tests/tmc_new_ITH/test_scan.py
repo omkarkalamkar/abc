@@ -164,8 +164,8 @@ def verify_scanning_state(
     )
     # override the starting state for the next step
     context_fixt.starting_state = ObsState.SCANNING
-    assert (
-        tmc.subarray_node.scanID == pytest.scan_id
+    assert tmc.subarray_node.scanID == json.dumps(
+        pytest.scan_id
     ), f"Expected scanID {pytest.scan_id} but got {tmc.subarray_node.scanID}"
 
 
