@@ -23,12 +23,12 @@ subarray_count: 2
 global:
   minikube: false
   tango_host: databaseds-tango-base-test:10000
-  dishids: &dish_ids ["SKA001", "SKA036", "SKA077", "SKA100"]
+  dishids: &dish_ids ["SKA001", "SKA036", "SKA063", "SKA077", "SKA100"]
 
   # List the dishes, if set, then this list will be applied to instances of:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
-  dishes: ["001", "036", "077", "100"]
+  dishes: ["001", "036", "063", "077", "100"]
   TMCLoggingLevel: "4"
 
   domain: "mid-tmc"
