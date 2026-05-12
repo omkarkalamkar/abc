@@ -133,8 +133,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
             dish_fqdn063 = dish_master3
-            dish_fqdn077 = dish_master4
-            dish_fqdn100 = dish_master5
+            dish_fqdn100 = dish_master4
+            dish_fqdn077 = dish_master5
 
         self.dish_master_list = [
             DeviceProxy(dish_fqdn001),
@@ -168,8 +168,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA001": DeviceProxy(tmc_dish_leaf_node1),
             "SKA036": DeviceProxy(tmc_dish_leaf_node2),
             "SKA063": DeviceProxy(tmc_dish_leaf_node3),
-            "SKAO77": DeviceProxy(tmc_dish_leaf_node4),
-            "SKA100": DeviceProxy(tmc_dish_leaf_node5),
+            "SKA100": DeviceProxy(tmc_dish_leaf_node4),
+            "SKA077": DeviceProxy(tmc_dish_leaf_node5),
         }
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
