@@ -65,7 +65,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.tests/tmc_new_ITH/test_81618_partial_configuration.py
+@pytest.mark.batch1
 @pytest.mark.test_scan_attr
 @pytest.mark.SKA_mid
 @scenario(
