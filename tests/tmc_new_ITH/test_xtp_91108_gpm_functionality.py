@@ -65,44 +65,7 @@ def extract_gpm_failure_details(events_tracer):
     return ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1])
 
 
-def validate_failed_dish_status(validation_reason, dish_gpm_lrcr_data):
-    """Validate failure details for a dish from LRCR data."""
-
-    if isinstance(dish_gpm_lrcr_data, str):
-        assert validation_reason in dish_gpm_lrcr_data
-        return
-
-    reasons = validation_reason.split(",")
-    lrcr_messages = [value[1].lower() for value in dish_gpm_lrcr_data.values()]
-    lrcr_result_codes = [value[0] for value in dish_gpm_lrcr_data.values()]
-    logger.info(
-        "Test reasons for validations: %s "
-        "LRCR messages: %s"
-        "Result codes: %s",
-        reasons,
-        lrcr_messages,
-        lrcr_result_codes,
-    )
-    for reason in reasons:
-        assert any(reason.lower() in msg.lower() for msg in lrcr_messages)
-    for result_code in lrcr_result_codes:
-        assert int(ResultCode.FAILED) == result_code
-
-
-def validate_applied_dish_status(
-    gpm_config, global_pointing_model_status, dish_id
-):
-    """Validate applied GPM status for configured bands of a dish."""
-
-    expected_bands = gpm_config["receptors"].get(dish_id, [])
-    for band in expected_bands:
-        assert (
-            gpm_config["version"]
-            == global_pointing_model_status[dish_id][band]
-        )
-
-
-@pytest.mark.aki
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_91108_gpm_functionality.feature",
@@ -146,8 +109,8 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
-    dish_01 = dishes.dish_master_dict["dish_001"]
-    dish_01.SetDefective(ERROR_PROPAGATION_DEFECT)
+    dish_63 = dishes.dish_master_dict["dish_063"]
+    dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -157,7 +120,7 @@ def given_a_tmc(
 @given(
     parsers.re(
         r"the following GPM configurations are provided for version "
-        r"(?P<version>[A-Za-z0-9_.-]+):\n"
+        r"(?P<version>[\d\.]+):\n"
         r"(?P<table>(?:\s*\|.*\|\s*\n?)+)",
         re.MULTILINE | re.DOTALL,
     ),
@@ -234,25 +197,50 @@ def tmc_reports_gpm_status_on_dish(
 
     for dish_id, validation_data in get_gpm_report(table).items():
         if "Applied" not in validation_data["status"]:
-            validate_failed_dish_status(
-                validation_data["reason"], event_tracer_lrcr_data[dish_id]
-            )
+            dish_gpm_lrcr_data = event_tracer_lrcr_data[dish_id]
+            if isinstance(dish_gpm_lrcr_data, str):
+                assert validation_data["reason"] in dish_gpm_lrcr_data
+            elif isinstance(dish_gpm_lrcr_data, dict):
+                reasons = validation_data["reason"].split(",")
+                lrcr_messages = [
+                    value[1].lower() for value in dish_gpm_lrcr_data.values()
+                ]
+                lrcr_result_codes = [
+                    value[0] for value in dish_gpm_lrcr_data.values()
+                ]
+                logger.info(
+                    "Test reasons for validations: %s "
+                    "LRCR messages: %s"
+                    "Result codes: %s",
+                    reasons,
+                    lrcr_messages,
+                    lrcr_result_codes,
+                )
+                for value in reasons:
+                    assert any(
+                        value.lower() in msg.lower() for msg in lrcr_messages
+                    )
+                for value in lrcr_result_codes:
+                    assert int(ResultCode.FAILED) == value
         else:
             global_pointing_model_status = json.loads(
                 tmc.central_node.globalpointingmodelstatus
             )
-            validate_applied_dish_status(
-                gpm_config, global_pointing_model_status, dish_id
+            assert (
+                gpm_config["version"]
+                == global_pointing_model_status[dish_id]["Band_1"]
+            )
+            assert (
+                gpm_config["version"]
+                == global_pointing_model_status[dish_id]["Band_5a"]
             )
 
-    dishes.dish_master_dict["dish_001"].SetDefective(RESET_DEFECT)
+    dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
 
+    release_input = MyFileJSONInput("centralnode", "release_resources_mid")
     event_tracer.clear_events()
 
-    tmc.release_resources(
-        MyFileJSONInput("centralnode", "release_resources_mid"),
-        wait_termination=False,
-    )
+    tmc.release_resources(release_input, wait_termination=False)
     assert_that(event_tracer).described_as(
         f"TMC Subarray Node device ({tmc.subarray_node})"
         "ObsState attribute values should move "

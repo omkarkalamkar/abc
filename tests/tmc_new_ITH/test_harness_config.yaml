@@ -10,7 +10,6 @@ tmc:
   tmc_dish_leaf_node2_name: "mid-tmc/leaf-node-dish/ska036"
   tmc_dish_leaf_node3_name: "mid-tmc/leaf-node-dish/ska063"
   tmc_dish_leaf_node4_name: "mid-tmc/leaf-node-dish/ska100"
-  tmc_dish_leaf_node5_name: "mid-tmc/leaf-node-dish/ska077"
 
 csp:
   is_emulated: true 
@@ -28,5 +27,4 @@ dishes:
   dish_master2_name: "mid-dish/dish-manager/SKA036"
   dish_master3_name: "mid-dish/dish-manager/SKA063"
   dish_master4_name: "mid-dish/dish-manager/SKA100"
-  dish_master5_name: "mid-dish/dish-manager/SKA077"
 
