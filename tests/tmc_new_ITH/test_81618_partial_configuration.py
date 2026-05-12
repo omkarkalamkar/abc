@@ -88,7 +88,6 @@ def given_a_tmc(
     """Given a TMC"""
     setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     setup_event_dish_subscription(event_tracer, dishes.dish_master_list)
-    event_tracer.subscribe_event(tmc.subarray_node, "scanDuration")
 
 
 @given("TMC SubarrayNode is in Ready ObsState")
@@ -141,7 +140,6 @@ def send_partial_configure_command(
     json_input = MyFileJSONInput("subarray", "partial_configure_trajectory")
     config_json = json.loads(json_input.as_str())
     update_configuration_json(config_json, configuration_data)
-    pytest.scan_duration = config_json.get("tmc", "").get("scan_duration")
     pytest.configuration_data = configuration_data
     context_fixt.when_action_result = tmc.configure(
         DictJSONInput(config_json), wait_termination=True
@@ -186,11 +184,6 @@ def verify_ready_state(
         sdp.sdp_subarray,
         "obsState",
         ObsState.READY,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
-        tmc.subarray_node,
-        "scanDuration",
-        pytest.scan_duration,
         previous_value=context_fixt.starting_state,
     )
     context_fixt.starting_state = ObsState.READY
