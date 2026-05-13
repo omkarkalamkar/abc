@@ -174,7 +174,7 @@ def given_a_tmc(
 @given(
     parsers.re(
         r"the following GPM configurations are provided for version "
-        r"(?P<version>[\d\.]+):\n"
+        r"(?P<version>[A-Za-z0-9_.-]+):\n"
         r"(?P<table>(?:\s*\|.*\|\s*\n?)+)",
         re.MULTILINE | re.DOTALL,
     ),
