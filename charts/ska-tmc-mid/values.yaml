@@ -150,7 +150,7 @@ deviceServers:
     file: "data/centralnode_mid.yaml"
     DishIDs: *dish_ids
     DishVccConfig:
-      DishVccUri: "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?~hm-912#tmdata"
+      DishVccUri: "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?hm-912#tmdata"
       DishVccFilePath: "instrument/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
       Enabled: "true"
       DishKvalueAggregationAllowedPercent: "100.0"
