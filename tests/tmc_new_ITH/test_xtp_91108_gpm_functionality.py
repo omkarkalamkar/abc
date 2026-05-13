@@ -32,56 +32,6 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 logger = logging.getLogger(__name__)
 
 
-def get_dish_master_proxy(dishes: DishesFacade, dish_id: str):
-    """Return dish proxy for a dish id supporting multiple key styles."""
-
-    match = re.search(r"(\d{3})$", dish_id)
-    suffix = match.group(1) if match else dish_id[-3:]
-    candidate_keys = [
-        dish_id,
-        f"dish_{suffix}",
-        f"SKA{suffix}",
-        f"ska{suffix}",
-    ]
-    for key in candidate_keys:
-        if key in dishes.dish_master_dict:
-            return dishes.dish_master_dict[key]
-
-    available_keys = ", ".join(sorted(dishes.dish_master_dict.keys()))
-    raise KeyError(
-        f"Dish {dish_id} not found in dish_master_dict. "
-        f"Tried keys: {candidate_keys}. Available keys: {available_keys}"
-    )
-
-
-def select_defective_dish_id(
-    dishes: DishesFacade, assigned_dish_ids: list[str]
-) -> str:
-    """Select an available dish id that is not currently assigned."""
-
-    assigned_suffixes = {
-        re.search(r"(\d{3})$", dish_id).group(1)
-        for dish_id in assigned_dish_ids
-        if re.search(r"(\d{3})$", dish_id)
-    }
-
-    available_suffixes = []
-    for key in dishes.dish_master_dict:
-        match = re.search(r"(\d{3})$", key)
-        if match:
-            available_suffixes.append(match.group(1))
-
-    for suffix in sorted(set(available_suffixes)):
-        if suffix not in assigned_suffixes:
-            return f"SKA{suffix}"
-
-    raise KeyError(
-        "No unassigned dish available in dish_master_dict. "
-        f"Assigned: {sorted(assigned_dish_ids)}; "
-        f"Available keys: {sorted(dishes.dish_master_dict.keys())}"
-    )
-
-
 def get_gpm_report(table):
     """Generates GPM report from table data for test validation."""
 
@@ -159,12 +109,8 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
-    pytest.defective_dish_id = select_defective_dish_id(
-        dishes, assign_input["dish"]["receptor_ids"]
-    )
-    get_dish_master_proxy(dishes, pytest.defective_dish_id).SetDefective(
-        ERROR_PROPAGATION_DEFECT
-    )
+    dish_77 = dishes.dish_master_dict["dish_077"]
+    dish_77.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -174,7 +120,7 @@ def given_a_tmc(
 @given(
     parsers.re(
         r"the following GPM configurations are provided for version "
-        r"(?P<version>[A-Za-z0-9_.-]+):\n"
+        r"(?P<version>[\d\.]+):\n"
         r"(?P<table>(?:\s*\|.*\|\s*\n?)+)",
         re.MULTILINE | re.DOTALL,
     ),
@@ -289,9 +235,7 @@ def tmc_reports_gpm_status_on_dish(
                 == global_pointing_model_status[dish_id]["Band_5a"]
             )
 
-    get_dish_master_proxy(dishes, pytest.defective_dish_id).SetDefective(
-        RESET_DEFECT
-    )
+    dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
 
     release_input = MyFileJSONInput("centralnode", "release_resources_mid")
     event_tracer.clear_events()

@@ -10,7 +10,7 @@ Feature: Apply GPM configuration to dishes via TMC Mid Telescope
       | SKA001  | Band_1, Band_5a |
       | SKA036  | Band_2          |
       | SKA093  | Band_5b         |
-      | SKA077  | Band_5a, Band_4 |
+      | SKA077  | Band_4, Band_3  |
     When the GPM configuration is applied via TMC
     Then TMC reports the status as below for the respective dish id:
       | Dish_ID | Status       | Reason                                 |
