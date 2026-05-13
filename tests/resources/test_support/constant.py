@@ -461,7 +461,7 @@ DEFAULT_DISH_VCC_CONFIG = {
     "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
     "tm_data_sources": [
         "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?"
-        + "~bb42e4c3aa92026546dd84e931d5fb93afdc6b8e#tmdata"
+        + "~hm-912#tmdata"
     ],
     "tm_data_filepath": (
         "instrument/dishid_vcc_map_configuration/"
