@@ -1,5 +1,5 @@
 {
     "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
-    "tm_data_sources": ["car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?~f30d2eb2dea7dba99804ab04d81a79ec460531a4#tmdata"],
+    "tm_data_sources": ["car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators~fe4427803c9065cec8d99f0a8756ec1aa7b0cdf1a#tmdata"],
     "tm_data_filepath": "instrument/dishid_vcc_map_configuration/same_k_value.json"
 }

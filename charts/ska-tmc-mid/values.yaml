@@ -127,7 +127,7 @@ skatmcsimulators:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators
     image: ska-tmc-simulators
-    tag: 1.12.1-dev.c71e4f4f0
+    tag: 1.12.1-dev.ca5262bf9
     pullPolicy: IfNotPresent
 
 resource_monitor:
@@ -150,8 +150,8 @@ deviceServers:
     file: "data/centralnode_mid.yaml"
     DishIDs: *dish_ids
     DishVccConfig:
-      DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
-      DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
+      DishVccUri: "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?~a5262bf9c7e1b2195f9061554bd81ec845f813a4#tmdata"
+      DishVccFilePath: "instrument/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
       Enabled: "true"
       DishKvalueAggregationAllowedPercent: "100.0"
     KValueValidRange:
