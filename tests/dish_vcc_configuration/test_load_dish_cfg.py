@@ -143,7 +143,7 @@ def validate_dish_vcc_config_attribute_set(central_node_mid):
             "interface": interface_schema,
             "tm_data_sources": [
                 "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?"
-                + "~a5262bf9c7e1b2195f9061554bd81ec845f813a4#tmdata"
+                + "~bb42e4c3aa92026546dd84e931d5fb93afdc6b8e#tmdata"
             ],
             "tm_data_filepath": (
                 "instrument/dishid_vcc_map_configuration/"
