@@ -70,7 +70,7 @@ def given_a_tmc(
     dish_36.SetDirectDishMode(DishMode.STOW)
 
     # Set SKA077 defective
-    dish_77 = dishes.dish_master_dict["dish_077"]
+    dish_77 = dishes.dish_master_dict["dish_063"]
     dish_77.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
@@ -150,7 +150,7 @@ def check_tmc_status(
     validate_stow_mode_failure_details(event_tracer, dish_status_map)
 
     # Restore the data for next test case execution
-    dishes.dish_master_dict["dish_077"].SetDefective(RESET_DEFECT)
+    dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
     tmc.force_change_of_obs_state(
         ObsState.EMPTY,
         default_commands_inputs,
@@ -199,8 +199,8 @@ def check_tmc_stow_mode_on_all_dishes(
     # Restore dish modes for next test cases
     dish_36 = dishes.dish_master_dict["dish_036"]
     dish_36.SetDirectDishMode(DishMode.STANDBY_LP)
-    dish_77 = dishes.dish_master_dict["dish_077"]
-    dish_77.SetDirectDishMode(DishMode.STANDBY_LP)
+    dish_63 = dishes.dish_master_dict["dish_063"]
+    dish_63.SetDirectDishMode(DishMode.STANDBY_LP)
     dish_100 = dishes.dish_master_dict["dish_100"]
     dish_100.SetDirectDishMode(DishMode.STANDBY_LP)
     dish_001 = dishes.dish_master_dict["dish_001"]
@@ -208,7 +208,7 @@ def check_tmc_stow_mode_on_all_dishes(
     assert dish_001.dishmode == DishMode.STANDBY_LP
     assert dish_100.dishmode == DishMode.STANDBY_LP
     assert dish_36.dishmode == DishMode.STANDBY_LP
-    assert dish_77.dishmode == DishMode.STANDBY_LP
+    assert dish_63.dishmode == DishMode.STANDBY_LP
     event_tracer.clear_events()
 
 

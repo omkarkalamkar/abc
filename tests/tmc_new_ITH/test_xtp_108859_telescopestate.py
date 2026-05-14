@@ -95,7 +95,7 @@ def when_dishes_in_dish_mode(
     """
 
     for dish_id, dish_mode in zip(
-        ["dish_001", "dish_036", "dish_077", "dish_100"],
+        ["dish_001", "dish_036", "dish_063", "dish_100"],
         [
             DishModeSKA001,
             DishModeSKA036,
