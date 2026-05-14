@@ -4,6 +4,12 @@ xauthority: "~/.Xauthority"
 legacy_compatibility: true
 
 global:
+  dishids: &dish_ids ["SKA001", "SKA036", "SKA077", "SKA100"]
+
+  # List the dishes, if set, then this list will be applied to instances of:
+  # deviceServers.dishmaster, deviceServers.dishleafnode
+  dishes: ["001", "036", "077", "100"]
+    
   retry: 
   - "--sleep=1"
   - "--tries=100"
@@ -48,13 +54,7 @@ ska-taranta:
 
 # Tmc-Mid
 tmc-mid:
-  global:
-    dishids: &dish_ids ["SKA001", "SKA036", "SKA077", "SKA100"]
 
-    # List the dishes, if set, then this list will be applied to instances of:
-    # deviceServers.dishmaster, deviceServers.dishleafnode
-    dishes: ["001", "036", "077", "100"]
-    
   labels:
     app: ska-tmc-integration
   enabled: true
