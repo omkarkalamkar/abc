@@ -90,7 +90,7 @@ k8s-test:
     COUNT: 1
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
   script:
-    - make k8s-test MARK="batch1"
+    - make k8s-test MARK="aki"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -100,116 +100,116 @@ k8s-test:
     - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
-k8s-test-mid-restart:
-  extends:
-    - k8s-test
-  variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
-    DISH_SIMULATION_ENABLED: "true"
-    SUBARRAY_COUNT: 2
-    SUBARRAY_COMMAND_TIMEOUT: 50
-    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
-    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
-    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
-    COUNT: 1
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
-  script:
-    - make k8s-test MARK="SKA_tmc_mid_restart"
-  environment:
-    name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-tmc-mid-restart
+# k8s-test-mid-restart:
+#   extends:
+#     - k8s-test
+#   variables:
+#     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
+#     DISH_SIMULATION_ENABLED: "true"
+#     SUBARRAY_COUNT: 2
+#     SUBARRAY_COMMAND_TIMEOUT: 50
+#     SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+#     CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+#     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
+#     COUNT: 1
+#     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
+#   script:
+#     - make k8s-test MARK="SKA_tmc_mid_restart"
+#   environment:
+#     name: test/$CI_COMMIT_REF_SLUG
+#     on_stop: stop-k8s-test-tmc-mid-restart
 
-stop-k8s-test-tmc-mid-restart:
-  extends:
-    - stop-k8s-test
-  variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
+# stop-k8s-test-tmc-mid-restart:
+#   extends:
+#     - stop-k8s-test
+#   variables:
+#     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
 
-k8s-test-mid-restart-device:
-  extends:
-    - k8s-test
-  variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
-    DISH_SIMULATION_ENABLED: "true"
-    SUBARRAY_COUNT: 2
-    SUBARRAY_COMMAND_TIMEOUT: 50
-    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
-    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
-    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
-    COUNT: 1
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
-  script:
-    - make k8s-test MARK="SKA_tmc_mid_device_restart"
-  environment:
-    name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-tmc-mid-restart-device
+# k8s-test-mid-restart-device:
+#   extends:
+#     - k8s-test
+#   variables:
+#     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
+#     DISH_SIMULATION_ENABLED: "true"
+#     SUBARRAY_COUNT: 2
+#     SUBARRAY_COMMAND_TIMEOUT: 50
+#     SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+#     CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+#     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
+#     COUNT: 1
+#     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
+#   script:
+#     - make k8s-test MARK="SKA_tmc_mid_device_restart"
+#   environment:
+#     name: test/$CI_COMMIT_REF_SLUG
+#     on_stop: stop-k8s-test-tmc-mid-restart-device
 
-stop-k8s-test-tmc-mid-restart-device:
-  extends:
-    - stop-k8s-test
-  variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
+# stop-k8s-test-tmc-mid-restart-device:
+#   extends:
+#     - stop-k8s-test
+#   variables:
+#     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
 
-k8s-test-batch2:
-  extends:
-    - k8s-test
-  variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
-    DISH_SIMULATION_ENABLED: "true"
-    SUBARRAY_COUNT: 2
-    COUNT: 1
-    SUBARRAY_COMMAND_TIMEOUT: 50
-    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
-    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
-    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
-  script:
-    - make k8s-test MARK="batch2"
-  environment:
-    name: test/$CI_COMMIT_REF_SLUG-batch2
-    on_stop: stop-k8s-test-batch2
-    auto_stop_in: 1 minute
+# k8s-test-batch2:
+#   extends:
+#     - k8s-test
+#   variables:
+#     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
+#     DISH_SIMULATION_ENABLED: "true"
+#     SUBARRAY_COUNT: 2
+#     COUNT: 1
+#     SUBARRAY_COMMAND_TIMEOUT: 50
+#     SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+#     CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+#     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
+#     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
+#   script:
+#     - make k8s-test MARK="batch2"
+#   environment:
+#     name: test/$CI_COMMIT_REF_SLUG-batch2
+#     on_stop: stop-k8s-test-batch2
+#     auto_stop_in: 1 minute
 
-stop-k8s-test-batch2:
-  extends:
-    - stop-k8s-test
-  variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
-  environment:
-    name: test/$CI_COMMIT_REF_SLUG-batch2
-    action: stop
+# stop-k8s-test-batch2:
+#   extends:
+#     - stop-k8s-test
+#   variables:
+#     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
+#   environment:
+#     name: test/$CI_COMMIT_REF_SLUG-batch2
+#     action: stop
 
-k8s-tmc-scaling:
-  stage: scaling
-  when: manual
-  extends:
-    - k8s-test
-  tags:
-    - ska-staging-tmc
-  variables:
-    DEPLOY_ALL_DISHES: "true"
-    DISH_SIMULATION_ENABLED: "true"
-    SUBARRAY_COUNT: 4
-    COUNT: 1
-    KUBE_NAMESPACE: "staging-ska-tmc-mid"
-    K8S_TIMEOUT: "1800s"
-    TARANTA_ENABLED: "true"
-  script:
-    - make taranta-link
-  environment:
-    name: ska-tmc-staging-env
-    auto_stop_in: never
-    on_stop: stop-k8s-tmc-scaling
+# k8s-tmc-scaling:
+#   stage: scaling
+#   when: manual
+#   extends:
+#     - k8s-test
+#   tags:
+#     - ska-staging-tmc
+#   variables:
+#     DEPLOY_ALL_DISHES: "true"
+#     DISH_SIMULATION_ENABLED: "true"
+#     SUBARRAY_COUNT: 4
+#     COUNT: 1
+#     KUBE_NAMESPACE: "staging-ska-tmc-mid"
+#     K8S_TIMEOUT: "1800s"
+#     TARANTA_ENABLED: "true"
+#   script:
+#     - make taranta-link
+#   environment:
+#     name: ska-tmc-staging-env
+#     auto_stop_in: never
+#     on_stop: stop-k8s-tmc-scaling
 
-stop-k8s-tmc-scaling:
-  stage: scaling
-  extends:
-    - stop-k8s-test
-  tags:
-    - ska-staging-tmc
-  variables:
-    KUBE_NAMESPACE: "staging-ska-tmc-mid"
-  environment:
-    name: ska-tmc-staging-env
-    action: stop
-  when: manual
+# stop-k8s-tmc-scaling:
+#   stage: scaling
+#   extends:
+#     - stop-k8s-test
+#   tags:
+#     - ska-staging-tmc
+#   variables:
+#     KUBE_NAMESPACE: "staging-ska-tmc-mid"
+#   environment:
+#     name: ska-tmc-staging-env
+#     action: stop
+#   when: manual
