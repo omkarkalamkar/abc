@@ -62,9 +62,11 @@ tmc-mid:
   deviceServers:
     centralnode:
       LoggingLevel: "5"
+      DishIDs: ["SKA001", "SKA036", "SKA077", "SKA100"]
 
     subarraynode:
       LoggingLevel: "5"
+      DishIDs: ["SKA001", "SKA036", "SKA077", "SKA100"]
 
     sdpsubarrayleafnode:
       LoggingLevel: "5"
@@ -99,6 +101,7 @@ tmc-mid:
 
     resourcemonitor:
       LoggingLevel: "5"
+      DishIds: ["SKA001", "SKA036", "SKA077", "SKA100"]
     mocks:
       enabled: true
       dish: true
