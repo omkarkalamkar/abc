@@ -23,7 +23,7 @@ subarray_count: 2
 global:
   minikube: false
   tango_host: databaseds-tango-base-test:10000
-  dishids: &dish_ids ["SKA001", "SKA036", "SKA063", "SKA100"]
+  dishids: ["SKA001", "SKA036", "SKA063", "SKA100"]
 
   # List the dishes, if set, then this list will be applied to instances of:
   # deviceServers.dishmaster, deviceServers.dishleafnode
@@ -148,7 +148,7 @@ deviceServers:
     instances: ["01"]
     subarray_count: 1
     file: "data/centralnode_mid.yaml"
-    DishIDs: *dish_ids
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     DishVccConfig:
       DishVccUri: "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?1.13.2#tmdata"
       DishVccFilePath: "instrument/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
@@ -176,7 +176,7 @@ deviceServers:
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
-    DishIDs: *dish_ids
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/3.1"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/1.1"
@@ -315,7 +315,7 @@ deviceServers:
     DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
     SubarrayPrefix: "mid-tmc/subarray/"
     DishType: "SKA"
-    DishIDs: *dish_ids
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     MidSubarrayNodeFQDNs: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
     LoggingLevel: "4"
 
