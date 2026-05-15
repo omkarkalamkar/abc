@@ -5,7 +5,7 @@ Feature: Apply GPM configuration to dishes via TMC Mid Telescope
   
   @XTP-91108 @XTP-91105
   Scenario Outline: TMC processes GPM JSON and reports status per dish
-    Given the following GPM configurations are provided for version hm-912:
+    Given the following GPM configurations are provided for version 1.13.1:
       | Dish_ID | Bands           |
       | SKA001  | Band_1, Band_5a |
       | SKA036  | Band_2          |
