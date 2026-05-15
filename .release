@@ -1,13 +1,13 @@
-release=1.21.0-rc.2
-tag=1.21.0-rc.2
+release=1.21.0-rc.3
+tag=1.21.0-rc.3
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.1 to v1.21.0-rc.2**
-        * Fixed skb-1314.
+**1. Updated ska-tmc-mid from v1.21.0-rc.2 to v1.21.0-rc.3**
+        * Fixed DLN not able to generate program track table continuously.
 
 
   
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.1 to v1.21.0-rc.2**
-       * Fixed skb-1314.
+**1. Updated ska-tmc-mid from v1.21.0-rc.2 to v1.21.0-rc.3**
+       * Fixed DLN not able to generate program track table continuously.

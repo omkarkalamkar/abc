@@ -16,7 +16,7 @@ dependencies:
     version: 1.0.7
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-tmc-mid
-    version: 1.21.0-rc.2
+    version: 1.21.0-rc.3
     repository: file://../ska-tmc-mid
     alias: tmc-mid
   - name: ska-sdp
