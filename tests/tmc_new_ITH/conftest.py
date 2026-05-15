@@ -41,7 +41,7 @@ DEFAULT_VCC_CONFIG_INPUT = DictJSONInput(
         "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
         "tm_data_sources": [
             "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?"
-            + "1.13.1#tmdata"
+            + "1.13.2#tmdata"
         ],
         "tm_data_filepath": (
             "instrument/dishid_vcc_map_configuration/"
