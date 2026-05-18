@@ -5,12 +5,6 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[1.18.0-rc.3]
-*************
-Fixed
------
-* Updated dish leaf node availability attribute to fix SKB-1306.
-
 [1.22.0-rc.1]
 *************
 Fixed
@@ -87,6 +81,11 @@ Updated
   * ska-tmc-dishleafnode - 0.41.2
   * ska-tmc-subarraynode - 1.2.2
 
+[1.18.0-rc.3]
+*************
+Fixed
+-----
+* Updated dish leaf node availability attribute to fix SKB-1306.
 
 [1.18.0-rc.2]
 *************
