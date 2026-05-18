@@ -74,8 +74,8 @@ Step-by-Step Procedure
 
    Once all five calibration scans are complete:
 
-   - Send a `Configure_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_  command with the science configuration.
-   - TMC automatically fetch the calibration solutions from SDP using the addresses defined in `receive_address_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_.
+   - Send a `Configure_mid.json <https://developer.skao.int/projects/ska-schemas/en/latest/schemas/tmc/ska-tmc-configure.html>`_  command with the science configuration.
+   - TMC automatically fetch the calibration solutions from SDP using the addresses defined in `receive_address_mid.json <https://developer.skao.int/projects/ska-schemas/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_.
    - Confirm that calibration solutions are applied to the dishes.
    
 
@@ -109,7 +109,7 @@ If one of the calibration steps fails:
 JSON Interface References
 -------------------------
 
-* `TMC Configure schema <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_
+* `TMC Configure schema <https://developer.skao.int/projects/ska-schemas/en/latest/schemas/tmc/ska-tmc-configure.html>`_
 
 * Example partial configurations (for reference/testing):
 
@@ -185,4 +185,4 @@ JSON Interface References
          }
      }
 
-* `receive_address_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_ (used mainly for testing)
+* `receive_address_mid.json <https://developer.skao.int/projects/ska-schemas/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_ (used mainly for testing)
