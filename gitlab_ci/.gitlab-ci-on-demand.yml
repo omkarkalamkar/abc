@@ -55,11 +55,11 @@ mid-on-demand-deploy-mini-skampi:
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
-    DISH_INDEX_63: "063"
+    DISH_INDEX_77: "077"
     DISH_INDEX_100: "100"
     DISH_NAMESPACE_1: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-$DISH_INDEX_1"
     DISH_NAMESPACE_2: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-$DISH_INDEX_36"
-    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-$DISH_INDEX_63"
+    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-$DISH_INDEX_77"
     DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-$DISH_INDEX_100"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test"
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test"
@@ -75,7 +75,7 @@ mid-on-demand-deploy-mini-skampi:
   needs:
     - on-demand-dish-lmc-dish001
     - on-demand-dish-lmc-dish036
-    - on-demand-dish-lmc-dish063
+    - on-demand-dish-lmc-dish077
     - on-demand-dish-lmc-dish100
   environment:
     name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
@@ -144,31 +144,31 @@ stop-on-demand-dish-lmc-036:
     name: test/od-d036-$CI_COMMIT_REF_SLUG
     action: stop
 
-on-demand-dish-lmc-dish063:
+on-demand-dish-lmc-dish077:
   extends:
     - on-demand-dish-lmc-dish001
   variables:
-    DISH_INDEX: "063"
+    DISH_INDEX: "077"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-$DISH_INDEX"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-$DISH_INDEX"
     DISH_HELM_RELEASE: "6.0.1"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
-    name: test/od-d063-$CI_COMMIT_REF_SLUG
-    on_stop: stop-on-demand-dish-lmc-063
+    name: test/od-d077-$CI_COMMIT_REF_SLUG
+    on_stop: stop-on-demand-dish-lmc-077
   when: manual
 
-stop-on-demand-dish-lmc-063:
+stop-on-demand-dish-lmc-077:
   extends:
     - stop-k8s-dish-lmc-001
   stage: on-demand
   variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-063"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-077"
     DISH_HELM_RELEASE: "6.0.1"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
-    name: test/od-d063-$CI_COMMIT_REF_SLUG
+    name: test/od-d077-$CI_COMMIT_REF_SLUG
     action: stop
 
 on-demand-dish-lmc-dish100:

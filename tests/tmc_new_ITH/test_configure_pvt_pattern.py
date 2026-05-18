@@ -202,7 +202,7 @@ def check_for_track_table_entries(
     """
     Method to check dish leaf node is able to generate track table entries
     """
-    for dish_id in ["SKA001", "SKA063", "SKA100", "SKA036"]:
+    for dish_id in ["SKA001", "SKA077", "SKA100", "SKA036"]:
         programTrackTable = central_node_mid.get_track_table_for_dish_id(
             dish_id
         )

@@ -69,7 +69,7 @@ PORT ?= 10000
 SUBARRAY_COUNT ?= 1
 DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
 DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
-DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
+DISH_NAME_77 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA077
 DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 CSP_MASTER ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/control/0
 CSP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/subarray
@@ -163,7 +163,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-taranta.enabled=$(TARANTA_ENABLED)\
 	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
-	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_63)"\
+	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_77)"\
 	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
 	--set tmc-mid.deviceServers.mocks.dish=$(DISH_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=$(SUBARRAY_COUNT)\
@@ -189,7 +189,7 @@ PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 DISH_NAMESPACE_4=$(DISH_NAMESPACE_4) \
 							 DISH_NAME_1=$(DISH_NAME_1) \
 							 DISH_NAME_36=$(DISH_NAME_36) \
-							 DISH_NAME_63=$(DISH_NAME_63) \
+							 DISH_NAME_77=$(DISH_NAME_77) \
 							 DISH_NAME_100=$(DISH_NAME_100) \
 							 KUBE_NAMESPACE=$(KUBE_NAMESPACE) \
 							 KUBE_NAMESPACE_SDP=$(KUBE_NAMESPACE_SDP)

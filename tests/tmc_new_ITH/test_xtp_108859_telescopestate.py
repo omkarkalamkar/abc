@@ -78,16 +78,16 @@ def when_tmc_off(tmc: TMCFacade):
 
 @when(
     parsers.parse(
-        "dishes SKA001, SKA036, SKA063, SKA100 are in"
+        "dishes SKA001, SKA036, SKA077, SKA100 are in"
         " dish mode {DishModeSKA001}, {DishModeSKA036}, "
-        "{DishModeSKA063}, {DishModeSKA100} respectively"
+        "{DishModeSKA077}, {DishModeSKA100} respectively"
     )
 )
 def when_dishes_in_dish_mode(
     dishes: DishesFacade,
     DishModeSKA001: str,
     DishModeSKA036: str,
-    DishModeSKA063: str,
+    DishModeSKA077: str,
     DishModeSKA100: str,
 ):
     """
@@ -99,7 +99,7 @@ def when_dishes_in_dish_mode(
         [
             DishModeSKA001,
             DishModeSKA036,
-            DishModeSKA063,
+            DishModeSKA077,
             DishModeSKA100,
         ],
     ):

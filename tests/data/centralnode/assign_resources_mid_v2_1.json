@@ -6,7 +6,7 @@
       "receptor_ids": [
          "SKA001",
          "SKA036",
-         "SKA063",
+         "SKA077",
          "SKA100"
       ]
    },
@@ -22,7 +22,7 @@
          "receptors": [
             "SKA001",
             "SKA036",
-            "SKA063",
+            "SKA077",
             "SKA100"
          ],
          "receive_nodes": 1

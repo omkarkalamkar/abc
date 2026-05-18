@@ -127,7 +127,7 @@ skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.11.1
+    tag: 1.13.2
     pullPolicy: IfNotPresent
 
 resource_monitor:
@@ -150,8 +150,8 @@ deviceServers:
     file: "data/centralnode_mid.yaml"
     DishIDs: *dish_ids
     DishVccConfig:
-      DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
-      DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
+      DishVccUri: "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?1.13.2#tmdata"
+      DishVccFilePath: "instrument/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
       Enabled: "true"
       DishKvalueAggregationAllowedPercent: "100.0"
     KValueValidRange:
@@ -166,7 +166,7 @@ deviceServers:
     family: "central-node"
     member: "0"
     global_pointing_model:
-      version: "1.9.7"
+      version: "1.13.2"
       interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
       data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"

@@ -1,5 +1,5 @@
 {
     "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
-    "tm_data_sources": ["car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"],
-    "tm_data_filepath": "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
+    "tm_data_sources": ["car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?1.13.2#tmdata"],
+    "tm_data_filepath": "instrument/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
 }

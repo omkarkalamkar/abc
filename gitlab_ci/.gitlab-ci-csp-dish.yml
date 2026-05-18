@@ -12,11 +12,11 @@ k8s-test-csp-dish:
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
-    DISH_INDEX_63: "063"
+    DISH_INDEX_77: "077"
     DISH_INDEX_100: "100"
     DISH_NAMESPACE_1: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_1"
     DISH_NAMESPACE_2: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_36"
-    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_63"
+    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_77"
     DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
@@ -30,7 +30,7 @@ k8s-test-csp-dish:
   needs:
     - dish-lmc-dish001
     - dish-lmc-dish036
-    - dish-lmc-dish063
+    - dish-lmc-dish077
     - dish-lmc-dish100
 
   environment:
