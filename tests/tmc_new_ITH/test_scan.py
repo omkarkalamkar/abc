@@ -63,7 +63,6 @@ def _setup_event_subscriptions(
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test_sb_id
 @scenario(
     "../tmc_new_ITH/features/scan.feature",
     "Test scan command",
