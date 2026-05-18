@@ -63,6 +63,7 @@ def _setup_event_subscriptions(
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
+@pytest.mark.test_sb_id
 @scenario(
     "../tmc_new_ITH/features/scan.feature",
     "Test scan command",
@@ -85,17 +86,21 @@ def subarray_in_ready_state(
     context_fixt.starting_state = ObsState.READY
     json_input = MyFileJSONInput("subarray", "configure_mid")
     config_json = json.loads(json_input.as_str())
-    pytest.scan_duration = config_json.get("tmc", "").get("scan_duration")
+    scan_duration = config_json.get("tmc", "").get("scan_duration")
     tmc.force_change_of_obs_state(
         ObsState.READY,
         default_commands_inputs,
         wait_termination=True,
     )
 
-    assert tmc.subarray_node.scanDuration == pytest.scan_duration, (
-        f"Expected scanDuration {pytest.scan_duration} "
+    assert tmc.subarray_node.scanDuration == scan_duration, (
+        f"Expected scanDuration {scan_duration} "
         f"but got {tmc.subarray_node.scanDuration}"
     )
+
+    assert (
+        "eb-mvp" in tmc.subarray_node.sbID
+    ), f"Got empty sbID {tmc.subarray_node.sbID}"
 
 
 @when("the Scan command is sent to the subarray")
