@@ -313,6 +313,12 @@ def is_dish_vcc_set():
             "Unexpected error in set_weather_station fixture %s", e
         )
     csp_master_device = tango.DeviceProxy(csp_master)
+    csp_subarray_01 = tango.DeviceProxy("mid-csp/subarray/01")
+    csp_subarray_02 = tango.DeviceProxy("mid-csp/subarray/02")
+    if csp_subarray_01.adminMode != 0:
+        csp_subarray_01.adminMode = 0
+    if csp_subarray_02.adminMode != 0:
+        csp_subarray_02.adminMode = 0
     if csp_master_device.adminMode != 0:
         csp_master_device.adminMode = 0
         csp_state = csp_master_device.state()
