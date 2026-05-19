@@ -10,7 +10,7 @@ import pytest
 import tango
 from pytest_bdd import given, parsers, then, when
 from ska_control_model import AdminMode
-CHANGELOG.mdfrom ska_ser_logging import configure_logging
+from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.tango.event_callback import (
