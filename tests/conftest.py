@@ -9,7 +9,8 @@ from typing import Generator
 import pytest
 import tango
 from pytest_bdd import given, parsers, then, when
-from ska_ser_logging import configure_logging
+from ska_control_model import AdminMode
+CHANGELOG.mdfrom ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.tango.event_callback import (
@@ -312,15 +313,16 @@ def is_dish_vcc_set():
         LOGGER.exception(
             "Unexpected error in set_weather_station fixture %s", e
         )
+
     csp_master_device = tango.DeviceProxy(csp_master)
     csp_subarray_01 = tango.DeviceProxy("mid-csp/subarray/01")
     csp_subarray_02 = tango.DeviceProxy("mid-csp/subarray/02")
-    if csp_subarray_01.adminMode != 0:
-        csp_subarray_01.adminMode = 0
-    if csp_subarray_02.adminMode != 0:
-        csp_subarray_02.adminMode = 0
-    if csp_master_device.adminMode != 0:
-        csp_master_device.adminMode = 0
+    if csp_subarray_01.adminMode != AdminMode.ONLINE:
+        csp_subarray_01.adminMode = AdminMode.ONLINE
+    if csp_subarray_02.adminMode != AdminMode.ONLINE:
+        csp_subarray_02.adminMode = AdminMode.ONLINE
+    if csp_master_device.adminMode != AdminMode.ONLINE:
+        csp_master_device.adminMode = AdminMode.ONLINE
         csp_state = csp_master_device.state()
         if CSP_SIMULATION_ENABLED.lower() == "true" and csp_state in (
             tango.DevState.UNKNOWN,
