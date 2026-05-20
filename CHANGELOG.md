@@ -5,6 +5,22 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+*************
+Fixed
+------
+* Updated CSP Subarray Leaf Node (0.45.5) to invoke GoToIdle command on CSP Subarray as part of End command
+
+Added
+-----
+* SKA063 changed to SKA077 in tests, json. Main chart remains same.
+* Added support for command queueing in TMC.
+    - SDP Leaf Node: v0.30.1
+    - CSP Leaf Node: v0.45.4
+    - Dish Leaf Node: v0.45.2
+    - Subarray Node: v1.10.0
+
+
 [1.22.0-rc.1]
 *************
 Fixed
