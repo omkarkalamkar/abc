@@ -13,7 +13,7 @@ Fixed
 
 Added
 -----
-* Added dish SKA077 in TMC mid deployment.
+* SKA063 changed to SKA077 in tests, json. Main chart remains same.
 * Added support for command queueing in TMC.
     - SDP Leaf Node: v0.30.1
     - CSP Leaf Node: v0.45.4
