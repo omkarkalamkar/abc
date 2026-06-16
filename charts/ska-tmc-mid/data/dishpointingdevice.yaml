@@ -28,13 +28,12 @@ server:
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
     {{- range $instance := .Values.global.dishids }}
-      {{- $num := regexReplaceAll "^[A-Za-z]+" $instance "" }}
-      {{- $instance_list = append $instance_list $num }}
+      {{- $instance_list = append $instance_list $instance }}
     {{- end }}
   {{- else }}
     {{- range $instance_real := $real_dish_name }}
     {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
-    {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
+    {{- $instance_list = append $instance_list $match }}
     {{- end }}
     {{- end }}
 
@@ -43,7 +42,7 @@ server:
       classes:
       - name: "DishPointingDevice"
         devices:
-        - name: "{{ $tmcDishPointingSuffix }}{{ $number }}"
+        - name: "{{ $tmcDishPointingSuffix }}/{{ $number }}"
           properties:
             - name: "TrackTableUpdateRate"
               values:

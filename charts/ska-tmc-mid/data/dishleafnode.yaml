@@ -47,13 +47,13 @@ server:
 
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
     {{- range $instance := .Values.global.dishids }}
-      {{- $num := regexReplaceAll "^[A-Za-z]+" $instance "" }}
-      {{- $instance_list = append $instance_list $num }}
+      {{- $instance_list = append $instance_list $instance }}
     {{- end }}
   {{- else }}
     {{- range $instance_real := $real_dish_name }}
+  {{- $instance_real := $instance_real | upper -}}
   {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
-  {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
+  {{- $instance_list = append $instance_list $match }}
   {{- end }}
   {{- end }}
 
@@ -67,7 +67,7 @@ server:
             - name: "MidDishControl"
               values:
                 {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
-                - "{{ $dishManagerSuffix }}{{ $number }}" # Mock device FQDN
+                - "{{ $dishManagerSuffix }}/{{ $number }}" # Mock device FQDN
                 {{- else }}
                   {{- range $index_real, $instance_real := $real_dish_name }}
                     {{- if eq $index_real $index }}
