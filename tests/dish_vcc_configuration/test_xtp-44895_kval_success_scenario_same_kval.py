@@ -3,11 +3,10 @@ from pytest_bdd import scenario, when
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
-from tests.resources.test_harness.helpers import (
-    prepare_json_args_for_centralnode_commands,
-)
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import COMMAND_COMPLETED
+
+from .utils import get_load_dish_vcc_json
 
 
 @pytest.mark.batch1
@@ -44,9 +43,7 @@ def invoke_load_dish_cfg(
         central_node_mid.central_node, "longRunningCommandResult"
     )
     # Prepare input for load dish configuration
-    load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
-        "same_kvalue", command_input_factory
-    )
+    load_dish_cfg_json = get_load_dish_vcc_json("same_kvalue.json")
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
