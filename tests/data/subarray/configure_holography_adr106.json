@@ -5,7 +5,7 @@
         "wrap_sector": -1,
         "groups": [
             {
-            	"receptors": ["SKA036","SKA100"],
+            	"receptors": ["SKA036","SKA100","SKA999"],
                 "field": {
                     "target_name": "Cen-A",
                     "reference_frame": "ICRS",
@@ -21,7 +21,7 @@
                 "projection": {"name": "SIN", "alignment": "ICRS"}
             },
             {
-            	"receptors": ["SKA001", "SKA077"],
+            	"receptors": ["SKA001", "SKA077","SKA500"],
                 "field": {
                     "target_name": "Cen-A",
                     "reference_frame": "ICRS",

@@ -33,15 +33,21 @@ dish_master1 = "mid-dish/dish-manager/ska001"
 dish_master2 = "mid-dish/dish-manager/ska036"
 dish_master3 = "mid-dish/dish-manager/ska077"
 dish_master4 = "mid-dish/dish-manager/ska100"
+dish_master5 = "mid-dish/dish-manager/ska500"
+dish_master6 = "mid-dish/dish-manager/ska999"
 alarm_handler1 = "alarm/handler/01"
 tmc_dish_leaf_node1 = "mid-tmc/leaf-node-dish/ska001"
 tmc_dish_leaf_node2 = "mid-tmc/leaf-node-dish/ska036"
 tmc_dish_leaf_node3 = "mid-tmc/leaf-node-dish/ska077"
 tmc_dish_leaf_node4 = "mid-tmc/leaf-node-dish/ska100"
+tmc_dish_leaf_node5 = "mid-tmc/leaf-node-dish/ska500"
+tmc_dish_leaf_node6 = "mid-tmc/leaf-node-dish/ska999"
 tmc_dish_pointing_device1 = "mid-tmc/dish-pointing/ska001"
 tmc_dish_pointing_device2 = "mid-tmc/dish-pointing/ska036"
 tmc_dish_pointing_device3 = "mid-tmc/dish-pointing/ska077"
 tmc_dish_pointing_device4 = "mid-tmc/dish-pointing/ska100"
+tmc_dish_pointing_device5 = "mid-tmc/dish-pointing/ska500"
+tmc_dish_pointing_device6 = "mid-tmc/dish-pointing/ska999"
 tmc_subarray_prefix = "mid-tmc/subarray"
 tmc_csp_subarrayln_prefix = "mid-tmc/subarray-leaf-node-csp"
 tmc_sdp_subarrayln_prefix = "mid-tmc/subarray-leaf-node-sdp"
@@ -77,11 +83,15 @@ ON_OFF_DEVICE_COMMAND_DICT = {
     "dish_master2": dish_master2,
     "dish_master3": dish_master3,
     "dish_master4": dish_master4,
+    "dish_master5": dish_master5,
+    "dish_master6": dish_master6,
     "dish_master_list": [
         dish_master1,
         dish_master2,
         dish_master3,
         dish_master4,
+        dish_master5,
+        dish_master6,
     ],
     "central_node": centralnode,
     "tmc_csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
@@ -97,6 +107,8 @@ DEVICE_STATE_STANDBY_INFO = {
     dish_master2: ["DISABLE", "STANDBY"],
     dish_master3: ["DISABLE", "STANDBY"],
     dish_master4: ["DISABLE", "STANDBY"],
+    dish_master5: ["DISABLE", "STANDBY"],
+    dish_master6: ["DISABLE", "STANDBY"],
 }
 
 DEVICE_STATE_ON_INFO = {
@@ -109,6 +121,8 @@ DEVICE_STATE_ON_INFO = {
     dish_master2: ["STANDBY"],
     dish_master3: ["STANDBY"],
     dish_master4: ["STANDBY"],
+    dish_master5: ["STANDBY"],
+    dish_master6: ["STANDBY"],
 }
 
 DISH_MODE_STANDBYFP_INFO = {
@@ -116,6 +130,8 @@ DISH_MODE_STANDBYFP_INFO = {
     dish_master2: ["STANDBY_FP"],
     dish_master3: ["STANDBY_FP"],
     dish_master4: ["STANDBY_FP"],
+    dish_master5: ["STANDBY_FP"],
+    dish_master6: ["STANDBY_FP"],
 }
 
 DISH_MODE_STANDBYLP_INFO = {
@@ -123,6 +139,8 @@ DISH_MODE_STANDBYLP_INFO = {
     dish_master2: ["STANDBY_LP"],
     dish_master3: ["STANDBY_LP"],
     dish_master4: ["STANDBY_LP"],
+    dish_master5: ["STANDBY_LP"],
+    dish_master6: ["STANDBY_LP"],
 }
 
 DEVICE_OBS_STATE_EMPTY_INFO = {
@@ -158,6 +176,8 @@ DEVICE_STATE_OFF_INFO = {
     dish_master2: ["STANDBY"],
     dish_master3: ["STANDBY"],
     dish_master4: ["STANDBY"],
+    dish_master5: ["STANDBY"],
+    dish_master6: ["STANDBY"],
 }
 
 DEVICE_OBS_STATE_ABORT_INFO = {

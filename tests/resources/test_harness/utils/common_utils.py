@@ -367,7 +367,7 @@ def setup_dish_events(
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_tracer: Fixture for EventTracer class
     """
-    dish_ids = ["SKA001", "SKA036", "SKA077", "SKA100"]
+    dish_ids = ["SKA001", "SKA036", "SKA077", "SKA100", "SKA999", "SKA500"]
     events = ["dishMode", "pointingState"]
 
     for dish_id in dish_ids:
@@ -430,7 +430,14 @@ def turn_on_telescope(
         DevState.ON,
     )
 
-    for dish_id in ["SKA001", "SKA036", "SKA077", "SKA100"]:
+    for dish_id in [
+        "SKA001",
+        "SKA036",
+        "SKA077",
+        "SKA100",
+        "SKA500",
+        "SKA999",
+    ]:
 
         assert_that(event_tracer).described_as(
             "FAILED ASSUMPTION AFTER ON COMMAND: "

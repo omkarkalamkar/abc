@@ -151,6 +151,19 @@ CUSTOM_VALUES2=	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=1\
 	--set ska-sdp.lmc.nsubarray=1
 endif
+BRANCH_NAME ?= $(CI_COMMIT_BRANCH)
+ifeq ($(strip $(CI_COMMIT_BRANCH)),)
+ifeq ($(strip $(CI_MERGE_REQUEST_SOURCE_BRANCH_NAME)),)
+	BRANCH_NAME := $(CI_COMMIT_TAG)
+else
+	BRANCH_NAME := $(CI_MERGE_REQUEST_SOURCE_BRANCH_NAME)
+endif
+endif
+DISH_VCC_URI ?= "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration?$(BRANCH_NAME)\#tmdata"
+DISH_VCC_PATH ?= "config_files/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
+GPM_FILE_PATH ?= "config_files/global_pointing_model_data"
+GPM_VERSION ?= "$(BRANCH_NAME)"
+GPM_SOURCES ?= "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration"
 
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.tango_host=$(TANGO_HOST) \
@@ -172,6 +185,11 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.sdpsubarrayleafnode.CommandTimeOutDefault=$(SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOutDefault=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOutDefault=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.centralnode.DishVccConfig.DishVccUri=$(DISH_VCC_URI)\
+	--set tmc-mid.deviceServers.centralnode.DishVccConfig.DishVccFilePath=$(DISH_VCC_PATH)\
+	--set tmc-mid.deviceServers.centralnode.global_pointing_model.version=$(GPM_VERSION)\
+	--set tmc-mid.deviceServers.centralnode.global_pointing_model.data_sources_prefix=$(GPM_SOURCES)\
+	--set tmc-mid.deviceServers.centralnode.global_pointing_model.file_path_prefix=$(GPM_FILE_PATH)\
 	$(CUSTOM_VALUES1)\
 	$(CUSTOM_VALUES2)\
 	$(CUSTOM_VALUES3)
