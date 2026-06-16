@@ -38,7 +38,7 @@ server:
     {{- end }}
 
   {{- range $index, $number := $instance_list }}
-    - name: "{{ $number }}"
+    - name: "{{ $number | lower}}"
       classes:
       - name: "DishPointingDevice"
         devices:

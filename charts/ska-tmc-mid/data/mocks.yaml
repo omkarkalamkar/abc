@@ -71,7 +71,7 @@ server:
       {{- end }}
       {{- if eq $isSimulatedDish true }}
 {{- range .Values.global.dishids }}
-    - name: "{{ . }}"
+    - name: "{{ . | lower }}"
       classes:
         - name: "HelperDishDevice"
           devices:
