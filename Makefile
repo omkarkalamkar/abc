@@ -164,7 +164,7 @@ DISH_VCC_PATH ?= "config_files/dishid_vcc_map_configuration/ska-mid-cbf-system-p
 GPM_FILE_PATH ?= "config_files/global_pointing_model_data"
 GPM_VERSION ?= "$(BRANCH_NAME)"
 GPM_SOURCES ?= "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration"
-
+ARRAY_LAYOUT_PATH ?="config_files/array_layout_file/mid-layout.json"
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.tango_host=$(TANGO_HOST) \
 	--set ska-tango-base.display=$(DISPLAY) \
@@ -190,6 +190,12 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.centralnode.global_pointing_model.version=$(GPM_VERSION)\
 	--set tmc-mid.deviceServers.centralnode.global_pointing_model.data_sources_prefix=$(GPM_SOURCES)\
 	--set tmc-mid.deviceServers.centralnode.global_pointing_model.file_path_prefix=$(GPM_FILE_PATH)\
+	--set tmc-mid.deviceServers.centralnode.DefaultArrayLayoutSourceURIs=$(DISH_VCC_URI)\
+	--set tmc-mid.deviceServers.centralnode.DefaultArrayLayoutPath=$(ARRAY_LAYOUT_PATH)\
+	--set tmc-mid.deviceServers.subarraynode.TelmodelSource=$(DISH_VCC_URI)\
+	--set tmc-mid.deviceServers.subarraynode.TelmodelPath=$(ARRAY_LAYOUT_PATH)\
+	--set tmc-mid.deviceServers.cspsubarrayleafnode.TelmodelSource=$(DISH_VCC_URI)\
+	--set tmc-mid.deviceServers.cspsubarrayleafnode.TelmodelPath=$(ARRAY_LAYOUT_PATH)\
 	$(CUSTOM_VALUES1)\
 	$(CUSTOM_VALUES2)\
 	$(CUSTOM_VALUES3)
