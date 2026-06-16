@@ -100,7 +100,7 @@ def invoke_configure(
     :param subarray_node: fixture for a TMC SubarrayNode under test
     """
     input_json = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
+        "configure_mid_few_dishes", command_input_factory
     )
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
