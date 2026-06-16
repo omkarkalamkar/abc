@@ -41,7 +41,7 @@ server:
       classes:
       - name: "DishPointingDevice"
         devices:
-        - name: "{{ $tmcDishPointingSuffix }}/{{ $number }}"
+        - name: "{{ $tmcDishPointingSuffix }}/{{ $number |lower}}"
           properties:
             - name: "TrackTableUpdateRate"
               values:
