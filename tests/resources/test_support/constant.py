@@ -448,12 +448,16 @@ device_dict = {
         dish_master2,
         dish_master3,
         dish_master4,
+        dish_master5,
+        dish_master6
     ],
     "dish_leaf_node_list": [
         tmc_dish_leaf_node1,
         tmc_dish_leaf_node2,
         tmc_dish_leaf_node3,
         tmc_dish_leaf_node4,
+        tmc_dish_leaf_node5,
+        tmc_dish_leaf_node6
     ],
     "sdp_subarray": sdp_subarray1,
     "csp_subarray": csp_subarray1,
