@@ -179,6 +179,8 @@ def validate_k_number_set(simulator_factory):
         dish_master_2_sim,
         _,
         _,
+        _,
+        _,
     ) = get_master_device_simulators(simulator_factory)
     assert dish_master_1_sim.kValue == 119
     assert dish_master_2_sim.kValue == 1127
