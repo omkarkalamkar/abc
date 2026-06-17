@@ -312,11 +312,9 @@ def tmc_able_to_memorize_the_array_layout(
 
     assert (
         pytest.source_uris
-        == json.loads(tmc.central_node.defaultarraylayouturl)["source_uris"]
+        == json.loads(tmc.central_node.arrayLayoutUrl)["source_uris"]
     )
     assert (
         pytest.array_layout_path
-        == json.loads(tmc.central_node.defaultarraylayouturl)[
-            "array_layout_path"
-        ]
+        == json.loads(tmc.central_node.arrayLayoutUrl)["array_layout_path"]
     )
