@@ -165,6 +165,7 @@ GPM_FILE_PATH ?= "config_files/global_pointing_model_data"
 GPM_VERSION ?= "$(BRANCH_NAME)"
 GPM_SOURCES ?= "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration"
 ARRAY_LAYOUT_PATH ?="config_files/array_layout_file/mid-layout.json"
+
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.tango_host=$(TANGO_HOST) \
 	--set ska-tango-base.display=$(DISPLAY) \
@@ -218,7 +219,7 @@ PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 KUBE_NAMESPACE=$(KUBE_NAMESPACE) \
 							 KUBE_NAMESPACE_SDP=$(KUBE_NAMESPACE_SDP)\
 							 TELMODEL_SOURCE=$(TELMODEL_SOURCE)\
-							 TELMODEL_PATH=$(ARRAY_LAYOUT_PATH)
+							 TELMODEL_PATH=$(DISH_VCC_PATH)
 
 
 K8S_TEST_TEST_COMMAND ?= $(PYTHON_VARS_BEFORE_PYTEST) $(PYTHON_RUNNER) \
