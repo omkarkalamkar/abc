@@ -1,12 +1,11 @@
 import pytest
 from pytest_bdd import scenario, when
 
+from tests.dish_vcc_configuration.utils import get_load_dish_vcc_json
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import COMMAND_COMPLETED
-
-from .utils import get_load_dish_vcc_json
 
 
 @pytest.mark.batch1
