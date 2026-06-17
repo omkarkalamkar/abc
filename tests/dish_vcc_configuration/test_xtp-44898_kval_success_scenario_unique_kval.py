@@ -54,3 +54,4 @@ def invoke_load_dish_cfg(
         (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
+    central_node_mid.move_to_on()
