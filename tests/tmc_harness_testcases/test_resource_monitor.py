@@ -19,6 +19,7 @@ from tango import DeviceProxy, DevState
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
@@ -147,8 +148,10 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
             "subarray_allocation": 2,
             "availability": True,
         }
-
-    assert json.loads(resource_monitor.dishes) == expected_dishes_data
+    results = json.dumps(expected_dishes_data)
+    assert wait_and_validate_device_attribute_value(
+        resource_monitor, "dishes", results, is_json=True
+    )
 
 
 @when("all assigned resources are released")
@@ -204,4 +207,7 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
             "subarray_allocation": -1,
             "availability": True,
         }
-    assert json.loads(resource_monitor.dishes) == expected_dishes_data
+    results = json.dumps(expected_dishes_data)
+    assert wait_and_validate_device_attribute_value(
+        resource_monitor, "dishes", results, is_json=True
+    )
