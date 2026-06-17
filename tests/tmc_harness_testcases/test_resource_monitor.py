@@ -129,8 +129,8 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     """
     resource_monitor = pytest.resource_monitor
     # Retrieve stored resources for both subarrays
-    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036"]
-    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100"]
+    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036","SKA500"]
+    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100","SKA999"]
 
     expected_dishes_data = {}
 
@@ -193,8 +193,8 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     """Verify that ResourceMonitor dishes becomes empty after release."""
     resource_monitor = pytest.resource_monitor
     # Retrieve previously assigned dishes for both subarrays
-    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036"]
-    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100"]
+    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036","SKA500"]
+    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100","SKA999"]
     # Combine all dishes
     all_assigned_dishes = assigned_sa1 + assigned_sa2
     expected_dishes_data = {}
@@ -204,10 +204,4 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
             "subarray_allocation": -1,
             "availability": True,
         }
-    results = json.dumps(expected_dishes_data)
-    assert_that(event_tracer).described_as(
-        "ResourceMonitor dishes attribute should be empty after "
-        "ReleaseAllResources"
-    ).within_timeout(TIMEOUT).has_change_event_occurred(
-        resource_monitor, "dishes", results
-    )
+    assert json.loads(resource_monitor.dishes) == expected_dishes_data
