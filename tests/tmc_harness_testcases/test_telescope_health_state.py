@@ -1,10 +1,7 @@
 import pytest
 from ska_tango_base.control_model import HealthState
 
-from tests.resources.test_harness.helpers import (
-    get_device_simulator_with_given_name,
-    get_master_device_simulators,
-)
+from tests.resources.test_harness.helpers import get_master_device_simulators
 
 
 class TestTelescopeHealthState(object):
@@ -193,19 +190,6 @@ class TestTelescopeHealthState(object):
             assert event_recorder.has_change_event_occurred(
                 dish, "healthState", HealthState.OK
             ), "Expected HealthState to be OK"
-
-        devices = "csp subarray,sdp subarray"
-        devices_list = devices.split(",")
-        health_state = "OK,OK,OK,OK"
-        health_state_list = health_state.split(",")
-
-        sim_devices_list = get_device_simulator_with_given_name(
-            simulator_factory, devices_list
-        )
-        for sim_device, sim_health_state_val in list(
-            zip(sim_devices_list, health_state_list)
-        ):
-            sim_device.SetDirectHealthState(HealthState[sim_health_state_val])
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,

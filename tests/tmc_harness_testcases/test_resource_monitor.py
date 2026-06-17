@@ -148,8 +148,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
             "availability": True,
         }
 
-    results = json.dumps(expected_dishes_data)
-    assert resource_monitor.dishes == results
+    assert json.loads(resource_monitor.dishes) == expected_dishes_data
 
 
 @when("all assigned resources are released")
