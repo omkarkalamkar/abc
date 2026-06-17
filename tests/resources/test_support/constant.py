@@ -476,6 +476,8 @@ SIMULATOR_DEVICE_FQDN_DICT = {
         dish_master2,
         dish_master3,
         dish_master4,
+        dish_master5,
+        dish_master6,
     ],
     SimulatorDeviceType.MID_SDP_MASTER_DEVICE: [sdp_master],
     SimulatorDeviceType.MID_CSP_MASTER_DEVICE: [csp_master],

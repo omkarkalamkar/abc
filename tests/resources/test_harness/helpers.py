@@ -155,6 +155,12 @@ def get_master_device_simulators(simulator_factory):
     dish_master_sim_4 = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.DISH_DEVICE, sim_number=4
     )
+    dish_master_sim_5 = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.DISH_DEVICE, sim_number=5
+    )
+    dish_master_sim_6 = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.DISH_DEVICE, sim_number=6
+    )
     return (
         csp_master_sim,
         sdp_master_sim,
@@ -162,6 +168,8 @@ def get_master_device_simulators(simulator_factory):
         dish_master_sim_2,
         dish_master_sim_3,
         dish_master_sim_4,
+        dish_master_sim_5,
+        dish_master_sim_6,
     )
 
 
