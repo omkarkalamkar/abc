@@ -49,7 +49,7 @@ def invoke_load_dish_cfg(
     )
     # Prepare input for load dish configuration
     load_dish_cfg_json = get_load_dish_vcc_json(
-        file_name="multiple_same_kval.json"
+        file_name="mulitple_same_kvalue.json"
     )
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(

@@ -48,7 +48,7 @@ def invoke_load_dish_cfg(
     )
     # Prepare input for load dish configuration
     load_dish_cfg_json = get_load_dish_vcc_json(
-        file_name="kvalue_out_of_range.json"
+        file_name="out_of_range_kvalue.json"
     )
     result_code, _ = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json

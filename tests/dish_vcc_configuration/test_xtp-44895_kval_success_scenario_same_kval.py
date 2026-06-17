@@ -42,7 +42,7 @@ def invoke_load_dish_cfg(
         central_node_mid.central_node, "longRunningCommandResult"
     )
     # Prepare input for load dish configuration
-    load_dish_cfg_json = get_load_dish_vcc_json("same_kvalue.json")
+    load_dish_cfg_json = get_load_dish_vcc_json("same_k_value.json")
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
