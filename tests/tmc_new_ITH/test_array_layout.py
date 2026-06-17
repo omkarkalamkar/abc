@@ -160,11 +160,9 @@ def verify_subarray_array_layout(
         "arraylayouturl",
         Anything,
     )
-    source_uris = json.loads(tmc.central_node.defaultarraylayouturl)[
-        "source_uris"
-    ]
+    source_uris = json.loads(tmc.subarray_node.arrayLayoutUrl)["source_uris"]
 
-    layout_path = json.loads(tmc.central_node.defaultarraylayouturl)[
+    layout_path = json.loads(tmc.subarray_node.arrayLayoutUrl)[
         "array_layout_path"
     ]
 

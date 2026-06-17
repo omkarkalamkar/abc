@@ -10,9 +10,7 @@
           "SKA001",
           "SKA036",
           "SKA077",
-          "SKA100",
-          "SKA999",
-          "SKA500"
+          "SKA100"
         ],
         "sync_pps": false,
         "attenuation_pol_x": 20.0,
@@ -38,9 +36,7 @@
           "SKA001",
           "SKA036",
           "SKA077",
-          "SKA100",
-          "SKA500",
-          "SKA999"
+          "SKA100"
         ],
         "field": {
           "target_name": "Polaris Australis",
