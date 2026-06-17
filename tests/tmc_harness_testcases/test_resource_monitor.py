@@ -149,11 +149,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
         }
 
     results = json.dumps(expected_dishes_data)
-    assert_that(event_tracer).described_as(
-        "ResourceMonitor dishes attribute value should update"
-    ).within_timeout(TIMEOUT).has_change_event_occurred(
-        resource_monitor, "dishes", results
-    )
+    assert resource_monitor.dishes == results
 
 
 @when("all assigned resources are released")
