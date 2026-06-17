@@ -67,6 +67,7 @@ REAL_DISH36_FQDN = os.getenv("DISH_NAME_36")
 REAL_DISH77_FQDN = os.getenv("DISH_NAME_77")
 REAL_DISH100_FQDN = os.getenv("DISH_NAME_100")
 
+
 class CentralNodeWrapperMid(CentralNodeWrapper):
     """A wrapper class to implement common tango specific details
     and standard set of commands for TMC Mid CentralNode,
@@ -142,7 +143,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(dish_fqdn077),
             DeviceProxy(dish_fqdn100),
             DeviceProxy(dish_fqdn500),
-            DeviceProxy(dish_fqdn999)
+            DeviceProxy(dish_fqdn999),
         ]
 
         self.dish_master_dict = {
@@ -152,7 +153,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA100": DeviceProxy(dish_fqdn100),
             "SKA500": DeviceProxy(dish_fqdn500),
             "SKA999": DeviceProxy(dish_fqdn999),
-
         }
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
@@ -175,7 +175,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA100": DeviceProxy(tmc_dish_leaf_node4),
             "SKA500": DeviceProxy(tmc_dish_leaf_node5),
             "SKA999": DeviceProxy(tmc_dish_leaf_node6),
-
         }
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
