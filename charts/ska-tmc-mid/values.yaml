@@ -189,6 +189,13 @@ deviceServers:
     family: "subarray"
     ScanStartTimeOffset: 10
     StartTimeEnabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 200Mi
+      requests:
+        cpu: 200m
+        memory: 100Mi
     LoggingLevel: "4"
 
   sdpsubarrayleafnode:
