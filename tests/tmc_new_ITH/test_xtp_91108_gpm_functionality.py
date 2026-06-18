@@ -32,8 +32,6 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 logger = logging.getLogger(__name__)
 
-GPM_VERSION = os.getenv("GPM_VERSION")
-
 
 def get_gpm_report(table):
     """Generates GPM report from table data for test validation."""
@@ -146,7 +144,7 @@ def given_a_gpm_json(version, table):
         bands = [b.strip() for b in entry["Bands"].split(",")]
         receptors[dish_id] = bands
 
-    gpm_input_data = {"version": GPM_VERSION, "receptors": receptors}
+    gpm_input_data = {"version": os.getenv("GPM_VERSION"), "receptors": receptors}
 
     logger.info("Formed GPM input: %s", gpm_input_data)
     return gpm_input_data
