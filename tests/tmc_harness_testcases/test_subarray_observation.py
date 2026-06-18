@@ -21,6 +21,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_harness.utils.enums import DishMode, PointingState
 from tests.resources.test_support.constant import TIMEOUT
 
 
@@ -93,7 +94,46 @@ def _configure_resources(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    _, unique_id = subarray_node.store_configuration_data(configure_input_json)
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", configure_input_json
+    )
+
+    assert_that(event_tracer).described_as(
+        "Subarray Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.dish_leaf_node_dict["SKA500"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert_that(event_tracer).described_as(
+        "Subarray Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.dish_leaf_node_dict["SKA500"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert_that(event_tracer).described_as(
+        "Subarray Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.dish_leaf_node_dict["SKA500"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert_that(event_tracer).described_as(
+        "Subarray Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.dish_leaf_node_dict["SKA500"],
+        "pointingState",
+        PointingState.TRACK,
+    )
     assert_that(event_tracer).described_as(
         "Subarray Node device"
         f"({central_node_mid.subarray_node.dev_name()}) "
@@ -126,7 +166,7 @@ def _scan(
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    _, unique_id = subarray_node.store_scan_data(scan_input_json)
+    _, unique_id = subarray_node.execute_transition("Scan", scan_input_json)
     assert_that(event_tracer).described_as(
         "Subarray Node device"
         f"({central_node_mid.subarray_node.dev_name()}) "
@@ -267,7 +307,11 @@ def _check_receptors_in_delays(subarray_node: SubarrayNodeWrapper):
         assert receptor in receptors_in_delay
 
 
-def _tmc_setup(central_node_mid, subarray_node, event_tracer):
+def _tmc_setup(
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_tracer: TangoEventTracer,
+):
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -287,7 +331,18 @@ def _tmc_setup(central_node_mid, subarray_node, event_tracer):
     event_tracer.subscribe_event(
         subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
     )
-
+    event_tracer.subscribe_event(
+        central_node_mid.dish_leaf_node_dict["SKA500"], "DishMode"
+    )
+    event_tracer.subscribe_event(
+        central_node_mid.dish_leaf_node_dict["SKA500"], "PointingState"
+    )
+    event_tracer.subscribe_event(
+        central_node_mid.dish_leaf_node_dict["SKA999"], "DishMode"
+    )
+    event_tracer.subscribe_event(
+        central_node_mid.dish_leaf_node_dict["SKA999"], "PointingState"
+    )
     # Logging events
     log_events(
         {
@@ -301,6 +356,14 @@ def _tmc_setup(central_node_mid, subarray_node, event_tracer):
             ],
             subarray_node.csp_subarray_leaf_node: ["cspSubarrayObsState"],
             subarray_node.sdp_subarray_leaf_node: ["sdpSubarrayObsState"],
+            central_node_mid.dish_leaf_node_dict["SKA500"]: [
+                "DishMode",
+                "pointingState",
+            ],
+            central_node_mid.dish_leaf_node_dict["SKA999"]: [
+                "DishMode",
+                "pointingState",
+            ],
         }
     )
 
