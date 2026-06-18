@@ -144,7 +144,10 @@ def given_a_gpm_json(version, table):
         bands = [b.strip() for b in entry["Bands"].split(",")]
         receptors[dish_id] = bands
 
-    gpm_input_data = {"version": os.getenv("GPM_VERSION"), "receptors": receptors}
+    gpm_input_data = {
+        "version": os.getenv("GPM_VERSION"),
+        "receptors": receptors,
+    }
 
     logger.info("Formed GPM input: %s", gpm_input_data)
     return gpm_input_data
