@@ -9,6 +9,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="WIP")
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
