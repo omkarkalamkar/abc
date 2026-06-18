@@ -3,6 +3,7 @@
 import ast
 import json
 import logging
+import os
 import re
 
 import pytest
@@ -30,9 +31,9 @@ from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 logger = logging.getLogger(__name__)
-import os
 
 GPM_VERSION = os.getenv("GPM_VERSION")
+
 
 def get_gpm_report(table):
     """Generates GPM report from table data for test validation."""
