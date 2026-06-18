@@ -140,7 +140,7 @@ resource_monitor:
 resources:
   requests:
     cpu: 200m
-    memory: 500Mi
+    memory: 100Mi
 
 deviceServers:
   centralnode:
@@ -189,13 +189,6 @@ deviceServers:
     family: "subarray"
     ScanStartTimeOffset: 10
     StartTimeEnabled: false
-    resources:
-      limits:
-        cpu: 600m
-        memory: 1000Mi
-      requests:
-        cpu: 400m
-        memory: 300Mi
     LoggingLevel: "4"
 
   sdpsubarrayleafnode:
@@ -255,10 +248,10 @@ deviceServers:
     IsDishAbortEnabled: True
     resources:
       limits:
-        memory: 3000Mi
+        memory: 1000Mi
       requests:
-        cpu: 2000m
-        memory: 700Mi
+        cpu: 200m
+        memory: 200Mi
     CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
@@ -300,8 +293,8 @@ deviceServers:
         memory: 1000Mi
         cpu: 500m
       requests:
-        cpu: 500m
-        memory: 500Mi
+        cpu: 200m
+        memory: 200Mi
     LoggingLevel: "4"
     ProgramTrackTableSize: 50
 
