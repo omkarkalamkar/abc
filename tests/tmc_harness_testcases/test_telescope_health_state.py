@@ -1,7 +1,10 @@
 import pytest
 from ska_tango_base.control_model import HealthState
 
-from tests.resources.test_harness.helpers import get_master_device_simulators
+from tests.resources.test_harness.helpers import (
+    get_device_simulators,
+    get_master_device_simulators,
+)
 
 
 class TestTelescopeHealthState(object):
@@ -156,7 +159,9 @@ class TestTelescopeHealthState(object):
             dish_master_sim_5,
             dish_master_sim_6,
         ) = get_master_device_simulators(simulator_factory)
-
+        sdp_sim, csp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+        sdp_sim.SetDirectHealthState(HealthState.OK)
+        csp_sim.SetDirectHealthState(HealthState.OK)
         csp_master_sim.SetDirectHealthState(HealthState.OK)
         sdp_master_sim.SetDirectHealthState(HealthState.OK)
         dishes: list = [
