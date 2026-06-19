@@ -8,6 +8,7 @@ import logging
 import time
 
 import pytest
+import tango
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import AdminMode, HealthState
@@ -29,6 +30,8 @@ from tests.resources.test_support.common_utils.tmc_helpers import (
 )
 from tests.resources.test_support.constant import (
     alarm_handler1,
+    dish_master5,
+    dish_master6,
     tmc_dish_leaf_node1,
 )
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
@@ -53,6 +56,8 @@ def _setup_event_subscriptions(
     :param sdp: the SDP facade.
     :param event_tracer: the event tracer.
     """
+    dishes.dish_master_dict["dish_500"] = tango.DeviceProxy(dish_master5)
+    dishes.dish_master_dict["dish_999"] = tango.DeviceProxy(dish_master6)
 
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     event_tracer.subscribe_event(tmc.subarray_node, "healthInfo")
@@ -86,7 +91,12 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(
         dishes.dish_master_dict["dish_100"], "healthState"
     )
-
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_500"], "healthState"
+    )
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_999"], "healthState"
+    )
     mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
 
     for subarray in mid_subarrays.values():
@@ -242,7 +252,12 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_100"].SetDirectCapabilityState(
         pytest.capability_dict
     )
-
+    dishes.dish_master_dict["dish_500"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+    dishes.dish_master_dict["dish_999"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
     sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
     csp.csp_master.SetDirectHealthState(HealthState.OK)
@@ -251,6 +266,9 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_036"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_063"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_100"].SetDirectHealthState(HealthState.OK)
+    dishes.dish_master_dict["dish_500"].SetDirectHealthState(HealthState.OK)
+    dishes.dish_master_dict["dish_999"].SetDirectHealthState(HealthState.OK)
+
     mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
 
     # Set all MID subarrays health to OK
