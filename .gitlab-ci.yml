@@ -164,7 +164,7 @@ k8s-test-batch2:
     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
   script:
-    - make k8s-test MARK="test"
+    - make k8s-test MARK="batch2"
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     on_stop: stop-k8s-test-batch2

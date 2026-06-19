@@ -203,7 +203,7 @@ def preserve_dish_state(
     assert tmc.central_node.IsDishVccConfigSet is True
 
 
-@pytest.mark.test
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_97749_dish_validation_health.feature",
