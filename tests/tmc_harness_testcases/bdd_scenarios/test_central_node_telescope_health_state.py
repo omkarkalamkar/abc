@@ -9,8 +9,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(reason="WIP")
-@pytest.mark.batch2
+@pytest.mark.test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/telescope_health_state_aggregation.feature",

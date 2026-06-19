@@ -136,8 +136,7 @@ class TestTelescopeHealthState(object):
             HealthState.FAILED,
         )
 
-    @pytest.mark.skip(reason="WIP")
-    @pytest.mark.batch2
+    @pytest.mark.test
     @pytest.mark.SKA_mid
     def test_telescope_health_state_ok(
         self,
@@ -266,8 +265,7 @@ class TestTelescopeHealthState(object):
             ),
         ],
     )
-    @pytest.mark.skip(reason="WIP")
-    @pytest.mark.batch2
+    @pytest.mark.test
     @pytest.mark.SKA_mid
     def test_telescope_health_state_degraded(
         self,
@@ -381,8 +379,7 @@ class TestTelescopeHealthState(object):
             ),
         ],
     )
-    @pytest.mark.skip(reason="WIP")
-    @pytest.mark.batch2
+    @pytest.mark.test
     @pytest.mark.SKA_mid
     def test_telescope_health_state_unknown(
         self,
