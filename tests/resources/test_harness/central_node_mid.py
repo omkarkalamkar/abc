@@ -17,7 +17,7 @@ from tests.resources.test_harness.helpers import (
     wait_csp_master_off,
 )
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import DishMode
+from tests.resources.test_harness.utils.enums import CapabilityStates, DishMode
 from tests.resources.test_harness.utils.sync_decorators import (
     sync_abort,
     sync_assign_resources,
@@ -203,6 +203,18 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
+        self.capability_dict = json.dumps(
+            {
+                "B1": CapabilityStates.STANDBY,
+                "B2": CapabilityStates.STANDBY,
+                "B3": CapabilityStates.STANDBY,
+                "B4": CapabilityStates.STANDBY,
+                "B5a": CapabilityStates.STANDBY,
+                "B5b": CapabilityStates.STANDBY,
+            }
+        )
+        for dish_master in self.dish_master_list:
+            dish_master.SetDirectCapabilityState(self.capability_dict)
 
     @property
     def state(self) -> DevState:
