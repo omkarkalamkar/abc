@@ -247,6 +247,10 @@ Central Node
     #. **family** : This refers to the family name of CentralNode TANGO device. Currently defaults to "central-node".
     #. **member** : This refers to the member of CentralNode TANGO device. Currently defaults to "0".
     #. **SubarrayPrefix** :  This refers to the prefix for subarray devices. Currently defaults to "mid-tmc/subarray/".
+    #. **MeerKatDishIdLowerLimit** : This refers to allowed lower limit for Meerkat dish ids. Currently defaults to 0.
+    #. **MeerKatDishIdUpperLimit** : This refers to allowed upper limit for Meerkat dish ids. Currently defaults to 63.
+    #. **SkaDishIdLowerLimit** : This refers to allowed lower limit for SKA dish ids. Currently defaults to 1.
+    #. **SkaDishIdUpperLimit** : This refers to allowed upper limit for SKA dish ids. Currently defaults to 999.
 
 Subarray Node
 ^^^^^^^^^^^^^^

@@ -172,7 +172,11 @@ deviceServers:
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
     LoggingLevel: "4"
     SubarrayPrefix: "mid-tmc/subarray/"
-
+    MeerKatDishIdLowerLimit: 0 
+    MeerKatDishIdUpperLimit: 63
+    SkaDishIdLowerLimit: 1
+    SkaDishIdUpperLimit: 999
+    
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
