@@ -91,8 +91,7 @@ class TestTelescopeHealthState(object):
             ),
         ],
     )
-    @pytest.mark.skip(reason="WIP")
-    @pytest.mark.batch2
+    @pytest.mark.test
     @pytest.mark.SKA_mid
     def test_telescope_health_state_failed(
         self,
