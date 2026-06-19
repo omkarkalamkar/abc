@@ -368,21 +368,6 @@ def _tmc_setup(
     )
 
 
-# def _add_dishes(
-#     central_node_mid: CentralNodeWrapperMid,
-#     name: str,
-#     dishleaf_node: str,
-#     dish_master: str,
-# ):
-#     central_node_mid.dish_master_list.append(DeviceProxy(dish_master))
-#     central_node_mid.dish_master_dict[name] = DeviceProxy(dish_master)
-#     central_node_mid.dish_leaf_node_list.append(DeviceProxy(dishleaf_node))
-#     central_node_mid.dish_leaf_node_dict[name] = DeviceProxy(dishleaf_node)
-#     DeviceProxy(dish_master).SetDirectCapabilityState(
-#         central_node_mid.capability_dict
-#     )
-
-
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 def test_verify_observation_500_999_dishes(
@@ -391,7 +376,8 @@ def test_verify_observation_500_999_dishes(
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
 ):
-    """Test to verify TMC SubarrayNode observation flow with MKT dishes
+    """Test to verify TMC SubarrayNode observation flow with SKA500,
+        SKA900 dishes
     Args:
         central_node_mid (CentralNodeWrapperMid): Object of Central node
             wrapper
@@ -402,9 +388,6 @@ def test_verify_observation_500_999_dishes(
         event_tracer(TangoEventTracer): object of TangoEventTracer used for
         managing the device events
     """
-    # _add_dishes(
-    #     central_node_mid
-    # )
     _tmc_setup(central_node_mid, subarray_node, event_tracer)
 
     _on(central_node_mid, event_tracer)
