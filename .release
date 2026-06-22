@@ -1,24 +1,22 @@
-release=1.22.0-rc.2
-tag=1.22.0-rc.2
+release=1.23.0-rc.1
+tag=1.23.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.22.0-rc.1 to v1.22.0-rc.2**
-        * Updated CSP Subarray Leaf Node (0.45.5) to invoke GoToIdle command on CSP Subarray as part of End command
-        * SKA063 changed to SKA077 in tests, json. Main chart remains same.
-        * Added support for command queueing in TMC.
-                - SDP Leaf Node: v0.30.1
-                - CSP Leaf Node: v0.45.4
-                - Dish Leaf Node: v0.45.2
-                - Subarray Node: v1.10.0
+**1. Updated ska-tmc-mid from v1.22.0-rc.2 to v1.23.0-rc.1**
+        * Added following new properties in Central Node.
+        MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0. 
+        MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
+        SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1. 
+        SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999. 
+        * Central Node v1.6.0 with new validation to allow SKA dishes till 999.
 
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.22.0-rc.1 to v1.22.0-rc.2**
-        * Updated CSP Subarray Leaf Node (0.45.5) to invoke GoToIdle command on CSP Subarray as part of End command
-        * SKA063 changed to SKA077 in tests, json. Main chart remains same.
-        * Added support for command queueing in TMC.
-                - SDP Leaf Node: v0.30.1
-                - CSP Leaf Node: v0.45.4
-                - Dish Leaf Node: v0.45.2
-                - Subarray Node: v1.10.0
+**1. Updated ska-tmc-mid from v1.22.0-rc.2 to v1.23.0-rc.1**
+        * Added following new properties in Central Node.
+        MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0. 
+        MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
+        SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1. 
+        SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999. 
+        * Central Node v1.6.0 with new validation to allow SKA dishes till 999.
