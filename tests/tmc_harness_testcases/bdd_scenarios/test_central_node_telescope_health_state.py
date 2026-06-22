@@ -37,6 +37,8 @@ def simulator_devices_health_state_is_ok(simulator_factory, event_recorder):
         dish_master_sim_2,
         dish_master_sim_3,
         dish_master_sim_4,
+        dish_master_sim_5,
+        dish_master_sim_6,
     ) = get_master_device_simulators(simulator_factory)
 
     set_desired_health_state(
@@ -47,6 +49,8 @@ def simulator_devices_health_state_is_ok(simulator_factory, event_recorder):
             dish_master_sim_2,
             dish_master_sim_3,
             dish_master_sim_4,
+            dish_master_sim_5,
+            dish_master_sim_6,
         ],
         health_state_value=HealthState.OK,
     )
@@ -57,7 +61,8 @@ def simulator_devices_health_state_is_ok(simulator_factory, event_recorder):
     event_recorder.subscribe_event(dish_master_sim_2, "healthState")
     event_recorder.subscribe_event(dish_master_sim_3, "healthState")
     event_recorder.subscribe_event(dish_master_sim_4, "healthState")
-
+    event_recorder.subscribe_event(dish_master_sim_5, "healthState")
+    event_recorder.subscribe_event(dish_master_sim_6, "healthState")
     assert event_recorder.has_change_event_occurred(
         csp_master_sim, "healthState", HealthState.OK
     ), "Expected HealthState to be OK"
@@ -75,6 +80,12 @@ def simulator_devices_health_state_is_ok(simulator_factory, event_recorder):
     ), "Expected HealthState to be OK"
     assert event_recorder.has_change_event_occurred(
         dish_master_sim_4, "healthState", HealthState.OK
+    ), "Expected HealthState to be OK"
+    assert event_recorder.has_change_event_occurred(
+        dish_master_sim_5, "healthState", HealthState.OK
+    ), "Expected HealthState to be OK"
+    assert event_recorder.has_change_event_occurred(
+        dish_master_sim_6, "healthState", HealthState.OK
     ), "Expected HealthState to be OK"
 
 

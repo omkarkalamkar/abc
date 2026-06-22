@@ -5,6 +5,21 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[unreleased]
+************
+Added
+-----
+* Added following new properties in Central Node.
+    MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0. 
+    MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
+    SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1. 
+    SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999. 
+
+Updated
+-------
+* Central Node v1.6.0 with new validation to allow SKA dishes till 999.
+
+
 [1.22.0-rc.2]
 *************
 Fixed

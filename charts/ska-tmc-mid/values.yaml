@@ -53,11 +53,11 @@ global:
   csp_subarray_prefix: "mid-csp/subarray"
   sdp_subarray_prefix: "mid-sdp/subarray"
   dish_suffix: "mid-dish/dish-manager"
-  dish_manager_suffix: "mid-dish/dish-manager/ska"
+  dish_manager_suffix: "mid-dish/dish-manager"
   csp_master: "mid-csp/control/0"
   sdp_master: "mid-sdp/control/0"
-  dish_ln_prefix: "mid-tmc/leaf-node-dish/ska"
-  dishln_pointing_suffix: "mid-tmc/dish-pointing/ska"
+  dish_ln_prefix: "mid-tmc/leaf-node-dish"
+  dishln_pointing_suffix: "mid-tmc/dish-pointing"
   mid_sdp_subarray_1: "mid-sdp/subarray/01"
   mid_sdp_subarray_2: "mid-sdp/subarray/02"
   mid_sdp_queueconnector: "mid-sdp/queueconnector/01"
@@ -85,14 +85,14 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 1.3.3
+    tag: 1.6.0
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 1.10.0
+    tag: 1.12.0
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -120,7 +120,7 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.45.2
+    tag: 0.45.3
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
@@ -140,7 +140,7 @@ resource_monitor:
 resources:
   requests:
     cpu: 200m
-    memory: 500Mi
+    memory: 100Mi
 
 deviceServers:
   centralnode:
@@ -172,7 +172,11 @@ deviceServers:
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
     LoggingLevel: "4"
     SubarrayPrefix: "mid-tmc/subarray/"
-
+    MeerKatDishIdLowerLimit: 0 
+    MeerKatDishIdUpperLimit: 63
+    SkaDishIdLowerLimit: 1
+    SkaDishIdUpperLimit: 999
+    
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
@@ -191,11 +195,11 @@ deviceServers:
     StartTimeEnabled: false
     resources:
       limits:
-        cpu: 600m
-        memory: 1000Mi
+        cpu: 500m
+        memory: 200Mi
       requests:
-        cpu: 400m
-        memory: 300Mi
+        cpu: 200m
+        memory: 100Mi
     LoggingLevel: "4"
 
   sdpsubarrayleafnode:
@@ -255,10 +259,10 @@ deviceServers:
     IsDishAbortEnabled: True
     resources:
       limits:
-        memory: 3000Mi
+        memory: 1000Mi
       requests:
-        cpu: 2000m
-        memory: 700Mi
+        cpu: 200m
+        memory: 200Mi
     CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
@@ -300,8 +304,8 @@ deviceServers:
         memory: 1000Mi
         cpu: 500m
       requests:
-        cpu: 500m
-        memory: 500Mi
+        cpu: 200m
+        memory: 200Mi
     LoggingLevel: "4"
     ProgramTrackTableSize: 50
 

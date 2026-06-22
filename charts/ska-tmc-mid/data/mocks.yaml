@@ -8,8 +8,7 @@ instances:
   - "04"
   - "05"
 {{- range .Values.global.dishids }}
-  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
-  - "{{ $num }}"
+  - "{{ . | lower}}"
 {{- end }}
 
 {{- $midSdpControlFqdn := .Values.global.sdp_master }}
@@ -72,12 +71,11 @@ server:
       {{- end }}
       {{- if eq $isSimulatedDish true }}
 {{- range .Values.global.dishids }}
-  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
-    - name: "{{ $num }}"
+    - name: "{{ . | lower }}"
       classes:
         - name: "HelperDishDevice"
           devices:
-            - name: "{{ $dishManagerSuffix }}{{ $num }}"
+            - name: "{{ $dishManagerSuffix }}/{{ . | lower}}"
 {{- end }}
       {{- end }}
 depends_on:

@@ -19,6 +19,7 @@ from tango import DeviceProxy, DevState
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
@@ -88,7 +89,7 @@ def given_subarray_idle(
         "assign_resources_mid", command_input_factory
     )
     assign_data1 = json.loads(assign_input_json)
-    assign_data1["dish"]["receptor_ids"] = ["SKA001", "SKA036"]
+    assign_data1["dish"]["receptor_ids"] = ["SKA001", "SKA036", "SKA500"]
 
     central_node_mid.store_resources(json.dumps(assign_data1))
     assert_that(event_tracer).described_as(
@@ -103,7 +104,7 @@ def given_subarray_idle(
     central_node_mid.set_subarray_id("2")
     assign_data = json.loads(assign_input_json)
     assign_data["subarray_id"] = 2
-    assign_data["dish"]["receptor_ids"] = ["SKA077", "SKA100"]
+    assign_data["dish"]["receptor_ids"] = ["SKA077", "SKA100", "SKA999"]
     central_node_mid.perform_action("AssignResources", json.dumps(assign_data))
     assert_that(event_tracer).described_as(
         "TMC subarray device"
@@ -129,8 +130,8 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     """
     resource_monitor = pytest.resource_monitor
     # Retrieve stored resources for both subarrays
-    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036"]
-    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100"]
+    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036","SKA500"]
+    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100","SKA999"]
 
     expected_dishes_data = {}
 
@@ -147,12 +148,9 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
             "subarray_allocation": 2,
             "availability": True,
         }
-
     results = json.dumps(expected_dishes_data)
-    assert_that(event_tracer).described_as(
-        "ResourceMonitor dishes attribute value should update"
-    ).within_timeout(TIMEOUT).has_change_event_occurred(
-        resource_monitor, "dishes", results
+    assert wait_and_validate_device_attribute_value(
+        resource_monitor, "dishes", results, is_json=True
     )
 
 
@@ -198,8 +196,8 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     """Verify that ResourceMonitor dishes becomes empty after release."""
     resource_monitor = pytest.resource_monitor
     # Retrieve previously assigned dishes for both subarrays
-    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036"]
-    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100"]
+    assigned_sa1 = pytest.assign_sa1  # ["SKA001", "SKA036","SKA500"]
+    assigned_sa2 = pytest.assign_sa2  # ["SKA077", "SKA100","SKA999"]
     # Combine all dishes
     all_assigned_dishes = assigned_sa1 + assigned_sa2
     expected_dishes_data = {}
@@ -210,9 +208,6 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
             "availability": True,
         }
     results = json.dumps(expected_dishes_data)
-    assert_that(event_tracer).described_as(
-        "ResourceMonitor dishes attribute should be empty after "
-        "ReleaseAllResources"
-    ).within_timeout(TIMEOUT).has_change_event_occurred(
-        resource_monitor, "dishes", results
+    assert wait_and_validate_device_attribute_value(
+        resource_monitor, "dishes", results, is_json=True
     )

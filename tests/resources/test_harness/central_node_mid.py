@@ -17,7 +17,7 @@ from tests.resources.test_harness.helpers import (
     wait_csp_master_off,
 )
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import DishMode
+from tests.resources.test_harness.utils.enums import CapabilityStates, DishMode
 from tests.resources.test_harness.utils.sync_decorators import (
     sync_abort,
     sync_assign_resources,
@@ -41,6 +41,8 @@ from tests.resources.test_support.constant import (
     dish_master2,
     dish_master3,
     dish_master4,
+    dish_master5,
+    dish_master6,
     sdp_master,
     sdp_subarray1,
     tmc_csp_master_leaf_node,
@@ -49,6 +51,8 @@ from tests.resources.test_support.constant import (
     tmc_dish_leaf_node2,
     tmc_dish_leaf_node3,
     tmc_dish_leaf_node4,
+    tmc_dish_leaf_node5,
+    tmc_dish_leaf_node6,
     tmc_sdp_master_leaf_node,
     tmc_sdp_subarrayln_prefix,
     tmc_subarray_prefix,
@@ -130,12 +134,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn036 = dish_master2
             dish_fqdn077 = dish_master3
             dish_fqdn100 = dish_master4
+            dish_fqdn500 = dish_master5
+            dish_fqdn999 = dish_master6
 
         self.dish_master_list = [
             DeviceProxy(dish_fqdn001),
             DeviceProxy(dish_fqdn036),
             DeviceProxy(dish_fqdn077),
             DeviceProxy(dish_fqdn100),
+            DeviceProxy(dish_fqdn500),
+            DeviceProxy(dish_fqdn999),
         ]
 
         self.dish_master_dict = {
@@ -143,12 +151,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA036": DeviceProxy(dish_fqdn036),
             "SKA077": DeviceProxy(dish_fqdn077),
             "SKA100": DeviceProxy(dish_fqdn100),
+            "SKA500": DeviceProxy(dish_fqdn500),
+            "SKA999": DeviceProxy(dish_fqdn999),
         }
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
+            DeviceProxy(tmc_dish_leaf_node5),
+            DeviceProxy(tmc_dish_leaf_node6),
         ]
 
         self.central_node.set_timeout_millis(5000)
@@ -161,6 +173,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA036": DeviceProxy(tmc_dish_leaf_node2),
             "SKA077": DeviceProxy(tmc_dish_leaf_node3),
             "SKA100": DeviceProxy(tmc_dish_leaf_node4),
+            "SKA500": DeviceProxy(tmc_dish_leaf_node5),
+            "SKA999": DeviceProxy(tmc_dish_leaf_node6),
         }
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
@@ -189,6 +203,18 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
+        self.capability_dict = json.dumps(
+            {
+                "B1": CapabilityStates.STANDBY,
+                "B2": CapabilityStates.STANDBY,
+                "B3": CapabilityStates.STANDBY,
+                "B4": CapabilityStates.STANDBY,
+                "B5a": CapabilityStates.STANDBY,
+                "B5b": CapabilityStates.STANDBY,
+            }
+        )
+        for dish_master in self.dish_master_list:
+            dish_master.SetDirectCapabilityState(self.capability_dict)
 
     @property
     def state(self) -> DevState:

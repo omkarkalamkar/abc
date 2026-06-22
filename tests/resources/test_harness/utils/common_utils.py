@@ -430,8 +430,7 @@ def turn_on_telescope(
         DevState.ON,
     )
 
-    for dish_id in ["SKA001", "SKA036", "SKA077", "SKA100"]:
-
+    for dish_id in dish_ids.split(","):
         assert_that(event_tracer).described_as(
             "FAILED ASSUMPTION AFTER ON COMMAND: "
             "Dish Master device"

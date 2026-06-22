@@ -104,7 +104,7 @@ def tmc_pass_configuration_to_csp_controller(simulator_factory):
     :param simulator_factory: fixture for creating simulator devices for
     mid Telescope respectively.
     """
-    csp_master_sim, _, _, _, _, _ = get_master_device_simulators(
+    csp_master_sim, _, _, _, _, _, _, _ = get_master_device_simulators(
         simulator_factory
     )
     expected_dish_vcc_config = {
@@ -177,6 +177,8 @@ def validate_k_number_set(simulator_factory):
         _,
         dish_master_1_sim,
         dish_master_2_sim,
+        _,
+        _,
         _,
         _,
     ) = get_master_device_simulators(simulator_factory)
