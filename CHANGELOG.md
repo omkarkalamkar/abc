@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [1.23.0-rc.1]
-************
+*************
 Added
 -----
 * Added following new properties in Central Node.
