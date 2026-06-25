@@ -146,6 +146,10 @@ def invoke_configure(
     configure_input_json = prepare_json_args_for_commands(
         "configure_adr_63", command_input_factory
     )
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_tracer.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
     )
@@ -178,5 +182,17 @@ def verify_ready_obsstate(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the TMC SubarrayNode transitions to obsState READY'"
+        "TMC SUbarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(command_result,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[0], COMMAND_COMPLETED),
     )
     event_tracer.clear_events()
