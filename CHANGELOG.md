@@ -6,6 +6,19 @@ All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 
+[1.21.0]
+*************
+Fixed
+------
+* Fixed DLN not able to generate program track table continuously.
+* To work EndScan as expected scan duration greated needs to be greater than 50 seconds.
+* Fixed skb-1314.
+
+Updated
+-------
+* Support for Position Velocity Time pattern added.
+* programTrackTable size is now configurable via `ProgramTrackTableSize` property in dish pointing device.
+
 [1.21.0-rc.3]
 *************
 Fixed

@@ -1,13 +1,21 @@
-release=1.21.0-rc.3
-tag=1.21.0-rc.3
+release=1.21.0
+tag=1.21.0
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.2 to v1.21.0-rc.3**
+**1. Updated ska-tmc-mid from v1.21.0-rc.3 to v1.21.0**
+        * Support for Position Velocity Time pattern added.
+        * ProgramTrackTable size is now configurable via ProgramTrackTableSize property in dish pointing device
+        * Fixed skb-1314.
         * Fixed DLN not able to generate program track table continuously.
+        * To work the EndScan command as expected provide scan duration greater than 50 seconds.
 
 
   
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.2 to v1.21.0-rc.3**
-       * Fixed DLN not able to generate program track table continuously.
+**1. Updated ska-tmc-mid from v1.21.0-rc.3 to v1.21.0**
+       * Support for Position Velocity Time pattern added.
+        * ProgramTrackTable size is now configurable via ProgramTrackTableSize property in dish pointing device
+        * Fixed skb-1314.
+        * Fixed DLN not able to generate program track table continuously.
+        * To work the EndScan command as expected provide scan duration greater than 50 seconds.
