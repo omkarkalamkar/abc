@@ -111,7 +111,7 @@ def verify_subarrys_in_idle(
     central_node_mid.set_subarray_id("2")
     assign_data = json.loads(assign_input_json)
     assign_data["subarray_id"] = 2
-    assign_data["dish"]["receptor_ids"] = ["SKA063", "SKA100"]
+    assign_data["dish"]["receptor_ids"] = ["SKA077", "SKA100"]
     assign_data["sdp"]["execution_block"]["eb_id"] = "eb-test-20220917-00000"
     central_node_mid.perform_action("AssignResources", json.dumps(assign_data))
     assert_that(event_tracer).described_as(

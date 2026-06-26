@@ -4,7 +4,7 @@
     "pointing": {
         "groups": [
             {
-                "receptors": ["SKA001", "SKA036","SKA100","SKA063"],
+                "receptors": ["SKA001", "SKA036","SKA100","SKA077"],
                 "field": {
                     "target_name": "Polaris Australis",
                     "reference_frame": "ICRS",

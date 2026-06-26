@@ -26,7 +26,7 @@
                 "projection": {"name": "SSN", "alignment": "AltAz"}
             },
             {
-                "receptors": ["SKA001", "SKA063"],
+                "receptors": ["SKA001", "SKA077"],
                 "field": {
                     "target_name": "Polaris Australis",
                     "reference_frame": "ICRS",

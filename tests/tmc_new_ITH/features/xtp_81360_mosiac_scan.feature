@@ -7,4 +7,4 @@ Scenario Outline: TMC Mid execute mosiac scan
 	Then the subarray executes the commands successfully and is in READY obsState
 	Examples:
 		| group1          | group2         | x_offsets        | y_offsets        |
-		| SKA001,SKA063   | SKA036,SKA100  | -5.0,5.0         | 5.0,1.0          |
+		| SKA001,SKA077   | SKA036,SKA100  | -5.0,5.0         | 5.0,1.0          |

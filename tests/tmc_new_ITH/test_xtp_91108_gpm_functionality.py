@@ -3,6 +3,7 @@
 import ast
 import json
 import logging
+import os
 import re
 
 import pytest
@@ -109,8 +110,8 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
-    dish_63 = dishes.dish_master_dict["dish_063"]
-    dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
+    dish_36 = dishes.dish_master_dict["dish_036"]
+    dish_36.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -120,7 +121,7 @@ def given_a_tmc(
 @given(
     parsers.re(
         r"the following GPM configurations are provided for version "
-        r"(?P<version>[\d\.]+):\n"
+        r"(?P<version>[A-Za-z0-9_.-]+):\n"
         r"(?P<table>(?:\s*\|.*\|\s*\n?)+)",
         re.MULTILINE | re.DOTALL,
     ),
@@ -143,7 +144,10 @@ def given_a_gpm_json(version, table):
         bands = [b.strip() for b in entry["Bands"].split(",")]
         receptors[dish_id] = bands
 
-    gpm_input_data = {"version": version, "receptors": receptors}
+    gpm_input_data = {
+        "version": os.getenv("GPM_VERSION"),
+        "receptors": receptors,
+    }
 
     logger.info("Formed GPM input: %s", gpm_input_data)
     return gpm_input_data
@@ -235,7 +239,7 @@ def tmc_reports_gpm_status_on_dish(
                 == global_pointing_model_status[dish_id]["Band_5a"]
             )
 
-    dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
+    dishes.dish_master_dict["dish_036"].SetDefective(RESET_DEFECT)
 
     release_input = MyFileJSONInput("centralnode", "release_resources_mid")
     event_tracer.clear_events()

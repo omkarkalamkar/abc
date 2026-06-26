@@ -9,7 +9,7 @@
         "dishes": [
           "SKA001",
           "SKA036",
-          "SKA063",
+          "SKA077",
           "SKA100"
         ],
         "sync_pps": false,
@@ -35,7 +35,7 @@
         "receptors": [
           "SKA001",
           "SKA036",
-          "SKA063",
+          "SKA077",
           "SKA100"
         ],
         "field": {

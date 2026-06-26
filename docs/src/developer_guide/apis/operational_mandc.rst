@@ -9,9 +9,9 @@ Control Commands
 
 TMC provides APIs in the form of Tango device commands for controlling the telescope as follows:
 
-* `TelescopeOn <https://developer.skao.int/projects/ska-tmc-centralnode/en/latest/api/ska_tmc_centralnode.commands.html#ska-tmc-centralnode-commands-telescope-on-command-module>`_
-* `TelescopeOff <https://developer.skao.int/projects/ska-tmc-centralnode/en/latest/api/ska_tmc_centralnode.commands.html#ska-tmc-centralnode-commands-telescope-off-command-module>`_
-* `Standby <https://developer.skao.int/projects/ska-tmc-centralnode/en/latest/api/ska_tmc_centralnode.commands.html#ska-tmc-centralnode-commands-telescope-standby-command-module>`_
+* :ref:`TelescopeOn <centralnode:telescope_on>`
+* :ref:`TelescopeOff <centralnode:telescope_off>`
+* :ref:`Standby <centralnode:telescope_standby>`
 
 
 Monitoring of the telescope level activities can be done by reading/subscribing to 

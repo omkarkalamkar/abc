@@ -4,11 +4,9 @@ import pytest
 from pytest_bdd import parsers, scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
+from tests.dish_vcc_configuration.utils import get_load_dish_vcc_json
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
-from tests.resources.test_harness.helpers import (
-    prepare_json_args_for_centralnode_commands,
-)
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
@@ -49,8 +47,8 @@ def invoke_load_dish_cfg(
         central_node_mid.central_node, "longRunningCommandResult"
     )
     # Prepare input for load dish configuration
-    load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
-        "kvalue_out_of_range", command_input_factory
+    load_dish_cfg_json = get_load_dish_vcc_json(
+        file_name="out_of_range_kvalue.json"
     )
     result_code, _ = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json

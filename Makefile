@@ -70,7 +70,7 @@ PORT ?= 10000
 SUBARRAY_COUNT ?= 1
 DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
 DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
-DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
+DISH_NAME_77 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA077
 DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 CSP_MASTER ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/control/0
 CSP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/subarray
@@ -99,7 +99,7 @@ ITANGO_DOCKER_IMAGE = $(CAR_OCI_REGISTRY_HOST)/ska-cicd-k8s-tools-build-deploy:0
 # Test runner - run to completion job in K8s
 # name of the pod running the k8s_tests
 K8S_TEST_RUNNER = test-runner-$(HELM_RELEASE)
-
+k8s_test_src_dir = pyproject.toml $(PYTHON_SRC)/
 CI_PROJECT_PATH_SLUG ?= ska-tmc-integration
 CI_ENVIRONMENT_SLUG ?= ska-tmc-integration
 CSP_SIMULATION_ENABLED ?= true
@@ -152,6 +152,20 @@ CUSTOM_VALUES2=	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=1\
 	--set ska-sdp.lmc.nsubarray=1
 endif
+BRANCH_NAME ?= $(CI_COMMIT_BRANCH)
+ifeq ($(strip $(CI_COMMIT_BRANCH)),)
+ifeq ($(strip $(CI_MERGE_REQUEST_SOURCE_BRANCH_NAME)),)
+	BRANCH_NAME := $(CI_COMMIT_TAG)
+else
+	BRANCH_NAME := $(CI_MERGE_REQUEST_SOURCE_BRANCH_NAME)
+endif
+endif
+TELMODEL_SOURCE ?= "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration?$(BRANCH_NAME)\#tmdata"
+DISH_VCC_PATH ?= "config_files/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
+GPM_FILE_PATH ?= "config_files/global_pointing_model_data"
+GPM_VERSION ?= "$(BRANCH_NAME)"
+GPM_SOURCES ?= "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration"
+ARRAY_LAYOUT_PATH ?="config_files/array_layout_file/mid-layout.json"
 
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.tango_host=$(TANGO_HOST) \
@@ -164,7 +178,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-taranta.enabled=$(TARANTA_ENABLED)\
 	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
-	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_63)"\
+	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_77)"\
 	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
 	--set tmc-mid.deviceServers.mocks.dish=$(DISH_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=$(SUBARRAY_COUNT)\
@@ -173,6 +187,17 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.sdpsubarrayleafnode.CommandTimeOutDefault=$(SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOutDefault=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOutDefault=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.centralnode.DishVccConfig.DishVccUri=$(TELMODEL_SOURCE)\
+	--set tmc-mid.deviceServers.centralnode.DishVccConfig.DishVccFilePath=$(DISH_VCC_PATH)\
+	--set tmc-mid.deviceServers.centralnode.global_pointing_model.version=$(GPM_VERSION)\
+	--set tmc-mid.deviceServers.centralnode.global_pointing_model.data_sources_prefix=$(GPM_SOURCES)\
+	--set tmc-mid.deviceServers.centralnode.global_pointing_model.file_path_prefix=$(GPM_FILE_PATH)\
+	--set tmc-mid.deviceServers.centralnode.DefaultArrayLayoutSourceURIs=$(TELMODEL_SOURCE)\
+	--set tmc-mid.deviceServers.centralnode.DefaultArrayLayoutPath=$(ARRAY_LAYOUT_PATH)\
+	--set tmc-mid.deviceServers.subarraynode.TelmodelSource=$(TELMODEL_SOURCE)\
+	--set tmc-mid.deviceServers.subarraynode.TelmodelPath=$(ARRAY_LAYOUT_PATH)\
+	--set tmc-mid.deviceServers.cspsubarrayleafnode.TelmodelSource=$(TELMODEL_SOURCE)\
+	--set tmc-mid.deviceServers.cspsubarrayleafnode.TelmodelPath=$(ARRAY_LAYOUT_PATH)\
 	$(CUSTOM_VALUES1)\
 	$(CUSTOM_VALUES2)\
 	$(CUSTOM_VALUES3)
@@ -190,10 +215,14 @@ PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 DISH_NAMESPACE_4=$(DISH_NAMESPACE_4) \
 							 DISH_NAME_1=$(DISH_NAME_1) \
 							 DISH_NAME_36=$(DISH_NAME_36) \
-							 DISH_NAME_63=$(DISH_NAME_63) \
+							 DISH_NAME_77=$(DISH_NAME_77) \
 							 DISH_NAME_100=$(DISH_NAME_100) \
 							 KUBE_NAMESPACE=$(KUBE_NAMESPACE) \
-							 KUBE_NAMESPACE_SDP=$(KUBE_NAMESPACE_SDP)
+							 KUBE_NAMESPACE_SDP=$(KUBE_NAMESPACE_SDP)\
+							 TELMODEL_SOURCE=$(TELMODEL_SOURCE)\
+							 TELMODEL_PATH=$(DISH_VCC_PATH)\
+							 GPM_VERSION=$(GPM_VERSION)
+
 
 K8S_TEST_TEST_COMMAND ?= $(PYTHON_VARS_BEFORE_PYTEST) $(PYTHON_RUNNER) \
 						pytest \

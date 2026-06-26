@@ -3,8 +3,7 @@ function: telescope-monitoring
 domain: general-monitoring
 instances:
 {{- range .Values.global.dishids }}
-  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
-  - "{{ $num }}"
+  - "{{ . | lower }}"
 {{- end }}
 entrypoints:
   - name: "ska_tmc_dishleafnode.dish_leaf_node.MidTmcLeafNodeDish"
@@ -47,27 +46,27 @@ server:
 
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
     {{- range $instance := .Values.global.dishids }}
-      {{- $num := regexReplaceAll "^[A-Za-z]+" $instance "" }}
-      {{- $instance_list = append $instance_list $num }}
+      {{- $instance_list = append $instance_list $instance }}
     {{- end }}
   {{- else }}
     {{- range $instance_real := $real_dish_name }}
+  {{- $instance_real := $instance_real | upper -}}
   {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
-  {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
+  {{- $instance_list = append $instance_list $match }}
   {{- end }}
   {{- end }}
 
   {{- range $index, $number := $instance_list }}
-    - name: "{{ $number }}"
+    - name: "{{ $number | lower}}"
       classes:
       - name: "MidTmcLeafNodeDish"
         devices:
-        - name: "{{ $domain }}/{{ $family }}/{{ $prefixMember }}{{ $number }}"
+        - name: "{{ $domain }}/{{ $family }}/{{ $number |lower }}"
           properties:
             - name: "MidDishControl"
               values:
                 {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
-                - "{{ $dishManagerSuffix }}{{ $number }}" # Mock device FQDN
+                - "{{ $dishManagerSuffix }}/{{ $number |lower}}" # Mock device FQDN
                 {{- else }}
                   {{- range $index_real, $instance_real := $real_dish_name }}
                     {{- if eq $index_real $index }}
@@ -77,7 +76,7 @@ server:
                 {{- end }}
             - name: "MidPointingDevice"
               values:
-                - "{{ $tmcDishPointingSuffix }}{{ $number }}"
+                - "{{ $tmcDishPointingSuffix }}/{{ $number |lower}}"
             - name: "SkaLevel"
               values:
                 - "3"

@@ -1,6 +1,8 @@
 """Verifies scan functionality
 """
 
+import json
+
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
@@ -81,12 +83,23 @@ def subarray_in_ready_state(
     """Ensure the subarray is in the READY state."""
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     context_fixt.starting_state = ObsState.READY
-
+    json_input = MyFileJSONInput("subarray", "configure_mid")
+    config_json = json.loads(json_input.as_str())
+    scan_duration = config_json.get("tmc", "").get("scan_duration")
     tmc.force_change_of_obs_state(
         ObsState.READY,
         default_commands_inputs,
         wait_termination=True,
     )
+
+    assert tmc.subarray_node.scanDuration == scan_duration, (
+        f"Expected scanDuration {scan_duration} "
+        f"but got {tmc.subarray_node.scanDuration}"
+    )
+
+    assert (
+        "eb-mvp" in tmc.subarray_node.sbID
+    ), f"Got empty sbID {tmc.subarray_node.sbID}"
 
 
 @when("the Scan command is sent to the subarray")
@@ -105,6 +118,8 @@ def send_scan_command(
     context_fixt.when_action_name = "Scan"
 
     json_input = MyFileJSONInput("subarray", "scan_mid")
+    scan_json = json.loads(json_input.as_str())
+    pytest.scan_id = scan_json.get("scan_id")
     context_fixt.when_action_result = tmc.scan(
         json_input,
         wait_termination=False,
@@ -150,9 +165,11 @@ def verify_scanning_state(
         ObsState.SCANNING,
         previous_value=context_fixt.starting_state,
     )
-
     # override the starting state for the next step
     context_fixt.starting_state = ObsState.SCANNING
+    assert tmc.subarray_node.scanID == json.dumps(
+        pytest.scan_id
+    ), f"Expected scanID {pytest.scan_id} but got {tmc.subarray_node.scanID}"
 
 
 @then("the subarray should transition to the READY state")

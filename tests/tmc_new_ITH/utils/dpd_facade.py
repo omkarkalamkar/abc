@@ -11,7 +11,7 @@ class DishPointingDevicesFacade:
         self._dish_pointing_device_dict = {
             "SKA001": tango.DeviceProxy("mid-tmc/dish-pointing/ska001"),
             "SKA100": tango.DeviceProxy("mid-tmc/dish-pointing/ska100"),
-            "SKA063": tango.DeviceProxy("mid-tmc/dish-pointing/ska063"),
+            "SKA077": tango.DeviceProxy("mid-tmc/dish-pointing/ska077"),
             "SKA036": tango.DeviceProxy("mid-tmc/dish-pointing/ska036"),
         }
 

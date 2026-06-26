@@ -1,21 +1,22 @@
-release=1.21.0
-tag=1.21.0
+release=1.23.0-rc.1
+tag=1.23.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.3 to v1.21.0**
-        * Support for Position Velocity Time pattern added.
-        * ProgramTrackTable size is now configurable via ProgramTrackTableSize property in dish pointing device
-        * Fixed skb-1314.
-        * Fixed DLN not able to generate program track table continuously.
-        * To work the EndScan command as expected provide scan duration greater than 50 seconds.
+**1. Updated ska-tmc-mid from v1.22.0-rc.2 to v1.23.0-rc.1**
+        * Added following new properties in Central Node.
+        MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0. 
+        MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
+        SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1. 
+        SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999. 
+        * Central Node v1.6.0 with new validation to allow SKA dishes till 999.
 
 
-  
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.3 to v1.21.0**
-       * Support for Position Velocity Time pattern added.
-        * ProgramTrackTable size is now configurable via ProgramTrackTableSize property in dish pointing device
-        * Fixed skb-1314.
-        * Fixed DLN not able to generate program track table continuously.
-        * To work the EndScan command as expected provide scan duration greater than 50 seconds.
+**1. Updated ska-tmc-mid from v1.22.0-rc.2 to v1.23.0-rc.1**
+        * Added following new properties in Central Node.
+        MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0. 
+        MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
+        SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1. 
+        SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999. 
+        * Central Node v1.6.0 with new validation to allow SKA dishes till 999.

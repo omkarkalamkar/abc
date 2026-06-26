@@ -8,8 +8,7 @@ instances:
   - "04"
   - "05"
 {{- range .Values.global.dishids }}
-  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
-  - "{{ $num }}"
+  - "{{ . | lower}}"
 {{- end }}
 
 {{- $midSdpControlFqdn := .Values.global.sdp_master }}
@@ -24,6 +23,7 @@ entrypoints:
   - name: "ska_tmc_simulators.helper_base_device.HelperBaseDevice"
   - name: "ska_tmc_simulators.helper_dish_device.HelperDishDevice"
   - name: "ska_tmc_simulators.helper_subarray_device.HelperSubArrayDevice"
+  - name: "ska_tmc_simulators.helper_csp_subarray_device.HelperCSPSubarrayDevice"
   - name: "ska_tmc_simulators.helper_csp_master_device.HelperCspMasterDevice"
   - name: "ska_tmc_simulators.helper_sdp_subarray.HelperSdpSubarray"
   - name: "ska_tmc_simulators.helper_sdp_queue_connector_device.HelperSdpQueueConnector"
@@ -62,7 +62,7 @@ server:
           - name: "{{ $midCspControl }}"
     - name: "05"
       classes:
-        - name: "HelperSubArrayDevice"
+        - name: "HelperCSPSubarrayDevice"
           devices:
           {{- range $i, $_ := until $subCount }}
             {{- $idx := printf "%02d" (add $i 1) }}
@@ -71,12 +71,11 @@ server:
       {{- end }}
       {{- if eq $isSimulatedDish true }}
 {{- range .Values.global.dishids }}
-  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
-    - name: "{{ $num }}"
+    - name: "{{ . | lower }}"
       classes:
         - name: "HelperDishDevice"
           devices:
-            - name: "{{ $dishManagerSuffix }}{{ $num }}"
+            - name: "{{ $dishManagerSuffix }}/{{ . | lower}}"
 {{- end }}
       {{- end }}
 depends_on:

@@ -2,11 +2,11 @@ import pytest
 from pytest_bdd import scenario, then, when
 from ska_tango_base.control_model import HealthState
 
+from tests.dish_vcc_configuration.utils import get_load_dish_vcc_json
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     check_for_device_command_event,
-    prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
@@ -48,8 +48,8 @@ def invoke_load_dish_cfg(
         central_node_mid.central_node, "longRunningCommandResult"
     )
     # Prepare input for load dish configuration
-    load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
-        "multiple_same_kval", command_input_factory
+    load_dish_cfg_json = get_load_dish_vcc_json(
+        file_name="mulitple_same_kvalue.json"
     )
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(

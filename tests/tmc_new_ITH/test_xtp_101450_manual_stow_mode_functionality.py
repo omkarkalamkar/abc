@@ -69,9 +69,9 @@ def given_a_tmc(
     dish_36 = dishes.dish_master_dict["dish_036"]
     dish_36.SetDirectDishMode(DishMode.STOW)
 
-    # Set SKA063 defective
-    dish_63 = dishes.dish_master_dict["dish_063"]
-    dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
+    # Set SKA077 defective
+    dish_77 = dishes.dish_master_dict["dish_063"]
+    dish_77.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -232,7 +232,7 @@ def validate_dish_mode_set_to_stow(
         )
         assert dln_proxy.dishmode == DishMode.STOW
 
-    # Assert DLN SKA063 dish mode not stow due to error propogation set
+    # Assert DLN SKA077 dish mode not stow due to error propogation set
     assert tmc.dish_leaf_node_list[3] != DishMode.STOW
 
 
@@ -255,9 +255,9 @@ def validate_stow_mode_failure_details(events_tracer, dish_status_map):
     match = re.search(r"\{.*\}", json_part)
     dict_str = match.group(0)
     data = json.loads(dict_str)
-    err_msg1 = dish_status_map["ska063"]
+    err_msg1 = dish_status_map["ska077"]
     err_msg2 = dish_status_map["ska064"]
-    assert err_msg1 in data["ska063"]["result_code"][1]
+    assert err_msg1 in data["ska077"]["result_code"][1]
     assert err_msg2 in data["ska064"]
 
 
@@ -277,5 +277,5 @@ def validate_stow_mode_success_details(events_tracer):
     assert int(ResultCode.OK) == event_data[0]
     assert "ska001" in event_data[1]
     assert "ska036" in event_data[1]
-    assert "ska063" in event_data[1]
+    assert "ska077" in event_data[1]
     assert "ska100" in event_data[1]
