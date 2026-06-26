@@ -1,5 +1,6 @@
 # Project makefile for a ska-tmc-integration project. You should normally only need to modify
 # CAR_OCI_REGISTRY_USER and PROJECT below.
+k8s_test_src_dir = pyproject.toml $(PYTHON_SRC)/
 ALARM_HANDLER_FQDN= "alarm/handler/01"
 CAR_OCI_REGISTRY_HOST:=artefact.skao.int
 PROJECT = ska-tmc-integration
@@ -79,7 +80,7 @@ SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTE
 CI_REGISTRY ?= gitlab.com
 
 # K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12## docker image that will be run for testing purpose
-K8S_TEST_IMAGE_TO_TEST ?= $(CAR_OCI_REGISTRY_HOST)/ska-cicd-k8s-tools-build-deploy:0.13.4
+K8S_TEST_IMAGE_TO_TEST ?= $(CAR_OCI_REGISTRY_HOST)/ska-build-python:0.3.2
 
 TARANTA_ENABLED ?= false
 
