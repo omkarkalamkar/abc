@@ -150,7 +150,7 @@ def invoke_configure(
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    pytest.command_result = subarray_node.execute_transition(
+    _, pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
     )
     assert_that(event_tracer).described_as(
