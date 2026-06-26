@@ -5,6 +5,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+
 [1.23.0-rc.1]
 *************
 Added
@@ -61,6 +62,31 @@ Updated
 Updated
 -------
 * Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+
+[1.21.0]
+*************
+Fixed
+------
+* Fixed DLN not able to generate program track table continuously.
+* To work EndScan as expected scan duration greated needs to be greater than 50 seconds.
+* Fixed skb-1314.
+
+Updated
+-------
+* Support for Position Velocity Time pattern added.
+* programTrackTable size is now configurable via `ProgramTrackTableSize` property in dish pointing device.
+
+[1.21.0-rc.3]
+*************
+Fixed
+------
+* Fixed DLN not able to generate program track table continuously.
+
+[1.21.0-rc.2]
+*************
+Fixed
+------
+* Fixed skb-1314.
 
 [1.21.0-rc.1]
 *************
