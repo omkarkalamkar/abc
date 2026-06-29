@@ -6,7 +6,7 @@ import json
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
-from ska_control_model import ObsState
+from ska_control_model import ObsState, ResultCode
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
@@ -189,6 +189,16 @@ def verify_ready_state(
     state changes occur within a specified timeout. After verification, it
     updates the starting state in the context fixture for subsequent steps.
     """
+    assert_that(event_tracer).described_as(
+        "Scan command should complete successfully"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "longRunningCommandResult",
+        (
+            context_fixt.when_action_result[1][0],
+            json.dumps(((ResultCode.OK), "Command Completed")),
+        ),
+    )
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
