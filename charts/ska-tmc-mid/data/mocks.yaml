@@ -26,7 +26,7 @@ entrypoints:
   - name: "ska_tmc_simulators.helper_csp_subarray_device.HelperCSPSubarrayDevice"
   - name: "ska_tmc_simulators.helper_csp_master_device.HelperCspMasterDevice"
   - name: "ska_tmc_simulators.helper_sdp_subarray.HelperSdpSubarray"
-  - name: "ska_tmc_simulators.helper_sdp_queue_connector_device.HelperSdpQueueConnector"
+  - name: "ska_tmc_simulators.helper_sdp_queue_connector_device.HelperMidSdpQueueConnector"
 server:
   name: "mocks"
   instances:
@@ -49,7 +49,7 @@ server:
           {{- end }}
     - name: "03"
       classes:
-        - name: "HelperSdpQueueConnector"
+        - name: "HelperMidSdpQueueConnector"
           devices:
           - name: "{{ $midSdpQueueConnector }}"
       {{- end }}
