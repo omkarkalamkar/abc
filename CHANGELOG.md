@@ -11,7 +11,7 @@ Added
 -----
 * Added following new properties in Central Node:
 
-  - MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0.
+  - MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0
   - MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
   - SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1.
   - SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999.
