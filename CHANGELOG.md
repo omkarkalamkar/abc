@@ -5,6 +5,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+Updated
+-------
+* Updated TMC nodes with Pytango 10.3.0 upgrade:
+
+  - ska-tmc-centralnode: v1.5.0
+  - ska-tmc-subarraynode: v1.14.0
+  - ska-tmc-sdpleafnodes: v0.31.0
+  - ska-tmc-cspleafnodes: v0.46.0
+  - ska-tmc-dishleafnode: v0.46.0
+  - ska-tmc-simulators: v1.15.1
 
 [1.23.0-rc.1]
 *************
