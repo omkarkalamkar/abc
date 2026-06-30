@@ -212,17 +212,17 @@ def verify_ready_state(
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to READY."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "obsState",
+        ObsState.READY,
+        previous_value=context_fixt.starting_state,
+    ).has_change_event_occurred(
         csp.csp_subarray,
         "obsState",
         ObsState.READY,
         previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         sdp.sdp_subarray,
-        "obsState",
-        ObsState.READY,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
-        tmc.subarray_node,
         "obsState",
         ObsState.READY,
         previous_value=context_fixt.starting_state,
