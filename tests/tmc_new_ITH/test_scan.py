@@ -205,7 +205,7 @@ def verify_ready_state(
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to READY."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    ).within_timeout(65).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
         ObsState.READY,
