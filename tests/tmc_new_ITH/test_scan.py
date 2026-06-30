@@ -60,6 +60,7 @@ def _setup_event_subscriptions(
         event_enum_mapping={"obsState": ObsState},
     )
 
+
 @pytest.mark.test_scan
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
@@ -83,7 +84,7 @@ def subarray_in_ready_state(
     """Ensure the subarray is in the READY state."""
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     context_fixt.starting_state = ObsState.READY
-    assign_input=MyFileJSONInput("centralnode", "assign_resources_mid")
+    assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
     config_input = MyFileJSONInput("subarray", "command_Configure")
     config_json = json.loads(config_input.as_str())
     scan_duration = config_json.get("tmc", "").get("scan_duration")
