@@ -89,7 +89,7 @@ k8s-test:
     COUNT: 1
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
   script:
-    - make k8s-test MARK="test_scan"
+    - make k8s-test MARK="batch1"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
