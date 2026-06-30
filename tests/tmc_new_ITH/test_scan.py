@@ -60,7 +60,7 @@ def _setup_event_subscriptions(
         event_enum_mapping={"obsState": ObsState},
     )
 
-
+@pytest.mark.test_scan
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -83,12 +83,16 @@ def subarray_in_ready_state(
     """Ensure the subarray is in the READY state."""
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     context_fixt.starting_state = ObsState.READY
-    json_input = MyFileJSONInput("subarray", "configure_mid")
-    config_json = json.loads(json_input.as_str())
+    assign_input=MyFileJSONInput("centralnode", "assign_resources_mid")
+    config_input = MyFileJSONInput("subarray", "command_Configure")
+    config_json = json.loads(config_input.as_str())
     scan_duration = config_json.get("tmc", "").get("scan_duration")
     tmc.force_change_of_obs_state(
         ObsState.READY,
-        default_commands_inputs,
+        TestHarnessInputs(
+            assign_input=assign_input,
+            configure_input=config_input,
+        ),
         wait_termination=True,
     )
 
@@ -170,6 +174,7 @@ def verify_scanning_state(
     assert tmc.subarray_node.scanID == json.dumps(
         pytest.scan_id
     ), f"Expected scanID {pytest.scan_id} but got {tmc.subarray_node.scanID}"
+    event_tracer.clear_events()
 
 
 @then("the subarray should transition to the READY state")
@@ -205,18 +210,18 @@ def verify_ready_state(
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to READY."
-    ).within_timeout(65).has_change_event_occurred(
-        tmc.subarray_node,
-        "obsState",
-        ObsState.READY,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         csp.csp_subarray,
         "obsState",
         ObsState.READY,
         previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         sdp.sdp_subarray,
+        "obsState",
+        ObsState.READY,
+        previous_value=context_fixt.starting_state,
+    ).has_change_event_occurred(
+        tmc.subarray_node,
         "obsState",
         ObsState.READY,
         previous_value=context_fixt.starting_state,
