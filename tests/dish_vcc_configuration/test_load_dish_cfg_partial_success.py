@@ -38,7 +38,7 @@ def given_tmc(central_node_mid):
     # Verify no LoadDishCfg command is in progress
     timeout = 100
     while timeout > 0:
-        # 3 = DishVccCommandStatus.FAILED
+        # 3 = DishVccCommandStatus.OK
         if int(central_node_mid.central_node.DishVccCommandStatus) == 3:
             break
         timeout -= 1
@@ -91,7 +91,7 @@ def invoke_load_dish_cfg(
     """
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
-        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
+        TMC_MID_VCC_CONFIG_INPUT.as_str()
     )
 
     pytest.command_uid = unique_id[0]
@@ -137,7 +137,7 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
 
     # Make Dish VCC flag true
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
-        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
+        TMC_MID_VCC_CONFIG_INPUT.as_str()
     )
 
     event_recorder.has_change_event_occurred(
