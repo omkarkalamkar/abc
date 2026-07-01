@@ -45,7 +45,7 @@ def telescope_in_on_state(central_node_mid, event_recorder):
     """
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    central_node_mid.csp_master.admin_mode = AdminMode.ONLINE
+    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master, "State", DevState.OFF
     )

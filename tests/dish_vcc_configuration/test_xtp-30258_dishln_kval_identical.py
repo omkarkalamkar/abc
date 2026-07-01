@@ -7,6 +7,7 @@ from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
+    LOGGER,
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
@@ -34,6 +35,8 @@ def test_tmc_validate_dln_kvalue_identical():
 def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
     """Given a TMC with loaded Dish-VCC map version"""
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
+    LOGGER.info(f"Expected validation status: {cspmln_validation_string}")
+    LOGGER.info(f"VCC validation status: {tmc_mid.DishVccValidationStatus}")
     central_node_dish_vcc_validation_status = {
         "dish": "ALL DISH OK",
         tmc_csp_master_leaf_node: cspmln_validation_string,
