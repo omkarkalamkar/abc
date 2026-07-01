@@ -2,6 +2,7 @@
 """
 
 import json
+import time
 
 import pytest
 from assertpy import assert_that
@@ -20,6 +21,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+from tests.conftest import LOGGER
 
 
 def _setup_event_subscriptions(
@@ -204,6 +206,9 @@ def verify_ready_state(
             json.dumps(((ResultCode.OK), "Command Completed")),
         ),
     )
+    time.sleep(0.1)
+    LOGGER.debug("Dish leafnode list: %s", tmc.dish_leaf_node_list)
+
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
