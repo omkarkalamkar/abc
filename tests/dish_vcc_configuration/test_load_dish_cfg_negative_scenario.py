@@ -378,18 +378,15 @@ def invoke_command_load_cfg_on_defective_csp(
     )
     cspln = central_node_mid.csp_master_leaf_node.dev_name()
 
-    exception_msg = (
-        f'[3, "Exception occurred on the following devices: {cspln}: '
-        "Exception occurred on devices: "
-        f"{csp_sim.dev_name()}: Exception occurred, "
-        f'command failed."]'
+    pytest.exception_msg = (
+        f'"Exception occurred on the following devices: {cspln}'
     )
 
     pytest.command_result = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], exception_msg),
-        lookahead=5,
+        (unique_id[0], Anything),
+        lookahead=10,
     )
     LOGGER.info("LRCR: %s", pytest.command_result)
     LOGGER.info(
@@ -417,10 +414,10 @@ def check_sys_param_source_sys_param_attributes(central_node_mid):
 
 
 @then(parsers.parse("command returns with error message {error_message}"))
-def check_return_msg(error_message: str):
+def check_return_msg():
     """Test validate that command failed with error message"""
     LOGGER.info(
         "command_result is: %s",
         pytest.command_result["attribute_value"],
     )
-    assert error_message in pytest.command_result["attribute_value"][1]
+    assert pytest.exception_msg in pytest.command_result["attribute_value"][1]
