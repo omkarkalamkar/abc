@@ -296,20 +296,20 @@ class CorrectionKey(IntEnum):
     RESET = 2
 
 
-TMC_MID_VCC_CONFIG_INPUT = DictJSONInput(
+TMC_MID_VCC_CONFIG_INPUT = DictJSONInput
+(
     {
         "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
         "tm_data_sources": [
-            "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration?"
-            + "main#tmdata"
+            "gitlab://gitlab.com/ska-telescope/ska-tmc/"
+            "ska-tmc-mid-integration?main#tmdata"
         ],
         "tm_data_filepath": (
-            "instrument/dishid_vcc_map_configuration/"
+            "config_files/dishid_vcc_map_configuration/"
             "ska-mid-cbf-system-parameters.json"
         ),
     }
 )
-
 ABORT_COMPLETED = json.dumps([ResultCode.OK, "Abort command completed"])
 DISH_ERROR_MESSAGE = (
     "Exception occurred on the following devices: "
