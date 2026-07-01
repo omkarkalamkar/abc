@@ -7,11 +7,11 @@ from ska_control_model import AdminMode
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import get_master_device_simulators
 from tests.resources.test_support.constant import (
     COMMAND_COMPLETED,
     ERROR_PROPAGATION_DEFECT,
-    LOGGER,
     RESET_DEFECT,
     TMC_MID_VCC_CONFIG_INPUT,
 )
