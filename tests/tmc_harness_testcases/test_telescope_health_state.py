@@ -19,8 +19,8 @@ class TestTelescopeHealthState(object):
         "csp_master_health_state, sdp_master_health_state, \
         dish_master1_health_state, dish_master2_health_state, \
         dish_master3_health_state, dish_master4_health_state, \
-        dish_master5_health_state,dish_master6_health_state",
-        [
+        dish_master5_health_state,dish_master6_health_state, \
+        dish_master7_health_state,"[
             # decision table row 5 to row 9
             (
                 HealthState.OK,
@@ -31,40 +31,12 @@ class TestTelescopeHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
-            ),
-            (
-                HealthState.FAILED,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.FAILED,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.FAILED,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
                 HealthState.OK,
             ),
             (
                 HealthState.FAILED,
-                HealthState.FAILED,
+                HealthState.OK,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
@@ -76,7 +48,41 @@ class TestTelescopeHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.FAILED,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
                 HealthState.FAILED,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.FAILED,
+                HealthState.FAILED,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.FAILED,
+                HealthState.FAILED,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
@@ -86,6 +92,7 @@ class TestTelescopeHealthState(object):
                 HealthState.FAILED,
                 HealthState.OK,
                 HealthState.FAILED,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
@@ -109,6 +116,7 @@ class TestTelescopeHealthState(object):
         dish_master4_health_state,
         dish_master5_health_state,
         dish_master6_health_state,
+        dish_master7_health_state,
     ):
         (
             csp_master_sim,
@@ -119,6 +127,7 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4,
             dish_master_sim_5,
             dish_master_sim_6,
+            dish_master_sim_7,
         ) = get_master_device_simulators(simulator_factory)
         csp_master_sim.SetDirectHealthState(csp_master_health_state)
         sdp_master_sim.SetDirectHealthState(sdp_master_health_state)
@@ -128,6 +137,7 @@ class TestTelescopeHealthState(object):
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
         dish_master_sim_5.SetDirectHealthState(dish_master5_health_state)
         dish_master_sim_6.SetDirectHealthState(dish_master6_health_state)
+        dish_master_sim_7.SetDirectHealthState(dish_master7_health_state)
 
         event_recorder.subscribe_event(
             central_node_mid.central_node, "telescopeHealthState"
@@ -158,6 +168,7 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4,
             dish_master_sim_5,
             dish_master_sim_6,
+            dish_master_sim_7,
         ) = get_master_device_simulators(simulator_factory)
         sdp_sim, csp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
         sdp_sim.SetDirectHealthState(HealthState.OK)
@@ -171,6 +182,7 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4,
             dish_master_sim_5,
             dish_master_sim_6,
+            dish_master_sim_7,
         ]
         for dish in dishes:
             dish.SetDirectHealthState(HealthState.OK)
@@ -205,7 +217,8 @@ class TestTelescopeHealthState(object):
         "csp_master_health_state, sdp_master_health_state, \
         dish_master1_health_state, dish_master2_health_state, \
         dish_master3_health_state, dish_master4_health_state, \
-        dish_master5_health_state, dish_master6_health_state",
+        dish_master5_health_state, dish_master6_health_state, \
+        dish_master7_health_state",
         [
             # decision table row 11 to row 15
             (
@@ -217,40 +230,12 @@ class TestTelescopeHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
-            ),
-            (
-                HealthState.DEGRADED,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.DEGRADED,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.DEGRADED,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
                 HealthState.OK,
             ),
             (
                 HealthState.DEGRADED,
-                HealthState.DEGRADED,
+                HealthState.OK,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
@@ -262,7 +247,41 @@ class TestTelescopeHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.DEGRADED,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
                 HealthState.DEGRADED,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.DEGRADED,
+                HealthState.DEGRADED,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.DEGRADED,
+                HealthState.DEGRADED,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
@@ -285,6 +304,7 @@ class TestTelescopeHealthState(object):
         dish_master4_health_state,
         dish_master5_health_state,
         dish_master6_health_state,
+        dish_master7_health_state,
     ):
         (
             csp_master_sim,
@@ -295,6 +315,7 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4,
             dish_master_sim_5,
             dish_master_sim_6,
+            dish_master_sim_7,
         ) = get_master_device_simulators(simulator_factory)
         csp_master_sim.SetDirectHealthState(csp_master_health_state)
         sdp_master_sim.SetDirectHealthState(sdp_master_health_state)
@@ -304,6 +325,7 @@ class TestTelescopeHealthState(object):
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
         dish_master_sim_5.SetDirectHealthState(dish_master5_health_state)
         dish_master_sim_6.SetDirectHealthState(dish_master6_health_state)
+        dish_master_sim_7.SetDirectHealthState(dish_master7_health_state)
 
         event_recorder.subscribe_event(
             central_node_mid.central_node, "telescopeHealthState"
@@ -319,7 +341,8 @@ class TestTelescopeHealthState(object):
         "csp_master_health_state, sdp_master_health_state, \
         dish_master1_health_state, dish_master2_health_state, \
         dish_master3_health_state, dish_master4_health_state, \
-        dish_master5_health_state, dish_master6_health_state",
+        dish_master5_health_state, dish_master6_health_state, \
+        dish_master7_health_state",
         [
             # decision table row 17 to row 21
             (
@@ -331,40 +354,12 @@ class TestTelescopeHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
-            ),
-            (
-                HealthState.UNKNOWN,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.UNKNOWN,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.UNKNOWN,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
                 HealthState.OK,
             ),
             (
                 HealthState.UNKNOWN,
-                HealthState.UNKNOWN,
+                HealthState.OK,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
@@ -376,7 +371,41 @@ class TestTelescopeHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.UNKNOWN,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
                 HealthState.UNKNOWN,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
@@ -399,6 +428,7 @@ class TestTelescopeHealthState(object):
         dish_master4_health_state,
         dish_master5_health_state,
         dish_master6_health_state,
+        dish_master7_health_state,
     ):
         (
             csp_master_sim,
@@ -409,6 +439,7 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4,
             dish_master_sim_5,
             dish_master_sim_6,
+            dish_master_sim_7,
         ) = get_master_device_simulators(simulator_factory)
         csp_master_sim.SetDirectHealthState(csp_master_health_state)
         sdp_master_sim.SetDirectHealthState(sdp_master_health_state)
@@ -418,6 +449,7 @@ class TestTelescopeHealthState(object):
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
         dish_master_sim_5.SetDirectHealthState(dish_master5_health_state)
         dish_master_sim_6.SetDirectHealthState(dish_master6_health_state)
+        dish_master_sim_7.SetDirectHealthState(dish_master7_health_state)
 
         event_recorder.subscribe_event(
             central_node_mid.central_node, "telescopeHealthState"

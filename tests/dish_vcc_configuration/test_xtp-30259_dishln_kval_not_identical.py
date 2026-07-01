@@ -54,10 +54,10 @@ def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # Set DLN k-values which are not equal to its respective dish manager
     try:
-        tmc_mid.central_node.dish_leaf_node_list[1].kValue = 9
-        # Set dish manager k-value which are not equal to its respective
-        # dish leaf node
-        tmc_mid.central_node.dish_master_list[2].SetKValue(10)
+        pytest.old_kvalues = []
+        for dish_master in tmc_mid.central_node.dish_master_list:
+            pytest.old_kvalues.append(dish_master.kvalue)
+            dish_master.SetKValue(10)
     except Exception as ex:
         LOGGER.error(
             "Exception %s occurred at with error: %s",
@@ -141,8 +141,11 @@ def check_value_of_isdishvccconfigset_on_central_node(tmc_mid):
         tmc_mid.TelescopeOn()
     assert "Dish Vcc Config not Set" in str(e.value)
     # Restore to previous k-value
-    tmc_mid.central_node.dish_leaf_node_list[1].SetKValue(222)
-    tmc_mid.central_node.dish_leaf_node_list[2].SetKValue(333)
+
+    for dish_leaf_node, old_kvalue in zip(
+        tmc_mid.central_node.dish_leaf_node_list, pytest.old_kvalues
+    ):
+        dish_leaf_node.SetKValue(old_kvalue)
 
     assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.central_node,

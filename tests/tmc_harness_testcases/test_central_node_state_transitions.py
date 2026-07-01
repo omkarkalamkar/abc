@@ -35,6 +35,7 @@ class TestMidCentralNodeStateTransition(object):
             dish_master_sim4,
             dish_master_sim5,
             dish_master_sim6,
+            dish_master_sim7,
         ) = get_master_device_simulators(simulator_factory)
 
         event_recorder.subscribe_event(csp_master_sim, "State")
@@ -46,6 +47,7 @@ class TestMidCentralNodeStateTransition(object):
             dish_master_sim4,
             dish_master_sim5,
             dish_master_sim6,
+            dish_master_sim7,
         ]
         for dish in dishes:
             event_recorder.subscribe_event(dish, "DishMode")
