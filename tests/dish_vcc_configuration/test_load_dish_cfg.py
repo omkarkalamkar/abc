@@ -35,7 +35,12 @@ def given_tmc(central_node_mid):
     """Given a TMC"""
     timeout = 100
     while timeout > 0:
-        if int(central_node_mid.central_node.DishVccCommandStatus) == 3:
+        # 0 -> STAGING, 1 -> INIT, 2 -> IN_PROGRESS
+        if int(central_node_mid.central_node.DishVccCommandStatus) not in [
+            0,
+            1,
+            2,
+        ]:
             break
         timeout -= 1
         sleep(1)
