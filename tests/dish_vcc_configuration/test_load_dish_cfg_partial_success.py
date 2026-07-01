@@ -21,7 +21,7 @@ from tests.resources.test_support.constant import (
 @pytest.mark.SKA_mid
 @pytest.mark.test_dish_vcc
 @scenario(
-    "../dish_vcc_initialization/features/"
+    "../features/dish_vcc_initialization/"
     "load_dish_cfg_partial_success.feature",
     "TMC allows partial success for load Dish and VCC configuration file",
 )
