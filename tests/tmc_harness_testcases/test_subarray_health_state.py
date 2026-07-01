@@ -1,5 +1,6 @@
 import json
 import logging
+from time import sleep
 
 import pytest
 from ska_tango_base.control_model import HealthState, ObsState
@@ -806,6 +807,8 @@ class TestSubarrayHealthState(object):
         dish_master4_health_state,
     ):
         # Row 15 to 17
+
+        sleep(3)
         (
             csp_sa_sim,
             sdp_sa_sim,
@@ -887,7 +890,7 @@ class TestSubarrayHealthState(object):
                 "healthState",
                 HealthState.FAILED,
                 lookahead=10,
-            ), "Expected Subarray Node HealthState to be DEGRADED"
+            ), "Expected Subarray Node HealthState to be FAILED"
         else:
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node,
