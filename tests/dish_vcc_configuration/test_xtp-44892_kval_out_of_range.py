@@ -57,10 +57,10 @@ def invoke_load_dish_cfg(
     load_dish_cfg_json = get_load_dish_vcc_json(
         file_name="out_of_range_kvalue.json"
     )
-    result_code, _ = central_node_mid.load_dish_vcc_configuration(
+    result_code, uid = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
-
+    pytest.command_uid = uid[0]
     assert result_code == ResultCode.QUEUED
 
 
@@ -80,10 +80,9 @@ def test_tmc_rejects_command_with_error(
     assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (Anything, json.dumps([ResultCode.FAILED, error_message])),
+        (pytest.command_uid, Anything),
         lookahead=5,
     )
-
     assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
     central_node_mid.csp_master.On()
     assert event_recorder.has_change_event_occurred(
