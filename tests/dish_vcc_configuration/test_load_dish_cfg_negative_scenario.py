@@ -229,10 +229,6 @@ def test_tmc_rejects_command_with_error(
         (pytest.command_id, Anything),
         lookahead=10,
     )
-    LOGGER.info(
-        ">>>>>>>>> command_result is: %s",
-        assertion_data,
-    )
     assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
 
 
@@ -257,10 +253,6 @@ def test_validates_longrunningcommandresult_with_error(
             Anything,
         ),
         lookahead=10,
-    )
-    LOGGER.info(
-        ">>>>>>>>> command_result is: %s",
-        assertion_data,
     )
     assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
 
