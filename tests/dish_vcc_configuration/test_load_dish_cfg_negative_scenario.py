@@ -228,7 +228,10 @@ def test_tmc_rejects_command_with_error(
         (Anything, json.dumps([ResultCode.FAILED, error_message])),
         lookahead=5,
     )
-
+    LOGGER.info(
+        ">>>>>>>>> command_result is: %s",
+        assertion_data,
+    )
     assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
 
 
