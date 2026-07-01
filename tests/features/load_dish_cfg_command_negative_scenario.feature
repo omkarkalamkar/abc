@@ -2,7 +2,7 @@ Feature: TMC is able to handle the failure when load dish cfg command fails
     @XTP-28680 @XTP-28347
     Scenario Outline: TMC returns error message when non existent file is provided in configuration  
         Given a TMC
-        And Telescope is in ON state 
+        And CSP master in OFF state
         When I issue the command LoadDishCfg on TMC with non existent file <file_name> in configuration    
         Then TMC updates longrunningcommandresult with error <error_message>
         Examples:
@@ -12,7 +12,7 @@ Feature: TMC is able to handle the failure when load dish cfg command fails
     @XTP-28682 @XTP-28347
     Scenario Outline: TMC returns error when invalid dish id is provided in configuration
         Given a TMC
-        And Telescope is in ON state
+        And CSP master in OFF state
         When I issue the command LoadDishCfg on TMC with invalid <dish_id>
         Then TMC rejects the command with error <error_message>
         Examples:
@@ -22,14 +22,14 @@ Feature: TMC is able to handle the failure when load dish cfg command fails
     @XTP-28683 @XTP-28347
     Scenario Outline: TMC returns error when duplicate vcc id is provided in configuration
         Given a TMC
-        And Telescope is in ON state
+        And CSP master in OFF state
         When I issue the command LoadDishCfg on TMC with duplicate vcc id in configuration
         Then TMC rejects the command with error due to Duplicate Vcc ids found in json
 
     @XTP-28679 @XTP-28347
     Scenario Outline: TMC handling exception from CSP Subarray  
         Given a TMC
-        And Telescope is in ON state
+        And CSP master in OFF state
         When I issue the command LoadDishCfg on TMC and CSP Controller raises an exception
         Then dishVccConfig and sourceDishVccConfig attributes remains unchanged on CSP Master Leaf Node
         And command returns with error message <error_message>

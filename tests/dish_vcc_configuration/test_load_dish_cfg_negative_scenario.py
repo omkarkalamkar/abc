@@ -6,6 +6,7 @@ import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_tango_base.control_model import AdminMode
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
@@ -106,17 +107,13 @@ def given_tmc():
     """Given a TMC"""
 
 
-@given("Telescope is in ON state")
-def telescope_in_on_state(central_node_mid, event_recorder):
-    """Move Telescope to ON state"""
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    central_node_mid.move_to_on()
+@given("CSP master in OFF state")
+def csp_master_in_off_state(central_node_mid, event_recorder):
+    """Move CSP master to OFF state"""
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
+        central_node_mid.csp_master, "State", DevState.OFF
     )
 
 
