@@ -257,7 +257,10 @@ def test_validates_longrunningcommandresult_with_error(
         ),
         lookahead=5,
     )
-
+    LOGGER.info(
+        ">>>>>>>>> command_result is: %s",
+        assertion_data,
+    )
     assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
 
 
