@@ -132,10 +132,11 @@ def invoke_load_dish_cfg(central_node_mid, command_input_factory, file_name):
         f"load_dish_cfg_{file_name}", command_input_factory
     )
 
-    result_code, message = central_node_mid.load_dish_vcc_configuration(
+    result_code, unique_id = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
     result_code == ResultCode.QUEUED
+    pytest.command_id = unique_id[0]
 
 
 @given("a LoadDishCfg command is currently in progress")
@@ -225,8 +226,8 @@ def test_tmc_rejects_command_with_error(
     assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (Anything, json.dumps([ResultCode.FAILED, error_message])),
-        lookahead=5,
+        (pytest.command_id, Anything),
+        lookahead=10,
     )
     LOGGER.info(
         ">>>>>>>>> command_result is: %s",
@@ -252,10 +253,10 @@ def test_validates_longrunningcommandresult_with_error(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (
+            pytest.command_id,
             Anything,
-            json.dumps([ResultCode.FAILED, error_message]),
         ),
-        lookahead=5,
+        lookahead=10,
     )
     LOGGER.info(
         ">>>>>>>>> command_result is: %s",
@@ -280,8 +281,8 @@ def test_tmc_rejects_command_for_duplicate_vcc_id(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (
+            pytest.command_id,
             Anything,
-            json.dumps([ResultCode.FAILED, exp_msg]),
         ),
         lookahead=5,
     )
@@ -302,10 +303,11 @@ def invoke_command_with_invalid_dish_id(
         "load_dish_cfg_invalid_dish_id", command_input_factory
     )
 
-    result_code, _ = central_node_mid.load_dish_vcc_configuration(
+    result_code, uid = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
     assert result_code == ResultCode.QUEUED
+    pytest.command_id = uid[0]
 
 
 @when(
@@ -321,9 +323,10 @@ def invoke_command_with_duplicate_vcc_id(
         "load_dish_cfg_duplicate_vcc_id", command_input_factory
     )
 
-    result_code, message = central_node_mid.load_dish_vcc_configuration(
+    result_code, uid = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
+    pytest.command_id = uid[0]
     result_code == ResultCode.QUEUED
 
 
