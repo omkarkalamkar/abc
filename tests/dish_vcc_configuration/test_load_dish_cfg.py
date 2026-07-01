@@ -1,4 +1,5 @@
 import json
+from time import sleep
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -30,8 +31,14 @@ def test_dish_id_vcc_configuration():
 
 
 @given("a TMC")
-def given_tmc():
+def given_tmc(central_node_mid):
     """Given a TMC"""
+    timeout = 100
+    while timeout > 0:
+        if int(central_node_mid.central_node.DishVccCommandStatus) == 3:
+            break
+        timeout -= 1
+        sleep(1)
 
 
 @given("Telescope is in ON state")
