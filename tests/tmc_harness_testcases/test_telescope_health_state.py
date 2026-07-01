@@ -20,7 +20,8 @@ class TestTelescopeHealthState(object):
         dish_master1_health_state, dish_master2_health_state, \
         dish_master3_health_state, dish_master4_health_state, \
         dish_master5_health_state,dish_master6_health_state, \
-        dish_master7_health_state,"[
+        dish_master7_health_state",
+        [
             # decision table row 5 to row 9
             (
                 HealthState.OK,
