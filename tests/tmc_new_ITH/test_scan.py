@@ -16,12 +16,12 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
+from tests.conftest import LOGGER
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-from tests.conftest import LOGGER
 
 
 def _setup_event_subscriptions(
