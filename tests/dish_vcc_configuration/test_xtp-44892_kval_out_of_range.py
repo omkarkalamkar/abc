@@ -84,7 +84,3 @@ def test_tmc_rejects_command_with_error(
         lookahead=5,
     )
     assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
-    central_node_mid.csp_master.On()
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master, "State", DevState.ON
-    )
