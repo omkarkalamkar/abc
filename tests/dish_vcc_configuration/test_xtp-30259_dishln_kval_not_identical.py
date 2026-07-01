@@ -125,8 +125,13 @@ def check_value_of_isdishvccconfigset_on_central_node(tmc_mid):
     false after dish leaf node report."""
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
-        "SKA036": "k-value not identical",
-        "SKA077": "k-value not identical",
+        "ska036": "k-value not identical",
+        "ska001": "k-value not identical",
+        "ska077": "k-value not identical",
+        "ska099": "k-value not identical",
+        "ska100": "k-value not identical",
+        "ska999": "k-value not identical",
+        "ska500": "k-value not identical",
         tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     assert wait_and_validate_device_attribute_value(

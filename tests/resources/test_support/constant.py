@@ -87,6 +87,7 @@ ON_OFF_DEVICE_COMMAND_DICT = {
     "dish_master4": dish_master4,
     "dish_master5": dish_master5,
     "dish_master6": dish_master6,
+    "dish_master7": dish_master7,
     "dish_master_list": [
         dish_master1,
         dish_master2,
@@ -94,6 +95,7 @@ ON_OFF_DEVICE_COMMAND_DICT = {
         dish_master4,
         dish_master5,
         dish_master6,
+        dish_master7,
     ],
     "central_node": centralnode,
     "tmc_csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
@@ -111,6 +113,7 @@ DEVICE_STATE_STANDBY_INFO = {
     dish_master4: ["DISABLE", "STANDBY"],
     dish_master5: ["DISABLE", "STANDBY"],
     dish_master6: ["DISABLE", "STANDBY"],
+    dish_master7: ["DISABLE", "STANDBY"],
 }
 
 DEVICE_STATE_ON_INFO = {
@@ -125,6 +128,7 @@ DEVICE_STATE_ON_INFO = {
     dish_master4: ["STANDBY"],
     dish_master5: ["STANDBY"],
     dish_master6: ["STANDBY"],
+    dish_master7: ["STANDBY"],
 }
 
 DISH_MODE_STANDBYFP_INFO = {
@@ -134,6 +138,7 @@ DISH_MODE_STANDBYFP_INFO = {
     dish_master4: ["STANDBY_FP"],
     dish_master5: ["STANDBY_FP"],
     dish_master6: ["STANDBY_FP"],
+    dish_master7: ["STANDBY_FP"],
 }
 
 DISH_MODE_STANDBYLP_INFO = {
@@ -143,6 +148,7 @@ DISH_MODE_STANDBYLP_INFO = {
     dish_master4: ["STANDBY_LP"],
     dish_master5: ["STANDBY_LP"],
     dish_master6: ["STANDBY_LP"],
+    dish_master7: ["STANDBY_LP"],
 }
 
 DEVICE_OBS_STATE_EMPTY_INFO = {
@@ -480,6 +486,7 @@ SIMULATOR_DEVICE_FQDN_DICT = {
         dish_master4,
         dish_master5,
         dish_master6,
+        dish_master7,
     ],
     SimulatorDeviceType.MID_SDP_MASTER_DEVICE: [sdp_master],
     SimulatorDeviceType.MID_CSP_MASTER_DEVICE: [csp_master],

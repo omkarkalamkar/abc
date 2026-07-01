@@ -51,17 +51,6 @@ def telescope_in_on_state(central_node_mid, event_recorder):
     )
     for dish in central_node_mid.dish_leaf_node_list:
         event_recorder.subscribe_event(dish, "dishMode")
-    central_node_mid.move_to_on()
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master, "State", DevState.ON
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master, "State", DevState.ON
-    )
-    for dish in central_node_mid.dish_leaf_node_list:
-        assert event_recorder.has_change_event_occurred(
-            dish, "dishMode", DishMode.STANDBY_FP
-        )
 
 
 @when(
@@ -192,7 +181,14 @@ def validate_k_number_set(central_node_mid, simulator_factory, event_recorder):
     ) = get_master_device_simulators(simulator_factory)
     assert dish_master_1_sim.kValue == 119
     assert dish_master_2_sim.kValue == 1127
-    central_node_mid.csp_master.On()
+    central_node_mid.move_to_on()
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master, "State", DevState.ON
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master, "State", DevState.ON
     )
+    for dish in central_node_mid.dish_leaf_node_list:
+        assert event_recorder.has_change_event_occurred(
+            dish, "dishMode", DishMode.STANDBY_FP
+        )
