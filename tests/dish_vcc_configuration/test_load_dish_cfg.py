@@ -34,16 +34,18 @@ def test_dish_id_vcc_configuration():
 def given_tmc(central_node_mid):
     """Given a TMC"""
     timeout = 100
+    flag = True
     while timeout > 0:
-        # 0 -> STAGING, 1 -> INIT, 2 -> IN_PROGRESS
-        if int(central_node_mid.central_node.DishVccCommandStatus) not in [
-            0,
-            1,
-            2,
-        ]:
+        # 3 -> COMPLETED, 4 -> FAILED
+        if int(central_node_mid.central_node.DishVccCommandStatus) in [3, 4]:
+            flag = False
             break
         timeout -= 1
         sleep(1)
+    if flag:
+        raise Exception(
+            "LoadDishCfg command status not completed, cannot run the test"
+        )
 
 
 @given("Telescope is in ON state")

@@ -25,9 +25,9 @@ from tests.resources.test_support.constant import (
 @scenario(
     "../features/dish_vcc_initialization/"
     "load_dish_cfg_partial_success.feature",
-    "TMC allows partial success for load Dish and VCC configuration file",
+    "TMC loaddishcfg fails on failure on all dishes",
 )
-def test_dish_id_vcc_partial_success():
+def test_dish_id_vcc_configuration_failure():
     """This test case validates LoadDishCfg command
     fails if it fails on all the dishes.
     """
@@ -69,7 +69,7 @@ def csp_master_in_off_state(central_node_mid, event_recorder):
     )
 
 
-@given("one dish is working as expected out of allocated dishes")
+@given("All the dishes set to throw exception")
 def dishes_set_to_throws_exception(simulator_factory):
     """Move Telescope to ON state
     Args
@@ -79,7 +79,6 @@ def dishes_set_to_throws_exception(simulator_factory):
     """
 
     _, _, *dish_master_sims = get_master_device_simulators(simulator_factory)
-    pytest.errorless_dish = dish_master_sims.pop(0)
     pytest.dish_master_sims = dish_master_sims
     for dish_master_sim in dish_master_sims:
         dish_master_sim.SetDefective(ERROR_PROPAGATION_DEFECT)
@@ -106,7 +105,7 @@ def invoke_load_dish_cfg(
     pytest.command_uid = unique_id[0]
 
 
-@then("TMC loaddishcfg gets succeed partially")
+@then("TMC fails to set the Dish-VCC map")
 def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
     """Test validate that in progress load dish cfg complete"""
     # Subscribe for longRunningCommandResult attribute
@@ -119,12 +118,12 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
         central_node_mid.central_node, "isDishVccConfigSet"
     )
 
-    err_msg = "LoadDishCfg completed with partial success"
+    err_msg = "LoadDishCfg failed"
 
     event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "isDishVccConfigSet",
-        True,
+        False,
         lookahead=5,
     )
 
