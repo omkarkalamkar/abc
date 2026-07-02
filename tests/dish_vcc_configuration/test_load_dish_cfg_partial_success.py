@@ -195,6 +195,7 @@ def invoke_load_dish_cfg_in_empty_obsstate(central_node_mid, event_recorder):
 def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
     """TMC not allows loaddishcfg as CSP controller is in ON state"""
 
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     msg = "LoadDishCfg command is allowed in CSP Master DevState.OFF only."
     err_msg = f"[6, {msg}]"
     event_recorder.has_change_event_occurred(
@@ -205,10 +206,13 @@ def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
     )
 
     assert not central_node_mid.central_node.isDishVccConfigSet
-    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
+
+    central_node_mid.csp_master.off([])
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master, "State", DevState.OFF
     )
+
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
         json.dumps(TMC_MID_VCC_CONFIG_INPUT)
     )
