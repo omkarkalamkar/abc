@@ -4,13 +4,9 @@ from time import sleep
 
 import pytest
 from pytest_bdd import given, scenario, then, when
-from ska_control_model import AdminMode, ObsState
+from ska_control_model import AdminMode
 from ska_integration_test_harness.actions.utils.generate_eb_pb_ids import (
     generate_eb_pb_ids,
-)
-from ska_integration_test_harness.facades.tmc_facade import TMCFacade
-from ska_integration_test_harness.inputs.test_harness_inputs import (
-    TestHarnessInputs,
 )
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
@@ -185,16 +181,8 @@ def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
 
 
 @when("I try to invoke loaddishcfg in obsstate empty")
-def invoke_load_dish_cfg_in_empty_obsstate(
-    tmc: TMCFacade, central_node_mid, event_recorder
-):
+def invoke_load_dish_cfg_in_empty_obsstate(central_node_mid, event_recorder):
     """Test validate that in progress load dish cfg complete"""
-
-    tmc.force_change_of_obs_state(
-        ObsState.EMPTY,
-        TestHarnessInputs(),
-        wait_termination=True,
-    )
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
         json.dumps(TMC_MID_VCC_CONFIG_INPUT)
@@ -261,9 +249,7 @@ def dish_with_kvalue_issue(central_node_mid, event_recorder):
 
 
 @then("TMC rejects the assign resources command if invoked")
-def tmc_rejects_assign_resources(
-    tmc: TMCFacade, central_node_mid, event_recorder
-):
+def tmc_rejects_assign_resources(central_node_mid, event_recorder):
     """TMC mid rejects the assign resources command
     if invoked when any of the dish has kValue issue"""
 
@@ -271,8 +257,7 @@ def tmc_rejects_assign_resources(
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
     cmd_input = generate_eb_pb_ids(assign_input)
     LOGGER.info("Invoking AssignResources command: %s", assign_input)
-    _, uid = tmc.central_node.AssignResources(cmd_input.as_str())
-
+    _, uid = central_node_mid.central_node.AssignResources(cmd_input.as_str())
     assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
