@@ -125,7 +125,7 @@ dishleafnode:
 
 skatmcsimulators:
   image:
-    registry: https://gitlab.com/api/v4/projects/31132400/packages/helm/api/dev/charts
+    registry: artefact.skao.int
     image: ska-tmc-simulators
     tag: 1.15.1-dev.c9521abb2
     pullPolicy: IfNotPresent
