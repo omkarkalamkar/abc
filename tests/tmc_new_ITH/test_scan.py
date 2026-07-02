@@ -2,7 +2,6 @@
 """
 
 import json
-import time
 
 import pytest
 from assertpy import assert_that
@@ -14,52 +13,14 @@ from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
-from ska_tango_testing.integration import TangoEventTracer, log_events
+from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-
-
-def _setup_event_subscriptions(
-    tmc: TMCFacade,
-    csp: CSPFacade,
-    sdp: SDPFacade,
-    event_tracer: TangoEventTracer,
-):
-    """Subscribe TMC, CSP and SDP devices to track and log obsState events.
-
-    :param tmc: the TMC facade.
-    :param csp: the CSP facade.
-    :param sdp: the SDP facade.
-    :param event_tracer: the event tracer.
-    """
-    event_tracer.subscribe_event(tmc.subarray_node, "obsState")
-    event_tracer.subscribe_event(csp.csp_subarray, "obsState")
-    event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
-    event_tracer.subscribe_event(sdp.sdp_subarray, "receiveAddresses")
-    event_tracer.subscribe_event(sdp.sdp_subarray, "commandCallInfo")
-    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
-    event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
-
-    log_events(
-        {
-            tmc.subarray_node: [
-                "obsState",
-                "longRunningCommandResult",
-            ],
-            csp.csp_subarray: ["obsState"],
-            sdp.sdp_subarray: [
-                "obsState",
-                "commandCallInfo",
-                "receiveAddresses",
-            ],
-            tmc.central_node: ["longRunningCommandResult"],
-        },
-        event_enum_mapping={"obsState": ObsState},
-    )
+from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
 @pytest.mark.batch1
@@ -82,7 +43,7 @@ def subarray_in_ready_state(
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the READY state."""
-    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     context_fixt.starting_state = ObsState.READY
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
     config_input = MyFileJSONInput("subarray", "command_Configure")
@@ -205,7 +166,7 @@ def verify_ready_state(
             json.dumps(((ResultCode.OK), "Command Completed")),
         ),
     )
-    time.sleep(0.1)
+
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
