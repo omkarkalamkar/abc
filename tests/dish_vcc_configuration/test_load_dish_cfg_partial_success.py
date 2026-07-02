@@ -222,7 +222,7 @@ def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
 
     assert not central_node_mid.central_node.isDishVccConfigSet
 
-    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
+    central_node_mid.csp_master.off([])
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
