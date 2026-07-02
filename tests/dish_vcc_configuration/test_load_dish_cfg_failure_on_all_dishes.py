@@ -21,7 +21,6 @@ from tests.resources.test_support.constant import (
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test_dish_vcc
 @scenario(
     "../features/dish_vcc_initialization/"
     "load_dish_cfg_partial_success.feature",

@@ -25,7 +25,6 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test_dish_vcc
 @scenario(
     "../features/dish_vcc_initialization/"
     "load_dish_cfg_partial_success.feature",
@@ -112,7 +111,13 @@ def invoke_load_dish_cfg(
 
 @then("TMC loaddishcfg gets succeed partially")
 def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
-    """Test validate that in progress load dish cfg complete"""
+    """Test validate that in progress load dish cfg complete
+    Args
+    :param central_node_mid: fixture for a TMC CentralNode Mid under test
+    which provides simulated master devices
+    :param event_recorder: fixture for a MockTangoEventCallbackGroup
+    for validating the subscribing and receiving events.
+    """
 
     # Subscribe for longRunningCommandResult attribute
     event_recorder.subscribe_event(
@@ -182,7 +187,11 @@ def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
 
 @when("I try to invoke loaddishcfg in obsstate empty")
 def invoke_load_dish_cfg_in_empty_obsstate(central_node_mid):
-    """Test validate that in progress load dish cfg complete"""
+    """Test validate that in progress load dish cfg complete
+    Args
+    :param central_node_mid: fixture for a TMC CentralNode Mid under test
+    which provides simulated master devices
+    """
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
         json.dumps(TMC_MID_VCC_CONFIG_INPUT)
@@ -193,7 +202,13 @@ def invoke_load_dish_cfg_in_empty_obsstate(central_node_mid):
 
 @then("TMC not allow loaddishcfg as CSP controller is in ON state")
 def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
-    """TMC not allows loaddishcfg as CSP controller is in ON state"""
+    """TMC not allows loaddishcfg as CSP controller is in ON state
+    Args
+    :param central_node_mid: fixture for a TMC CentralNode Mid under test
+    which provides simulated master devices
+    :param event_recorder: fixture for a MockTangoEventCallbackGroup
+    for validating the subscribing and receiving events.
+    """
 
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     msg = "LoadDishCfg command is allowed in CSP Master DevState.OFF only."
@@ -207,10 +222,13 @@ def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
 
     assert not central_node_mid.central_node.isDishVccConfigSet
 
-    central_node_mid.csp_master.off([])
+    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
 
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master, "State", DevState.OFF
+        central_node_mid.csp_master,
+        "State",
+        DevState.OFF,
+        lookahead=10,
     )
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
@@ -231,8 +249,12 @@ def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
 
 
 @when("TMC have kValue issue on any of the dish")
-def dish_with_kvalue_issue(central_node_mid, event_recorder):
-    """TMC mid dish with kValue issue on any of the dish"""
+def dish_with_kvalue_issue(central_node_mid):
+    """TMC mid dish with kValue issue on any of the dish
+    Args
+    :param central_node_mid: fixture for a TMC CentralNode Mid under test
+    which provides simulated master devices
+    """
 
     pytest.kvalue = pytest.errorless_dish.kValue
     pytest.errorless_dish.SetKValue(234)
@@ -253,7 +275,13 @@ def dish_with_kvalue_issue(central_node_mid, event_recorder):
 @then("TMC rejects the assign resources command if invoked")
 def tmc_rejects_assign_resources(central_node_mid, event_recorder):
     """TMC mid rejects the assign resources command
-    if invoked when any of the dish has kValue issue"""
+    if invoked when any of the dish has kValue issue
+    Args
+    :param central_node_mid: fixture for a TMC CentralNode Mid under test
+    which provides simulated master devices
+    :param event_recorder: fixture for a MockTangoEventCallbackGroup
+    for validating the subscribing and receiving events.
+    """
 
     error_msg = "Can't assign receptors with k-value issues"
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
