@@ -139,20 +139,15 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
         central_node_mid.central_node.DishVccCommandStatus,
         assertion_data,
     )
-    LOGGER.info(
-        ">>>>>>>>>> %s", json.loads(assertion_data["attribute_value"][1])[0]
-    )
+    
     assert json.loads(assertion_data["attribute_value"][1])[0] == (
         ResultCode.FAILED
     )
     error_message = json.loads(assertion_data["attribute_value"][1])[1]
-    LOGGER.info("Error message is: %s", error_message)
     assert err_msg in error_message
     brace_index = error_message.find("{")
     dict_str = error_message[brace_index:]
-    LOGGER.info("<<<<<<< Error dict is: %s", dict_str)
     error_dict = ast.literal_eval(dict_str)
-    LOGGER.info(">>>>>>> Error dict is: %s", error_dict)
     msg = "Exception occurred, command failed"
     assert all(msg in error for error in error_dict.values())
 
