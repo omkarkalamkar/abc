@@ -181,7 +181,7 @@ def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
 
 
 @when("I try to invoke loaddishcfg in obsstate empty")
-def invoke_load_dish_cfg_in_empty_obsstate(central_node_mid, event_recorder):
+def invoke_load_dish_cfg_in_empty_obsstate(central_node_mid):
     """Test validate that in progress load dish cfg complete"""
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
@@ -234,22 +234,20 @@ def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
 def dish_with_kvalue_issue(central_node_mid, event_recorder):
     """TMC mid dish with kValue issue on any of the dish"""
 
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "DishVccValidationStatus"
-    )
-
     pytest.kvalue = pytest.errorless_dish.kValue
     pytest.errorless_dish.SetKValue(234)
-
-    event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "DishVccValidationStatus",
-        Anything,
-        lookahead=5,
-    )
-
-    status = json.loads(central_node_mid.central_node.DishVccValidationStatus)
-    assert any("not identical" in value for value in status.values())
+    timeout = 10
+    flag = False
+    while timeout > 0:
+        status = json.loads(
+            central_node_mid.central_node.DishVccValidationStatus
+        )
+        if any("not identical" in value for value in status.values()):
+            flag = True
+            break
+        timeout -= 1
+        sleep(1)
+    assert flag
 
 
 @then("TMC rejects the assign resources command if invoked")
@@ -283,12 +281,14 @@ def tmc_rejects_assign_resources(central_node_mid, event_recorder):
     assert error_msg in error_message
 
     pytest.errorless_dish.SetKValue(pytest.kvalue)
-    event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "DishVccValidationStatus",
-        Anything,
-        lookahead=5,
-    )
-
-    status = json.loads(central_node_mid.central_node.DishVccValidationStatus)
-    assert any("ALL DISH OK" in value for value in status.values())
+    timeout = 10
+    while timeout > 0:
+        status = json.loads(
+            central_node_mid.central_node.DishVccValidationStatus
+        )
+        if any("ALL DISH OK" in value for value in status.values()):
+            flag = True
+            break
+        timeout -= 1
+        sleep(1)
+    assert flag
