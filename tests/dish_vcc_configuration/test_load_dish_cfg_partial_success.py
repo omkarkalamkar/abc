@@ -107,7 +107,7 @@ def invoke_load_dish_cfg(
 
 
 @then("TMC loaddishcfg gets succeed partially")
-def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
+def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
     """Test validate that in progress load dish cfg complete"""
     # Subscribe for longRunningCommandResult attribute
 
@@ -142,7 +142,7 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
     )
 
     assert json.loads(assertion_data["attribute_value"][1])[0] == (
-        ResultCode.FAILED
+        ResultCode.OK
     )
     error_message = json.loads(assertion_data["attribute_value"][1])[1]
     assert err_msg in error_message
@@ -162,17 +162,12 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
 
     event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
-        "isDishVccConfigSet",
-        True,
-        lookahead=5,
-    )
-
-    event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
+
+    assert central_node_mid.central_node.isDishVccConfigSet
 
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     central_node_mid.move_to_on()
