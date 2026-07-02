@@ -1,3 +1,4 @@
+import ast
 import json
 from time import sleep
 
@@ -9,6 +10,7 @@ from tango import DevState
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import get_master_device_simulators
+from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import (
     COMMAND_COMPLETED,
     ERROR_PROPAGATION_DEFECT,
@@ -37,16 +39,18 @@ def given_tmc(central_node_mid):
 
     # Verify no LoadDishCfg command is in progress
     timeout = 100
+    flag = True
     while timeout > 0:
         # 0 -> STAGING, 1 -> INIT, 2 -> IN_PROGRESS
-        if int(central_node_mid.central_node.DishVccCommandStatus) not in [
-            0,
-            1,
-            2,
-        ]:
+        if int(central_node_mid.central_node.DishVccCommandStatus) == 3:
+            flag = False
             break
         timeout -= 1
         sleep(1)
+    if flag:
+        raise Exception(
+            "LoadDishCfg command status not completed, cannot run the test"
+        )
 
 
 @given("CSP Controller is in OFF state")
@@ -114,7 +118,7 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
         central_node_mid.central_node, "isDishVccConfigSet"
     )
 
-    err_msg = "LoadDishCfg command failed"
+    err_msg = "LoadDishCfg failed"
 
     event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -135,7 +139,22 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
         central_node_mid.central_node.DishVccCommandStatus,
         assertion_data,
     )
-    assert err_msg in json.loads(assertion_data["attribute_value"][1])[1]
+    LOGGER.info(
+        ">>>>>>>>>> %s", json.loads(assertion_data["attribute_value"][1])[0]
+    )
+    assert json.loads(assertion_data["attribute_value"][1])[0] == (
+        ResultCode.FAILED
+    )
+    error_message = json.loads(assertion_data["attribute_value"][1])[1]
+    LOGGER.info("Error message is: %s", error_message)
+    assert err_msg in error_message
+    brace_index = error_message.find("{")
+    dict_str = error_message[brace_index:]
+    LOGGER.info("<<<<<<< Error dict is: %s", dict_str)
+    error_dict = ast.literal_eval(dict_str)
+    LOGGER.info(">>>>>>> Error dict is: %s", error_dict)
+    msg = "Exception occurred, command failed"
+    assert all(msg in error for error in error_dict.values())
 
     for dish_master_sim in pytest.dish_master_sims:
         dish_master_sim.SetDefective(RESET_DEFECT)
@@ -157,4 +176,10 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
         "longRunningCommandResult",
         (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
+    )
+
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    central_node_mid.move_to_on()
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master, "State", DevState.ON
     )
