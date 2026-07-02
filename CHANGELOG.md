@@ -5,6 +5,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.21.1]
+*************
+Updated
+-------
+* Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+* Updated dish-leafnode tag to v0.44.3
 
 [1.21.0]
 *************
@@ -30,6 +36,12 @@ Fixed
 Fixed
 ------
 * Fixed skb-1314.
+
+[1.21.1-rc.1]
+*************
+Updated
+-------
+* Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
 
 [1.21.0-rc.1]
 *************
@@ -109,7 +121,7 @@ Updated
 *************
 Added
 -----
-* Added HealthInfo aggregation support in the ska-tmc-mid-integration node. 
+* Added HealthInfo aggregation support in the ska-tmc-mid-integration node.
   The node now processes HealthInfo events from SA, Dish, CSP and SDP devices and updates the aggregated healthInfo attribute accordingly.
 
 Updated
@@ -134,7 +146,7 @@ Added
 * TMC is now able to stow the dish manually using SetStowMode command.
 * Automatically using weather station data.
 * Follwing are the properties introduced in dishleafnode
-          weather_station_device_names: 
+          weather_station_device_names:
           max_allowed_wind_speed
           max_allowed_ops_wind_speed
           max_allowed_gust_wind_speed
@@ -146,7 +158,7 @@ Added
           max_temp_threshold
           min_temp_threshold
           time_delta
-          temp_delta 
+          temp_delta
           enable_auto_stow
 
 
@@ -168,7 +180,7 @@ Updated
 *************
 Updated
 -------
-* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error. 
+* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error.
 
 [1.13.0-rc.2]
 *************

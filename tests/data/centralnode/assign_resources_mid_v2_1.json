@@ -1,107 +1,166 @@
-
-
 {
-    "interface": "https://schema.skao.int/ska-tmc-assignresources/2.1",
-    "transaction_id": "txn-....-00001",
-    "subarray_id": 1,
-    "dish": {
-        "receptor_ids": ["SKA001","SKA036","SKA063","SKA100"]
-    },
-    "sdp": {
-        "interface": "https://schema.skao.int/ska-sdp-assignres/0.4",
-        "resources": {
-            "csp_links": [ 1, 2, 3, 4 ],
-            "receptors": ["SKA001","SKA036","SKA063","SKA100"],
-            "receive_nodes": 1
-         },
-         "execution_block": {
-            "eb_id": "eb-mvp01-20210623-00000",
-            "context": {},
-            "max_length":21600.0,
-      
-            "channels": [ {
+   "interface": "https://schema.skao.int/ska-tmc-assignresources/2.1",
+   "transaction_id": "txn-....-00001",
+   "subarray_id": 1,
+   "dish": {
+      "receptor_ids": [
+         "SKA001",
+         "SKA036",
+         "SKA063",
+         "SKA100"
+      ]
+   },
+   "sdp": {
+      "interface": "https://schema.skao.int/ska-sdp-assignres/0.4",
+      "resources": {
+         "csp_links": [
+            1,
+            2,
+            3,
+            4
+         ],
+         "receptors": [
+            "SKA001",
+            "SKA036",
+            "SKA063",
+            "SKA100"
+         ],
+         "receive_nodes": 1
+      },
+      "execution_block": {
+         "eb_id": "eb-mvp01-20210623-00000",
+         "context": {},
+         "max_length": 21600.0,
+         "channels": [
+            {
                "channels_id": "vis_channels",
-               "spectral_windows": [ {
-                   "spectral_window_id": "fsp_1_channels",
-                   "count": 14880,
-                   "start": 0,
-                   "stride": 1,
-                   "freq_min": 0.296e9,
-                   "freq_max": 0.496e9,
-                   "link_map": [ [0, 0], [200, 1], [744, 2], [944, 3] ]
-               } ]
-            }],
-            "polarisations": [ {
+               "spectral_windows": [
+                  {
+                     "spectral_window_id": "fsp_1_channels",
+                     "count": 14880,
+                     "start": 0,
+                     "stride": 1,
+                     "freq_min": 0.296e9,
+                     "freq_max": 0.496e9,
+                     "link_map": [
+                        [
+                           0,
+                           0
+                        ],
+                        [
+                           200,
+                           1
+                        ],
+                        [
+                           744,
+                           2
+                        ],
+                        [
+                           944,
+                           3
+                        ]
+                     ]
+                  }
+               ]
+            }
+         ],
+         "polarisations": [
+            {
                "polarisations_id": "all",
-               "corr_type": [ "XX", "XY", "YX", "YY" ]
-            } ],
-      
-            "fields": [ {
+               "corr_type": [
+                  "XX",
+                  "XY",
+                  "YX",
+                  "YY"
+               ]
+            }
+         ],
+         "fields": [
+            {
                "field_id": "field_a",
-               "phase_dir" : {
-                 "ra": [ 2.711325 ],
-                 "dec": [ -0.01328889 ],
-                 "reference_time": "...",
-                 "reference_frame": "ICRF3"
+               "phase_dir": {
+                  "ra": [
+                     2.711325
+                  ],
+                  "dec": [
+                     -0.01328889
+                  ],
+                  "reference_time": "2025-12-21T15:34:37.727590Z",
+                  "reference_frame": "ICRF3"
                },
                "pointing_fqdn": "low-tmc/telstate/0/pointing"
-            }, {
+            },
+            {
                "field_id": "field_b",
-               "phase_dir" : {
-                 "ra": [ 12.48519 ],
-                 "dec": [ 2.052388 ],
-                 "reference_time": "...",
-                 "reference_frame": "ICRF3"
+               "phase_dir": {
+                  "ra": [
+                     12.48519
+                  ],
+                  "dec": [
+                     2.052388
+                  ],
+                  "reference_time": "2025-12-21T15:34:37.727590Z",
+                  "reference_frame": "ICRF3"
                },
                "pointing_fqdn": "low-tmc/telstate/0/pointing"
-            } ],
-      
-            "beams": [ {
+            }
+         ],
+         "beams": [
+            {
                "beam_id": "vis0",
                "function": "visibilities"
-            } ],
-            "scan_types":[
-               {
-                  "scan_type_id": ".default",
-                  "beams": {
-                     "vis0": {
-                        "polarisations_id": "all",
-                        "channels_id": "vis_channels"
-                     }
-                  }
-               },
-               {
-                  "scan_type_id": "science_A",
-                  "derive_from": ".default",
-                  "beams": {
-                    "vis0": { "field_id": "field_a" }
-                  }
-               },
-               {
-                  "scan_type_id": "calibration",
-                  "derive_from": ".default",
-                  "beams": {
-                    "vis0": { "field_id": "field_b" }
+            }
+         ],
+         "scan_types": [
+            {
+               "scan_type_id": ".default",
+               "beams": {
+                  "vis0": {
+                     "polarisations_id": "all",
+                     "channels_id": "vis_channels"
                   }
                }
-            ]
-         },
-         "processing_blocks":[
+            },
             {
-                "pb_id": "pb-mvp01-20210623-00000",
-                "script": {
-                   "kind": "realtime",
-                   "name": "vis-receive",
-                   "version": "5.1.1" 
-                },
-                "parameters": {
-                    "dry_run": true,
-                    "channels_per_port": 20,
-                    "pod_settings": [{
-                       "networkMapping": {"ip": "1.2.3.4/0"}
-                   }]
-                }
+               "scan_type_id": "science_A",
+               "derive_from": ".default",
+               "beams": {
+                  "vis0": {
+                     "field_id": "field_a"
+                  }
+               }
+            },
+            {
+               "scan_type_id": "calibration",
+               "derive_from": ".default",
+               "beams": {
+                  "vis0": {
+                     "field_id": "field_b"
+                  }
+               }
             }
          ]
-    }
-  }
+      },
+      "processing_blocks": [
+         {
+            "pb_id": "pb-mvp01-20210623-00000",
+            "script": {
+               "kind": "realtime",
+               "name": "vis-receive",
+               "version": "5.1.1"
+            },
+            "parameters": {
+               "dry_run": true,
+               "channels_per_port": 20,
+               "pod_settings": [
+                  {
+                     "networkMapping": {
+                        "ip": "1.2.3.4/0"
+                     }
+                  }
+               ]
+            }
+         }
+      ]
+   }
+}

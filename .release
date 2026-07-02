@@ -2,20 +2,13 @@ release=1.21.0
 tag=1.21.0
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.3 to v1.21.0**
-        * Support for Position Velocity Time pattern added.
-        * ProgramTrackTable size is now configurable via ProgramTrackTableSize property in dish pointing device
-        * Fixed skb-1314.
-        * Fixed DLN not able to generate program track table continuously.
-        * To work the EndScan command as expected provide scan duration greater than 50 seconds.
+**1. Updated ska-tmc-mid from v1.21.0 to v1.21.1**
+        *Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+        * Updated dish-leafnode tag to v0.44.3
 
 
-  
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.21.0-rc.3 to v1.21.0**
-       * Support for Position Velocity Time pattern added.
-        * ProgramTrackTable size is now configurable via ProgramTrackTableSize property in dish pointing device
-        * Fixed skb-1314.
-        * Fixed DLN not able to generate program track table continuously.
-        * To work the EndScan command as expected provide scan duration greater than 50 seconds.
+**1. Updated ska-tmc-mid from v1.21.0 to v1.21.1**
+        *Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+        * Updated dish-leafnode tag to v0.44.3

@@ -98,7 +98,7 @@ k8s-test:
   after_script:
     - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
-    
+
 k8s-test-mid-restart:
   extends:
     - k8s-test

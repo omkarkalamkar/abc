@@ -3,91 +3,135 @@
     "transaction_id": "txn-....-00001",
     "subarray_id": 1,
     "dish": {
-      "receptor_ids": [
-        "SKA001",
-        "SKA036"
-      ]
+        "receptor_ids": [
+            "SKA001",
+            "SKA036"
+        ]
     },
-    "sdp":  {
-      "interface": "https://schema.skao.int/ska-sdp-assignres/0.4",
-      "resources": {
-          "receptors": ["SKA001", "SKA036"],
-          "receive_nodes": 1
-      },
-      "execution_block": {
-          "eb_id": "eb-test-20210630-00001",
-          "context": {},
-          "max_length": 21600.0,
-          "channels": [
-              {
-                  "channels_id": "vis_channels",
-                  "spectral_windows": [
-                      {
-                          "spectral_window_id": "fsp_1_channels",
-                          "count": 8,
-                          "start": 0,
-                          "stride": 1,
-                          "freq_min": 1.2925e9,
-                          "freq_max": 1.4125e9,
-                          "link_map": [[0, 0], [200, 1], [744, 2], [944, 3]]
-                      }
-                  ]
-              }
-          ],
-          "polarisations": [
-              {"polarisations_id": "all", "corr_type": ["XX", "XY", "YX", "YY"]}
-          ],
-          "fields": [
-              {
-                  "field_id": "pointing_offset_test",
-                  "phase_dir": {
-                      "ra": [294.869],
-                      "dec": [-63.168195],
-                      "reference_time": "...",
-                      "reference_frame": "ICRF3"
-                  }
-              }
-          ],
-          "beams": [{"beam_id": "vis0", "function": "visibilities"}],
-          "scan_types": [
-              {
-                  "scan_type_id": ".default",
-                  "beams": {
-                      "vis0": {"polarisations_id": "all", "channels_id": "vis_channels"}
-                  }
-              },
-              {
-                  "scan_type_id": "pointing",
-                  "derive_from": ".default",
-                  "beams": {"vis0": {"field_id": "pointing_offset_test"}}
-              }
-          ]
-      },
-      "processing_blocks": [
-          {
-              "pb_id": "pb-test-20211111-00001",
-              "script": {
-                  "kind": "realtime",
-                  "name": "pointing-offset",
-                  "version": "0.5.0"
-              },
-              "parameters": {
-                  "version": "0.5.0",
-                  "num_scan": 5,
-                  "additional_args": [
-                      "--thresh_width",
-                      "1.50",
-                      "--bw_factor",
-                      "0.7",
-                      "1.1",
-                      "--num_chunks",
-                      "8",
-                      "--use_modelvis",
-                      "--use_source_offset_column"
-                  ],
-                  "kafka_topic": "pointing-offset"
-              }
-          }
-      ]
+    "sdp": {
+        "interface": "https://schema.skao.int/ska-sdp-assignres/0.4",
+        "resources": {
+            "receptors": [
+                "SKA001",
+                "SKA036"
+            ],
+            "receive_nodes": 1
+        },
+        "execution_block": {
+            "eb_id": "eb-test-20210630-00001",
+            "context": {},
+            "max_length": 21600.0,
+            "channels": [
+                {
+                    "channels_id": "vis_channels",
+                    "spectral_windows": [
+                        {
+                            "spectral_window_id": "fsp_1_channels",
+                            "count": 8,
+                            "start": 0,
+                            "stride": 1,
+                            "freq_min": 1.2925e9,
+                            "freq_max": 1.4125e9,
+                            "link_map": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    200,
+                                    1
+                                ],
+                                [
+                                    744,
+                                    2
+                                ],
+                                [
+                                    944,
+                                    3
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "polarisations": [
+                {
+                    "polarisations_id": "all",
+                    "corr_type": [
+                        "XX",
+                        "XY",
+                        "YX",
+                        "YY"
+                    ]
+                }
+            ],
+            "fields": [
+                {
+                    "field_id": "pointing_offset_test",
+                    "phase_dir": {
+                        "ra": [
+                            294.869
+                        ],
+                        "dec": [
+                            -63.168195
+                        ],
+                        "reference_time": "2025-12-21T15:34:37.727590Z",
+                        "reference_frame": "ICRF3"
+                    }
+                }
+            ],
+            "beams": [
+                {
+                    "beam_id": "vis0",
+                    "function": "visibilities"
+                }
+            ],
+            "scan_types": [
+                {
+                    "scan_type_id": ".default",
+                    "beams": {
+                        "vis0": {
+                            "polarisations_id": "all",
+                            "channels_id": "vis_channels"
+                        }
+                    }
+                },
+                {
+                    "scan_type_id": "pointing",
+                    "derive_from": ".default",
+                    "beams": {
+                        "vis0": {
+                            "field_id": "pointing_offset_test"
+                        }
+                    }
+                }
+            ]
+        },
+        "processing_blocks": [
+            {
+                "pb_id": "pb-test-20211111-00001",
+                "script": {
+                    "kind": "realtime",
+                    "name": "pointing-offset",
+                    "version": "0.5.0"
+                },
+                "parameters": {
+                    "version": "0.5.0",
+                    "num_scan": 5,
+                    "additional_args": [
+                        "--thresh_width",
+                        "1.50",
+                        "--bw_factor",
+                        "0.7",
+                        "1.1",
+                        "--num_chunks",
+                        "8",
+                        "--use_modelvis",
+                        "--use_source_offset_column"
+                    ],
+                    "kafka_topic": "pointing-offset"
+                }
+            }
+        ]
     }
-  }
+}
