@@ -95,7 +95,7 @@ def invoke_load_dish_cfg(
     """
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
-        TMC_MID_VCC_CONFIG_INPUT.as_str()
+        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
     )
 
     pytest.command_uid = unique_id[0]
@@ -136,12 +136,13 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
         assertion_data,
     )
     assert err_msg in json.loads(assertion_data["attribute_value"][1])[1]
+
     for dish_master_sim in pytest.dish_master_sims:
         dish_master_sim.SetDefective(RESET_DEFECT)
 
     # Make Dish VCC flag true
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
-        TMC_MID_VCC_CONFIG_INPUT.as_str()
+        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
     )
 
     event_recorder.has_change_event_occurred(

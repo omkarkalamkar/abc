@@ -5,7 +5,6 @@ from enum import IntEnum
 
 import numpy as np
 from ska_control_model import ObsState
-from ska_integration_test_harness.inputs import DictJSONInput
 
 from tests.resources.test_harness.utils.enums import (
     DishMode,
@@ -296,20 +295,17 @@ class CorrectionKey(IntEnum):
     RESET = 2
 
 
-TMC_MID_VCC_CONFIG_INPUT = DictJSONInput
-(
-    {
-        "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
-        "tm_data_sources": [
-            "gitlab://gitlab.com/ska-telescope/ska-tmc/"
-            "ska-tmc-mid-integration?main#tmdata"
-        ],
-        "tm_data_filepath": (
-            "config_files/dishid_vcc_map_configuration/"
-            "ska-mid-cbf-system-parameters.json"
-        ),
-    }
-)
+TMC_MID_VCC_CONFIG_INPUT = {
+    "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
+    "tm_data_sources": [
+        "gitlab://gitlab.com/ska-telescope/ska-tmc/"
+        "ska-tmc-mid-integration?main#tmdata"
+    ],
+    "tm_data_filepath": (
+        "config_files/dishid_vcc_map_configuration/"
+        "ska-mid-cbf-system-parameters.json"
+    ),
+}
 ABORT_COMPLETED = json.dumps([ResultCode.OK, "Abort command completed"])
 DISH_ERROR_MESSAGE = (
     "Exception occurred on the following devices: "
