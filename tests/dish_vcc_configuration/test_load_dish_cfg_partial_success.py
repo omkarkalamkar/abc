@@ -139,7 +139,7 @@ def tmc_fails_to_set_vcc_map(central_node_mid, event_recorder):
         central_node_mid.central_node.DishVccCommandStatus,
         assertion_data,
     )
-    
+
     assert json.loads(assertion_data["attribute_value"][1])[0] == (
         ResultCode.FAILED
     )
