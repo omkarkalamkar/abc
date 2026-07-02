@@ -8,6 +8,7 @@ from ska_control_model import AdminMode, ObsState
 from ska_integration_test_harness.actions.utils.generate_eb_pb_ids import (
     generate_eb_pb_ids,
 )
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
@@ -185,7 +186,7 @@ def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
 
 @when("I try to invoke loaddishcfg in obsstate empty")
 def invoke_load_dish_cfg_in_empty_obsstate(
-    tmc, central_node_mid, event_recorder
+    tmc: TMCFacade, central_node_mid, event_recorder
 ):
     """Test validate that in progress load dish cfg complete"""
 
@@ -203,7 +204,7 @@ def invoke_load_dish_cfg_in_empty_obsstate(
 
 
 @then("TMC not allow loaddishcfg as CSP controller is in ON state")
-def tmc_not_allow_loaddishcfg(tmc, central_node_mid, event_recorder):
+def tmc_not_allow_loaddishcfg(central_node_mid, event_recorder):
     """TMC not allows loaddishcfg as CSP controller is in ON state"""
 
     msg = "LoadDishCfg command is allowed in CSP Master DevState.OFF only."
@@ -260,7 +261,9 @@ def dish_with_kvalue_issue(central_node_mid, event_recorder):
 
 
 @then("TMC rejects the assign resources command if invoked")
-def tmc_rejects_assign_resources(tmc, central_node_mid, event_recorder):
+def tmc_rejects_assign_resources(
+    tmc: TMCFacade, central_node_mid, event_recorder
+):
     """TMC mid rejects the assign resources command
     if invoked when any of the dish has kValue issue"""
 
