@@ -4,7 +4,13 @@ from time import sleep
 
 import pytest
 from pytest_bdd import given, scenario, then, when
-from ska_control_model import AdminMode
+from ska_control_model import AdminMode, ObsState
+from ska_integration_test_harness.actions.utils.generate_eb_pb_ids import (
+    generate_eb_pb_ids,
+)
+from ska_integration_test_harness.inputs.test_harness_inputs import (
+    TestHarnessInputs,
+)
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
@@ -17,6 +23,7 @@ from tests.resources.test_support.constant import (
     RESET_DEFECT,
     TMC_MID_VCC_CONFIG_INPUT,
 )
+from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 
 @pytest.mark.batch1
@@ -109,8 +116,8 @@ def invoke_load_dish_cfg(
 @then("TMC loaddishcfg gets succeed partially")
 def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
     """Test validate that in progress load dish cfg complete"""
-    # Subscribe for longRunningCommandResult attribute
 
+    # Subscribe for longRunningCommandResult attribute
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
@@ -174,3 +181,122 @@ def tmc_loads_dish_cfg_partial_success(central_node_mid, event_recorder):
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master, "State", DevState.ON
     )
+
+
+@when("I try to invoke loaddishcfg in obsstate empty")
+def invoke_load_dish_cfg_in_empty_obsstate(
+    tmc, central_node_mid, event_recorder
+):
+    """Test validate that in progress load dish cfg complete"""
+
+    tmc.force_change_of_obs_state(
+        ObsState.EMPTY,
+        TestHarnessInputs(),
+        wait_termination=True,
+    )
+
+    _, unique_id = central_node_mid.load_dish_vcc_configuration(
+        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
+    )
+
+    pytest.command_uid = unique_id[0]
+
+
+@then("TMC not allow loaddishcfg as CSP controller is in ON state")
+def tmc_not_allow_loaddishcfg(tmc, central_node_mid, event_recorder):
+    """TMC not allows loaddishcfg as CSP controller is in ON state"""
+
+    msg = "LoadDishCfg command is allowed in CSP Master DevState.OFF only."
+    err_msg = f"[6, {msg}]"
+    event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_uid, err_msg),
+        lookahead=5,
+    )
+
+    assert not central_node_mid.central_node.isDishVccConfigSet
+    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master, "State", DevState.OFF
+    )
+    _, unique_id = central_node_mid.load_dish_vcc_configuration(
+        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
+    )
+
+    event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+        lookahead=5,
+    )
+    assert central_node_mid.central_node.isDishVccConfigSet
+    central_node_mid.csp_master.on([])
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master, "State", DevState.ON
+    )
+
+
+@when("TMC have kValue issue on any of the dish")
+def dish_with_kvalue_issue(central_node_mid, event_recorder):
+    """TMC mid dish with kValue issue on any of the dish"""
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "DishVccValidationStatus"
+    )
+
+    pytest.kvalue = pytest.errorless_dish.kValue
+    pytest.errorless_dish.SetKValue(234)
+
+    event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "DishVccValidationStatus",
+        Anything,
+        lookahead=5,
+    )
+
+    status = json.loads(central_node_mid.central_node.DishVccValidationStatus)
+    assert any("not identical" in value for value in status.values())
+
+
+@then("TMC rejects the assign resources command if invoked")
+def tmc_rejects_assign_resources(tmc, central_node_mid, event_recorder):
+    """TMC mid rejects the assign resources command
+    if invoked when any of the dish has kValue issue"""
+
+    error_msg = "Can't assign receptors with k-value issues"
+    assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
+    cmd_input = generate_eb_pb_ids(assign_input)
+    LOGGER.info("Invoking AssignResources command: %s", assign_input)
+    _, uid = tmc.central_node.AssignResources(cmd_input.as_str())
+
+    assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (uid[0], Anything),
+        lookahead=5,
+    )
+
+    LOGGER.info(
+        "Command_result is: %s %s",
+        central_node_mid.central_node.DishVccValidationStatus,
+        assertion_data,
+    )
+
+    assert json.loads(assertion_data["attribute_value"][1])[0] == (
+        ResultCode.NOT_ALLOWED
+    )
+
+    error_message = json.loads(assertion_data["attribute_value"][1])[1]
+    assert error_msg in error_message
+
+    pytest.errorless_dish.SetKValue(pytest.kvalue)
+    event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "DishVccValidationStatus",
+        Anything,
+        lookahead=5,
+    )
+
+    status = json.loads(central_node_mid.central_node.DishVccValidationStatus)
+    assert any("ALL DISH OK" in value for value in status.values())

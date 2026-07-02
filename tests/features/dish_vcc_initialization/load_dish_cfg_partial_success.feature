@@ -13,6 +13,6 @@ Scenario Outline: TMC allows partial success for load Dish and VCC configuration
         Then TMC loaddishcfg gets succeed partially
         When I try to invoke loaddishcfg in obsstate empty
         Then TMC not allow loaddishcfg as CSP controller is in ON state
-        When TMC detects kValue issue on any of the dish
-        Then TMC rejects the assign resources command.
+        When TMC have kValue issue on any of the dish
+        Then TMC rejects the assign resources command if invoked
 
