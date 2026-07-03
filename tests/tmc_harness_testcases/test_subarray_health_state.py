@@ -812,7 +812,6 @@ class TestSubarrayHealthState(object):
     )
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
-    @pytest.mark.skip(reason="TC failing")
     def test_health_state_degraded_when_one_or_more_dish_degraded_or_failed(
         self,
         subarray_node,
@@ -857,6 +856,9 @@ class TestSubarrayHealthState(object):
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
+        dish_master_sim_5.SetDirectHealthState(dish_master4_health_state)
+        dish_master_sim_6.SetDirectHealthState(dish_master4_health_state)
+        dish_master_sim_7.SetDirectHealthState(dish_master4_health_state)
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
         event_recorder.subscribe_event(sdp_sa_sim, "healthState")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
