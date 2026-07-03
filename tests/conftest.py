@@ -486,3 +486,26 @@ MID_DELAY_JSON = {
         {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
     ],
 }
+
+REFERENCE_FRAME_FIELDS = {
+    "tle": {
+        "target_name": "ISS",
+        "reference_frame": "tle",
+        "attrs": {
+            "line1": "1 25544U 98067A   25180.54321875  "
+            ".00001234  00000-0  12345-4 0  9999",
+            "line2": "2 25544  51.6456 123.4567 0001234 "
+            "123.4567 236.5432 15.12345678 12345",
+        },
+    },
+    "altaz": {
+        "target_name": "Zenith Drift",
+        "reference_frame": "altaz",
+        "attrs": {"c1": 180.0, "c2": 90.0},
+    },
+    "galactic": {
+        "target_name": "Galactic Centre",
+        "reference_frame": "galactic",
+        "attrs": {"c1": 0.0, "c2": 0.0},
+    },
+}
