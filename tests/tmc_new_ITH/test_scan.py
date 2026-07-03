@@ -83,16 +83,12 @@ def subarray_in_ready_state(
     """Ensure the subarray is in the READY state."""
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     context_fixt.starting_state = ObsState.READY
-    assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
-    config_input = MyFileJSONInput("subarray", "command_Configure")
-    config_json = json.loads(config_input.as_str())
+    json_input = MyFileJSONInput("subarray", "configure_mid")
+    config_json = json.loads(json_input.as_str())
     scan_duration = config_json.get("tmc", "").get("scan_duration")
     tmc.force_change_of_obs_state(
         ObsState.READY,
-        TestHarnessInputs(
-            assign_input=assign_input,
-            configure_input=config_input,
-        ),
+        default_commands_inputs,
         wait_termination=True,
     )
 
