@@ -38,7 +38,7 @@ CONFIGURE_INTERFACE = "https://schema.skao.int/ska-tmc-configure/4.1"
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/check_delay_for_ref_frames.feature",
+    "../features/test_harness/check_tle_delay_calculation.feature",
     "Generate delay values for a <reference_frame> target",
 )
 def test_reference_frame_delay_generation() -> None:
