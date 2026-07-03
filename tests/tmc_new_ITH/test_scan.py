@@ -2,7 +2,6 @@
 """
 
 import json
-import time
 
 import pytest
 from assertpy import assert_that
@@ -16,7 +15,6 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.conftest import LOGGER
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -206,8 +204,6 @@ def verify_ready_state(
             json.dumps(((ResultCode.OK), "Command Completed")),
         ),
     )
-    time.sleep(0.1)
-    LOGGER.debug("Dish leafnode list: %s", tmc.dish_leaf_node_list)
 
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({tmc.subarray_node})"
