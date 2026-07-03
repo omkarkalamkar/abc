@@ -213,6 +213,7 @@ def verify_dish_vcc_command_status_completed(central_node):
         or csp_master_device.adminmode != 0
     ):
         csp_master_device.adminmode = 0
+        sleep(10)
 
     # 1. Initial poll loop
     timeout = 200
