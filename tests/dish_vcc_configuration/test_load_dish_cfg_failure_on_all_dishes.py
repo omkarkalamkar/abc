@@ -1,6 +1,5 @@
 import ast
 import json
-from time import sleep
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -35,21 +34,6 @@ def test_dish_id_vcc_configuration_failure():
 @given("a TMC")
 def given_tmc(central_node_mid):
     """Given a TMC"""
-
-    # Verify no LoadDishCfg command is in progress
-    timeout = 100
-    flag = True
-    while timeout > 0:
-        # 3 -> COMPLETED, 4 -> FAILED
-        if int(central_node_mid.central_node.DishVccCommandStatus) in [3, 4]:
-            flag = False
-            break
-        timeout -= 1
-        sleep(1)
-    if flag:
-        raise Exception(
-            "LoadDishCfg command status not completed, cannot run the test"
-        )
 
 
 @given("CSP Controller is in OFF state")

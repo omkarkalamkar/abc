@@ -40,21 +40,6 @@ def test_dish_id_vcc_partial_success():
 def given_tmc(central_node_mid):
     """Given a TMC"""
 
-    # Verify no LoadDishCfg command is in progress
-    timeout = 100
-    flag = True
-    while timeout > 0:
-        # 3 -> COMPLETED, 4 -> FAILED
-        if int(central_node_mid.central_node.DishVccCommandStatus) in [3, 4]:
-            flag = False
-            break
-        timeout -= 1
-        sleep(1)
-    if flag:
-        raise Exception(
-            "LoadDishCfg command status not completed, cannot run the test"
-        )
-
 
 @given("CSP Controller is in OFF state")
 def csp_master_in_off_state(central_node_mid, event_recorder):

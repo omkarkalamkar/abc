@@ -4,6 +4,7 @@ import logging
 import os
 import time
 from os.path import dirname, join
+from time import sleep
 from typing import Generator
 
 import pytest
@@ -34,7 +35,11 @@ from tests.resources.test_harness.utils.common_utils import (
     SharedContext,
 )
 from tests.resources.test_harness.utils.enums import ResultCode
-from tests.resources.test_support.constant import centralnode, csp_master
+from tests.resources.test_support.constant import (
+    TMC_MID_VCC_CONFIG_INPUT,
+    centralnode,
+    csp_master,
+)
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -192,6 +197,68 @@ def event_recorder() -> Generator[EventRecorder, None, None]:
     event_rec = EventRecorder()
     yield event_rec
     event_rec.clear_events()
+
+
+def verify_dish_vcc_command_status_completed(central_node):
+    """Method to verify DishVcc is initialized and completed."""
+
+    # Using constants for readability
+    STATUS_COMPLETED = 3
+    STATUS_FAILED = 4
+    flag = True
+    # 1. Initial poll loop
+    timeout = 200
+    while timeout > 0:
+        current_status = int(central_node.DishVccCommandStatus)
+        if current_status in (STATUS_COMPLETED, STATUS_FAILED):
+            LOGGER.info("LoadDishCfg Completed")
+            flag = False
+            break
+        timeout -= 1
+        sleep(1)
+
+    err_msg = "LoadDishCfg command status not completed, can't run tests"
+    # 2. Recovery Logic if the initial attempt failed
+    if current_status == STATUS_FAILED or flag:
+        # Attempt recovery re-configuration
+        central_node_mid.load_dish_vcc_configuration(
+            json.dumps(TMC_MID_VCC_CONFIG_INPUT)
+        )
+        command_status_ok = False
+        retry_timeout = 20
+        cn = central_node
+        msg = "ALL DISH OK"
+        while retry_timeout > 0:
+            # Check validation status
+            validation_str = cn.DishVccValidationStatus
+            status_dict = json.loads(validation_str)
+            all_dish_ok = any(
+                msg in str(value) for value in status_dict.values()
+            )
+            # Check command status
+            if int(cn.DishVccCommandStatus) == STATUS_COMPLETED:
+                command_status_ok = True
+
+            # If both conditions are met, recovery succeeded
+            # (but we still raise the exception per original logic)
+            if all_dish_ok and command_status_ok:
+                LOGGER.info("LoadDishCfg Completed")
+                break
+            retry_timeout -= 1
+            sleep(1)
+        if not command_status_ok:
+            raise Exception(
+                f"{err_msg}. Recovery attempt also failed or timed out."
+            )
+
+
+@pytest.fixture(scope="session", autouse=True)
+def dish_vcc_command_status_completed_at_startup():
+    """Run dish VCC command status verification at the
+    beginning of pytest execution."""tests/alarm_handler/test_pointing_data_alarm.py
+    central_node = tango.DeviceProxy("mid-tmc/central-node/0")
+    verify_dish_vcc_command_status_completed(central_node)
+    return central_node
 
 
 def wait_for_dish_mode_change(
