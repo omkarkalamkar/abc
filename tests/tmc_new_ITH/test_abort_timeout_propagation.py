@@ -308,7 +308,7 @@ def verify_error_message(
     # leaf nodes obsState is implemented in the ITH.
     # Also its observed the delayinfo timer changing the pointingState later on
     # resulting to next command failure.
-    if tests/conftest.py == "Dish":
+    if pytest.subsystem == "Dish":
         time.sleep(pytest.delay)
     else:
         time.sleep(0.5)
