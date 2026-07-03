@@ -206,10 +206,14 @@ def verify_dish_vcc_command_status_completed(central_node):
     STATUS_COMPLETED = 3
     STATUS_FAILED = 4
     flag = True
+    csp_master_device = tango.DeviceProxy(csp_master)
 
-    if int(central_node.DishVccCommandStatus) == 0:
-        csp_master_device = tango.DeviceProxy(csp_master)
-        csp_master_device.adninmode = 0
+    if (
+        int(central_node.DishVccCommandStatus) == 0
+        or csp_master_device.adminmode != 0
+    ):
+        csp_master_device.adminmode = 0
+
     # 1. Initial poll loop
     timeout = 200
     while timeout > 0:
@@ -226,7 +230,7 @@ def verify_dish_vcc_command_status_completed(central_node):
     if current_status == STATUS_FAILED or flag:
         # Attempt recovery re-configuration
         cn = central_node
-        cn.load_dish_vcc_configuration(json.dumps(TMC_MID_VCC_CONFIG_INPUT))
+        cn.loaddishcfg(json.dumps(TMC_MID_VCC_CONFIG_INPUT))
         command_status_ok = False
         retry_timeout = 20
         msg = "ALL DISH OK"
