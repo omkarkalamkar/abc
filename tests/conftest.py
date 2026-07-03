@@ -206,6 +206,10 @@ def verify_dish_vcc_command_status_completed(central_node):
     STATUS_COMPLETED = 3
     STATUS_FAILED = 4
     flag = True
+
+    if int(central_node.DishVccCommandStatus) == 0:
+        csp_master_device = tango.DeviceProxy(csp_master)
+        csp_master_device.adninmode = 0
     # 1. Initial poll loop
     timeout = 200
     while timeout > 0:
@@ -221,12 +225,10 @@ def verify_dish_vcc_command_status_completed(central_node):
     # 2. Recovery Logic if the initial attempt failed
     if current_status == STATUS_FAILED or flag:
         # Attempt recovery re-configuration
-        central_node_mid.load_dish_vcc_configuration(
-            json.dumps(TMC_MID_VCC_CONFIG_INPUT)
-        )
+        cn = central_node
+        cn.load_dish_vcc_configuration(json.dumps(TMC_MID_VCC_CONFIG_INPUT))
         command_status_ok = False
         retry_timeout = 20
-        cn = central_node
         msg = "ALL DISH OK"
         while retry_timeout > 0:
             # Check validation status
@@ -256,9 +258,8 @@ def verify_dish_vcc_command_status_completed(central_node):
 def dish_vcc_command_status_completed_at_startup():
     """Run dish VCC command status verification at the
     beginning of pytest execution."""
-    central_node = tango.DeviceProxy("mid-tmc/central-node/0")
+    central_node = tango.DeviceProxy(centralnode)
     verify_dish_vcc_command_status_completed(central_node)
-    return central_node
 
 
 def wait_for_dish_mode_change(
