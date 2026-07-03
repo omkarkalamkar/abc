@@ -255,7 +255,7 @@ def verify_dish_vcc_command_status_completed(central_node):
 @pytest.fixture(scope="session", autouse=True)
 def dish_vcc_command_status_completed_at_startup():
     """Run dish VCC command status verification at the
-    beginning of pytest execution."""tests/alarm_handler/test_pointing_data_alarm.py
+    beginning of pytest execution."""
     central_node = tango.DeviceProxy("mid-tmc/central-node/0")
     verify_dish_vcc_command_status_completed(central_node)
     return central_node
