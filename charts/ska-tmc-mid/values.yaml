@@ -120,7 +120,7 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.44.2
+    tag: 0.44.4
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
