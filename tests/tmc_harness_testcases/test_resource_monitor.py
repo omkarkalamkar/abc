@@ -27,7 +27,6 @@ from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.skip(reason="TC is failing")
 @scenario(
     "../features/resource_monitor.feature",
     "Check ResourceMonitor updates after resource assignment and release",

@@ -30,7 +30,6 @@ def test_raise_alarm_on_reception_of_nan_from_sdp():
 @given("a TMC mid with already executed calibration scans")
 def given_tmc_with_already_executed_calibration_scans(tmc_mid):
     """Given a TMC mid with already executed calibration scans"""
-
     tmc_mid.TelescopeOn()
     tmc_mid.dish_leaf_node_list[
         0

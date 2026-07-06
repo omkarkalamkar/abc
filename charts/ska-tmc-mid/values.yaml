@@ -83,9 +83,9 @@ itango:
 
 centralnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-centralnode
+    registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 1.7.0-dev.c2f1a353c
+    tag: 1.7.1
     pullPolicy: IfNotPresent
 
 subarraynode:
