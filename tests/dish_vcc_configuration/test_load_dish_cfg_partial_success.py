@@ -32,7 +32,7 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 )
 def test_dish_id_vcc_partial_success():
     """This test case validates LoadDishCfg command
-    fails if it fails on all the dishes.
+    partial success if it passed on any of the dish.
     """
 
 
