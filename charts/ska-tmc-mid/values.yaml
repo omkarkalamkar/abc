@@ -125,9 +125,9 @@ dishleafnode:
 
 skatmcsimulators:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators
+    registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.15.1-dev.cef93e0ac
+    tag: 1.15.2
     pullPolicy: IfNotPresent
 
 resource_monitor:

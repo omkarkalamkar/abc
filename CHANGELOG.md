@@ -16,7 +16,7 @@ Updated
   - ska-tmc-sdpleafnodes: v0.31.0
   - ska-tmc-cspleafnodes: v0.46.0
   - ska-tmc-dishleafnode: v0.46.0
-  - ska-tmc-simulators: v1.15.1
+  - ska-tmc-simulators: v1.15.2
 
 [1.23.0-rc.1]
 *************
