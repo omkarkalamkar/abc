@@ -504,8 +504,8 @@ REFERENCE_FRAME_FIELDS = {
         "attrs": {"c1": 180.0, "c2": 90.0},
     },
     "galactic": {
-        "target_name": "South Circumpolar",
+        "target_name": "Galactic Centre",
         "reference_frame": "galactic",
-        "attrs": {"c1": 305.0, "c2": -25.0},
+        "attrs": {"c1": 111.734745, "c2": -02.129570},
     },
 }
