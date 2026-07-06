@@ -489,6 +489,10 @@ MID_DELAY_JSON = {
 
 REFERENCE_FRAME_FIELDS = {
     "tle": {
+        # Geostationary satellite (ANGOSAT 2) so the target stays above the
+        # dish elevation limit from the SKA-Mid site at any time of day,
+        # keeping the test deterministic (a LEO satellite is only visible
+        # during brief passes). Refresh the TLE if it ages out (~6 months).
         "target_name": "ANGOSAT 2",
         "reference_frame": "tle",
         "attrs": {
@@ -504,8 +508,8 @@ REFERENCE_FRAME_FIELDS = {
         "attrs": {"c1": 180.0, "c2": 90.0},
     },
     "galactic": {
-        "target_name": "Galactic Centre",
+        "target_name": "South Circumpolar",
         "reference_frame": "galactic",
-        "attrs": {"c1": 0.0, "c2": 0.0},
+        "attrs": {"c1": 305.0, "c2": -25.0},
     },
 }
