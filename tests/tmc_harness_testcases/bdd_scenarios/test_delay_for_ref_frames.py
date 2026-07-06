@@ -1,12 +1,12 @@
-"""HM-972: Verify delay generation for TLE/Alt-az/Galactic targets in TMC Mid.
+"""Verify delay generation for TLE/Alt-az/Galactic targets in TMC Mid.
 
 This end-to-end test configures the TMC Mid subarray with a pointing target for
-each of the reference frames added in HM-952 (tle, altaz, galactic) and
-verifies that the CSP Subarray Leaf Node generates delay values for it (used
-for holography testing by the AIV team).
+each of the supported reference frames (tle, altaz, galactic) and verifies that
+the CSP Subarray Leaf Node generates delay values for it (used for holography
+testing by the AIV team).
 
 Note:
-    Requires the CSP Subarray Leaf Node with TLE/Alt-az support (HM-952) to be
+    Requires a CSP Subarray Leaf Node with TLE/Alt-az delay support to be
     deployed. Against an older leaf node the Configure with these targets will
     be rejected and the subarray will not reach READY.
 """
@@ -38,8 +38,8 @@ CONFIGURE_INTERFACE = "https://schema.skao.int/ska-tmc-configure/4.1"
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/check_tle_delay_calculation.feature",
-    "Generate delay values for a <reference_frame> target",
+    "../features/test_harness/check_delay_for_ref_frames.feature",
+    "Generate delay values for different reference frames in TMC Mid",
 )
 def test_reference_frame_delay_generation() -> None:
     """Verify delay generation per reference frame through TMC Mid."""
