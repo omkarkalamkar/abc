@@ -295,6 +295,7 @@ def assert_dish_vcc_validation_status_is_ok():
     """Method to check dish vcc validation status is ok"""
 
     timeout = 10
+    dish_vcc_validation_status_not_matching = True
     cn_wrapper = CentralNodeWrapperMid()
     central_node = cn_wrapper.central_node
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
