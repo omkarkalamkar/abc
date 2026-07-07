@@ -42,15 +42,13 @@ def test_reference_frame_delay_generation():
     """Verify delay generation per reference frame through TMC Mid."""
 
 
-@given("a TMC in ON state with subarray in IDLE ObsState")
-def given_tmc_on_and_idle(
+@given("a TMC in ON state")
+def given_tmc_on(
     central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
-    command_input_factory: JsonFactory,
 ):
-    """Bring TMC to ON, assign resources, wait until subarray reaches IDLE."""
-    # Subscribe *before* invoking any command
+    """Bring TMC to ON and confirm the subarray starts out EMPTY."""
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -90,7 +88,17 @@ def given_tmc_on_and_idle(
         "obsState",
         ObsState.EMPTY,
     )
+    event_tracer.clear_events()
 
+
+@given("subarray is in IDLE ObsState")
+def given_subarray_idle(
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_tracer: TangoEventTracer,
+    command_input_factory: JsonFactory,
+):
+    """Assign resources and wait until the subarray reaches IDLE."""
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
@@ -172,7 +180,7 @@ def delays_are_generated(subarray_node: SubarrayNodeWrapper):
         ), f"Missing delay polynomial for receptor {entry['receptor']}"
 
 
-@when("I end the observation")
+@then("I end the observation")
 def invoke_end(
     subarray_node: SubarrayNodeWrapper, event_tracer: TangoEventTracer
 ):
