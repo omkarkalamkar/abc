@@ -10,7 +10,7 @@ Feature: Delay generation for TLE, Alt-Az and Galactic targets in TMC Mid
         Then CSP Subarray Leaf Node stops generating delay values
 
         Examples:
-            | reference_frame |
-            | tle             |
-            | altaz           |
-            | galactic        |
+        | reference_frame  |
+        | tle              |
+        | altaz            |
+        | galactic         |
