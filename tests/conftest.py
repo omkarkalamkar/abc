@@ -40,6 +40,7 @@ from tests.resources.test_support.constant import (
     TMC_MID_VCC_CONFIG_INPUT,
     centralnode,
     csp_master,
+    tmc_csp_master_leaf_node,
 )
 
 configure_logging(logging.DEBUG)
@@ -269,7 +270,7 @@ def invoke_load_dish_cfg_cmd() -> bool:
     event_recorder.subscribe_event(central_node, "longRunningCommandResult")
     central_node_dish_vcc_validation_status = {
         "dish": "ALL DISH OK",
-        cn_wrapper.csp_master_leaf_node: cspmln_validation_string,
+        tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     _, unique_id = central_node.loaddishcfg(
         json.dumps(TMC_MID_VCC_CONFIG_INPUT)
@@ -303,7 +304,7 @@ def assert_dish_vcc_validation_status_is_ok():
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
         "dish": "ALL DISH OK",
-        cn_wrapper.csp_master_leaf_node: cspmln_validation_string,
+        tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     while timeout > 0:
         if (
