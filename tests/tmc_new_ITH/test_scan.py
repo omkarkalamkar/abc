@@ -6,7 +6,7 @@ import json
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
-from ska_control_model import ObsState
+from ska_control_model import ObsState, ResultCode
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
@@ -170,6 +170,7 @@ def verify_scanning_state(
     assert tmc.subarray_node.scanID == json.dumps(
         pytest.scan_id
     ), f"Expected scanID {pytest.scan_id} but got {tmc.subarray_node.scanID}"
+    event_tracer.clear_events()
 
 
 @then("the subarray should transition to the READY state")
@@ -190,6 +191,17 @@ def verify_ready_state(
     updates the starting state in the context fixture for subsequent steps.
     """
     assert_that(event_tracer).described_as(
+        "Scan command should complete successfully"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "longRunningCommandResult",
+        (
+            context_fixt.when_action_result[1][0],
+            json.dumps(((ResultCode.OK), "Command Completed")),
+        ),
+    )
+
+    assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
@@ -199,17 +211,14 @@ def verify_ready_state(
         tmc.subarray_node,
         "obsState",
         ObsState.READY,
-        previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         csp.csp_subarray,
         "obsState",
         ObsState.READY,
-        previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         sdp.sdp_subarray,
         "obsState",
         ObsState.READY,
-        previous_value=context_fixt.starting_state,
     )
 
     # override the starting state for the next step
