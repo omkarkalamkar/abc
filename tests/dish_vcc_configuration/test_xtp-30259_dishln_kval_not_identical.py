@@ -47,7 +47,7 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(
     event_recorder.subscribe_event(
         tmc_mid.central_node_device, "longRunningCommandResult"
     )
-    flag = True
+    dish_vcc_validation_status_not_matching = True
     timeout = 10
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
 
@@ -61,12 +61,12 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(
             json.loads(tmc_mid.central_node_device.DishVccValidationStatus)
             == central_node_dish_vcc_validation_status
         ):
-            flag = False
+            dish_vcc_validation_status_not_matching = False
             break
         timeout -= 1
         sleep(1)
 
-    if flag:
+    if dish_vcc_validation_status_not_matching:
         _, unique_id = tmc_mid.central_node_device.load_dish_vcc_configuration(
             json.dumps(TMC_MID_VCC_CONFIG_INPUT)
         )
@@ -82,11 +82,11 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(
                 json.loads(tmc_mid.central_node_device.DishVccValidationStatus)
                 == central_node_dish_vcc_validation_status
             ):
-                flag = False
+                dish_vcc_validation_status_not_matching = False
                 break
         timeout -= 1
         sleep(1)
-    assert not flag
+    assert not dish_vcc_validation_status_not_matching
     assert tmc_mid.IsDishVccConfigSet
 
 

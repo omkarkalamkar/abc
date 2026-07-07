@@ -199,20 +199,19 @@ def event_recorder() -> Generator[EventRecorder, None, None]:
     event_rec.clear_events()
 
 
-def verify_dish_vcc_command_status_completed(central_node):
+def verify_dish_vcc_command_status_completed(central_node, csp_master_device):
     """Method to verify DishVcc is initialized and completed."""
 
     # Using constants for readability
     STATUS_COMPLETED = 3
     STATUS_FAILED = 4
-    flag = True
-    csp_master_device = tango.DeviceProxy(csp_master)
+    is_dish_vcc_in_desired_state = True
 
     if (
         int(central_node.DishVccCommandStatus) == 0
-        or csp_master_device.adminmode != 0
+        or csp_master_device.adminmode != AdminMode.ONLINE
     ):
-        csp_master_device.adminmode = 0
+        csp_master_device.adminmode = AdminMode.ONLINE
         sleep(10)
 
     # 1. Initial poll loop
@@ -221,14 +220,14 @@ def verify_dish_vcc_command_status_completed(central_node):
         current_status = int(central_node.DishVccCommandStatus)
         if current_status in (STATUS_COMPLETED, STATUS_FAILED):
             LOGGER.info("LoadDishCfg Completed")
-            flag = False
+            is_dish_vcc_in_desired_state = False
             break
         timeout -= 1
         sleep(1)
 
     err_msg = "LoadDishCfg command status not completed, can't run tests"
     # 2. Recovery Logic if the initial attempt failed
-    if current_status == STATUS_FAILED or flag:
+    if current_status == STATUS_FAILED or is_dish_vcc_in_desired_state:
         # Attempt recovery re-configuration
         cn = central_node
         cn.loaddishcfg(json.dumps(TMC_MID_VCC_CONFIG_INPUT))
@@ -263,8 +262,10 @@ def verify_dish_vcc_command_status_completed(central_node):
 def dish_vcc_command_status_completed_at_startup():
     """Run dish VCC command status verification at the
     beginning of pytest execution."""
-    central_node = tango.DeviceProxy(centralnode)
-    verify_dish_vcc_command_status_completed(central_node)
+    central_node = CentralNodeWrapperMid()
+    verify_dish_vcc_command_status_completed(
+        central_node.central_node, central_node.csp_master
+    )
 
 
 def wait_for_dish_mode_change(
