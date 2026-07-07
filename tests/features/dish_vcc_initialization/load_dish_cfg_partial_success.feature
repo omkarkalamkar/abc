@@ -7,14 +7,10 @@ Scenario: TMC loaddishcfg fails on failure on all dishes
         Then TMC fails to set the Dish-VCC map
 
 @XTP-113488 @XTP-113486
-Scenario: TMC allows partial success for load Dish and VCC configuration file
-        Given a TMC
-        And CSP Controller is in OFF state
-        And one dish is working as expected out of allocated dishes
-        When I issue the command LoadDishCfg on TMC with Dish and VCC configuration file
-        Then TMC loaddishcfg gets succeed partially
-        When I try to invoke loaddishcfg in obsstate empty
-        Then TMC not allow loaddishcfg as CSP controller is in ON state
-        When TMC have kValue issue on any of the dish
-        Then TMC rejects the assign resources command if invoked
+Scenario: TMC allows partial success for LoadDishCfg and blocks further commands on device state and kValue issues
+    Given a TMC with CSP Controller in OFF state and one functional dish out of allocated dishes
+    When I issue LoadDishCfg with Dish and VCC configuration file
+    Then LoadDishCfg completes with partial success
+    And TMC does not allow LoadDishCfg in any ObsState as CSP Controller is ON
+    And TMC does not allow AssignResources as kValue issue on dish
 
