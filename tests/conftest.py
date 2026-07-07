@@ -264,6 +264,7 @@ def invoke_load_dish_cfg_cmd() -> bool:
 
     cn_wrapper = CentralNodeWrapperMid()
     central_node = cn_wrapper.central_node
+    event_recorder = EventRecorder()
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     event_recorder.subscribe_event(central_node, "longRunningCommandResult")
     central_node_dish_vcc_validation_status = {
@@ -279,6 +280,7 @@ def invoke_load_dish_cfg_cmd() -> bool:
         (unique_id[0], COMMAND_COMPLETED),
         lookahead=10,
     )
+    event_recorder.clear_events()
     timeout = 30
     while timeout > 0:
         if (
