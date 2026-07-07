@@ -11,7 +11,7 @@ from ska_integration_test_harness.actions.utils.generate_eb_pb_ids import (
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.conftest import LOGGER
+from tests.conftest import LOGGER, assert_dish_vcc_validation_status_is_ok
 from tests.resources.test_harness.helpers import get_master_device_simulators
 from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import (
@@ -266,14 +266,10 @@ def dish_with_kvalue_issue(central_node_mid, event_recorder):
     assert error_msg in error_message
 
     pytest.errorless_dish.SetKValue(kvalue)
-    timeout = 10
-    while timeout > 0:
-        status = json.loads(
-            central_node_mid.central_node.DishVccValidationStatus
-        )
-        if any("ALL DISH OK" in value for value in status.values()):
-            flag = True
-            break
-        timeout -= 1
-        sleep(1)
-    assert flag
+    vcc_status = central_node_mid.central_node.DishVccValidationStatus
+    for dish_id in vcc_status:
+        if "ska" not in dish_id.lower():
+            continue
+        dish_ln = central_node_mid.dish_leaf_node_dict[dish_id.upper()]
+        dish_ln.setkvalue(dish_ln.kvalue)
+    assert_dish_vcc_validation_status_is_ok()

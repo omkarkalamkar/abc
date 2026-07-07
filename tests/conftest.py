@@ -281,7 +281,7 @@ def invoke_load_dish_cfg_cmd() -> bool:
         lookahead=10,
     )
     event_recorder.clear_events()
-    timeout = 30
+    timeout = 10
     while timeout > 0:
         if (
             json.loads(central_node.DishVccValidationStatus)
@@ -315,6 +315,10 @@ def assert_dish_vcc_validation_status_is_ok():
         timeout -= 1
         sleep(1)
     if dish_vcc_validation_status_not_matching:
+        LOGGER.info(
+            "Invoking LoadDishCfg. Dish VCC Status: %s",
+            central_node.DishVccValidationStatus,
+        )
         dish_vcc_validation_status_not_matching = invoke_load_dish_cfg_cmd()
     assert not dish_vcc_validation_status_not_matching
 
