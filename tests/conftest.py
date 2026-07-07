@@ -36,6 +36,7 @@ from tests.resources.test_harness.utils.common_utils import (
 )
 from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
     TMC_MID_VCC_CONFIG_INPUT,
     centralnode,
     csp_master,
@@ -256,6 +257,63 @@ def verify_dish_vcc_command_status_completed(central_node, csp_master_device):
             raise Exception(
                 f"{err_msg}. Recovery attempt also failed or timed out."
             )
+
+
+def invoke_load_dish_cfg_cmd() -> bool:
+    """Method to invoke load dish cfg"""
+
+    cn_wrapper = CentralNodeWrapperMid()
+    central_node = cn_wrapper.central_node
+    cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
+    event_recorder.subscribe_event(central_node, "longRunningCommandResult")
+    central_node_dish_vcc_validation_status = {
+        "dish": "ALL DISH OK",
+        cn_wrapper.csp_master_leaf_node: cspmln_validation_string,
+    }
+    _, unique_id = central_node.loaddishcfg(
+        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
+    )
+    event_recorder.has_change_event_occurred(
+        central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+        lookahead=10,
+    )
+    timeout = 30
+    while timeout > 0:
+        if (
+            json.loads(central_node.DishVccValidationStatus)
+            == central_node_dish_vcc_validation_status
+        ):
+            return False
+        timeout -= 1
+        sleep(1)
+    return True
+
+
+def assert_dish_vcc_validation_status_is_ok():
+    """Method to check dish vcc validation status is ok"""
+
+    timeout = 10
+    cn_wrapper = CentralNodeWrapperMid()
+    central_node = cn_wrapper.central_node
+    cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
+    central_node_dish_vcc_validation_status = {
+        "dish": "ALL DISH OK",
+        cn_wrapper.csp_master_leaf_node: cspmln_validation_string,
+    }
+    while timeout > 0:
+        if (
+            json.loads(central_node.DishVccValidationStatus)
+            == central_node_dish_vcc_validation_status
+        ):
+            dish_vcc_validation_status_not_matching = False
+            break
+        timeout -= 1
+        sleep(1)
+    if dish_vcc_validation_status_not_matching:
+        dish_vcc_validation_status_not_matching = invoke_load_dish_cfg_cmd()
+    assert not dish_vcc_validation_status_not_matching
 
 
 @pytest.fixture(scope="session", autouse=True)

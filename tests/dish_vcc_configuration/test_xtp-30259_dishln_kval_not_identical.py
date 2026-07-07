@@ -2,22 +2,17 @@
 
 import json
 from datetime import datetime
-from time import sleep
 
 import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
-from tests.conftest import LOGGER
+from tests.conftest import LOGGER, assert_dish_vcc_validation_status_is_ok
 from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.resources.test_support.constant import (
-    COMMAND_COMPLETED,
-    TMC_MID_VCC_CONFIG_INPUT,
-    tmc_csp_master_leaf_node,
-)
+from tests.resources.test_support.constant import tmc_csp_master_leaf_node
 
 
 @pytest.mark.SKA_tmc_mid_device_restart
@@ -47,46 +42,7 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(
     event_recorder.subscribe_event(
         tmc_mid.central_node_device, "longRunningCommandResult"
     )
-    dish_vcc_validation_status_not_matching = True
-    timeout = 10
-    cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
-
-    central_node_dish_vcc_validation_status = {
-        "dish": "ALL DISH OK",
-        tmc_csp_master_leaf_node: cspmln_validation_string,
-    }
-
-    while timeout > 0:
-        if (
-            json.loads(tmc_mid.central_node_device.DishVccValidationStatus)
-            == central_node_dish_vcc_validation_status
-        ):
-            dish_vcc_validation_status_not_matching = False
-            break
-        timeout -= 1
-        sleep(1)
-
-    if dish_vcc_validation_status_not_matching:
-        _, unique_id = tmc_mid.central_node_device.load_dish_vcc_configuration(
-            json.dumps(TMC_MID_VCC_CONFIG_INPUT)
-        )
-        event_recorder.has_change_event_occurred(
-            tmc_mid.central_node_device,
-            "longRunningCommandResult",
-            (unique_id[0], COMMAND_COMPLETED),
-            lookahead=5,
-        )
-        timeout = 10
-        while timeout > 0:
-            if (
-                json.loads(tmc_mid.central_node_device.DishVccValidationStatus)
-                == central_node_dish_vcc_validation_status
-            ):
-                dish_vcc_validation_status_not_matching = False
-                break
-        timeout -= 1
-        sleep(1)
-    assert not dish_vcc_validation_status_not_matching
+    assert_dish_vcc_validation_status_is_ok()
     assert tmc_mid.IsDishVccConfigSet
 
 
