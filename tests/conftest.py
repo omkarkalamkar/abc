@@ -501,7 +501,7 @@ REFERENCE_FRAME_FIELDS = {
     "altaz": {
         "target_name": "Zenith Drift",
         "reference_frame": "altaz",
-        "attrs": {"c1": 180.0, "c2": 90.0},
+        "attrs": {"c1": 180.0, "c2": 45.0},
     },
     "galactic": {
         "target_name": "Galactic Centre",

@@ -1,37 +1,34 @@
-"""Verify delay generation for TLE/Alt-az/Galactic targets in TMC Mid.
+"""Verify delay generation for TLE/Alt-Az/Galactic targets in TMC Mid.
 
-This end-to-end test configures the TMC Mid subarray with a pointing target for
-each of the supported reference frames (tle, altaz, galactic) and verifies that
-the CSP Subarray Leaf Node generates delay values for it (used for holography
-testing by the AIV team).
-
-Note:
-    Requires a CSP Subarray Leaf Node with TLE/Alt-az delay support to be
-    deployed. Against an older leaf node the Configure with these targets will
-    be rejected and the subarray will not reach READY.
+This end-to-end test configures the TMC Mid subarray with an ADR-63
+pointing group (`groups[].field.reference_frame`) for each of the new
+reference frames added in HM-952 (tle, altaz, galactic) and verifies
+that the CSP Subarray Leaf Node produces a valid delay model for it
+and correctly resets the model on End.
 """
 import json
-import logging
 
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
-from tests.conftest import MID_DELAY_JSON, REFERENCE_FRAME_FIELDS
+from tests.conftest import REFERENCE_FRAME_FIELDS
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+    wait_for_delay_updates_stop_on_delay_model,
     wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
-LOGGER = logging.getLogger(__name__)
+TIMEOUT = 110
 
-# Interface that supports the tle/altaz/galactic pointing reference frames.
 CONFIGURE_INTERFACE = "https://schema.skao.int/ska-tmc-configure/4.1"
 
 
@@ -41,62 +38,93 @@ CONFIGURE_INTERFACE = "https://schema.skao.int/ska-tmc-configure/4.1"
     "../features/test_harness/check_delay_for_ref_frames.feature",
     "Generate delay values for different reference frames in TMC Mid",
 )
-def test_reference_frame_delay_generation() -> None:
+def test_reference_frame_delay_generation():
     """Verify delay generation per reference frame through TMC Mid."""
 
 
-@given("the telescope is in ON state")
-def check_telescope_is_in_on_state(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
-) -> None:
-    """Ensure the telescope is in the ON state."""
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
+@given("a TMC in ON state with subarray in IDLE ObsState")
+def given_tmc_on_and_idle(
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_tracer: TangoEventTracer,
+    command_input_factory: JsonFactory,
+):
+    """Bring TMC to ON, assign resources, wait until subarray reaches IDLE."""
+    # Subscribe *before* invoking any command
+    event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    assert event_recorder.has_change_event_occurred(
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_tracer.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    log_events(
+        {
+            central_node_mid.central_node: [
+                "telescopeState",
+                "longRunningCommandResult",
+            ],
+            subarray_node.subarray_node: [
+                "obsState",
+                "longRunningCommandResult",
+            ],
+        }
+    )
+
+    central_node_mid.move_to_on()
+
+    assert_that(event_tracer).described_as(
+        "TelescopeState is expected to be ON",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
+    assert_that(event_tracer).described_as(
+        "Subarray is expected to be in EMPTY obsState initially",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
 
-
-@given(parsers.parse("TMC subarray {subarray_id} in ObsState IDLE"))
-def move_subarray_node_to_idle_obsstate(
-    central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
-    command_input_factory: JsonFactory,
-    subarray_id: str,
-) -> None:
-    """Move the TMC Subarray to the IDLE ObsState."""
-    central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    assign_input = json.loads(assign_input_json)
-    assign_input["subarray_id"] = int(subarray_id)
-    central_node_mid.store_resources(json.dumps(assign_input))
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
 
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
+    assert_that(event_tracer).described_as(
+        "Subarray is expected to reach IDLE obsState after AssignResources",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
+    assert_that(event_tracer).described_as(
+        "AssignResources LRCR should complete OK",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+    event_tracer.clear_events()
 
 
 @when(
     parsers.parse(
-        "I configure the TMC subarray with a {reference_frame} target"
+        "I configure the TMC subarray with a {reference_frame} pointing target"
     )
 )
-def invoke_configure_command_with_reference_frame(
+def configure_with_reference_frame(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
     reference_frame: str,
-) -> None:
-    """Configure the subarray with a pointing target for the given frame."""
+):
+    """Build  Configure JSON with the ADR-63 groups[].field pointing block."""
     configure_json = json.loads(
         prepare_json_args_for_commands("configure_mid", command_input_factory)
     )
@@ -105,44 +133,54 @@ def invoke_configure_command_with_reference_frame(
         "groups": [{"field": REFERENCE_FRAME_FIELDS[reference_frame]}],
         "correction": "UPDATE",
     }
-    subarray_node.store_configuration_data(json.dumps(configure_json))
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    assert event_recorder.has_change_event_occurred(
+
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_json)
+    )
+
+    assert_that(event_tracer).described_as(
+        f"Subarray should reach READY after Configure({reference_frame})",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
     )
+    assert_that(event_tracer).described_as(
+        "Configure LRCR should complete OK",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+    event_tracer.clear_events()
 
 
 @then("CSP Subarray Leaf Node generates delay values for the target")
-def check_delay_values_generated(
-    subarray_node: SubarrayNodeWrapper,
-) -> None:
-    """Verify delay values are generated for the configured target."""
-    delay_json, delay_generated_time = wait_till_delay_values_are_populated(
+def delays_are_generated(subarray_node: SubarrayNodeWrapper):
+    """Verify a non-default delay model is published,
+    one entry per receptor."""
+    delay_json, _ = wait_till_delay_values_are_populated(
         subarray_node.csp_subarray_leaf_node
     )
-    LOGGER.info("Delay JSON generated for target: %s", delay_json)
-    LOGGER.info("Delay generated at: %s", delay_generated_time)
 
-    # Delays must have been generated (i.e. no longer the reset/initial value)
-    assert delay_json != MID_DELAY_JSON
-    receptor_delays = delay_json.get("receptor_delays")
+    receptor_delays = delay_json.get("receptor_delays") or []
     assert receptor_delays, "No receptor_delays generated for the target"
-    for receptor_delay in receptor_delays:
-        assert receptor_delay.get(
+    for entry in receptor_delays:
+        assert entry.get("receptor"), f"Empty receptor field in {entry}"
+        assert entry.get(
             "xypol_coeffs_ns"
-        ), f"Missing delay coefficients for receptor {receptor_delay}"
+        ), f"Missing delay polynomial for receptor {entry['receptor']}"
 
 
 @when("I end the observation")
-def invoke_end_command(
-    subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
-) -> None:
-    """Invoke End and verify the subarray returns to IDLE."""
+def invoke_end(
+    subarray_node: SubarrayNodeWrapper, event_tracer: TangoEventTracer
+):
+    """Invoke End and wait for IDLE."""
     subarray_node.end_observation()
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "Subarray should return to IDLE after End",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
@@ -150,10 +188,8 @@ def invoke_end_command(
 
 
 @then("CSP Subarray Leaf Node stops generating delay values")
-def check_delay_values_stopped(
-    subarray_node: SubarrayNodeWrapper,
-) -> None:
-    """Verify delay generation stops after End."""
-    cspsal_node = subarray_node.csp_subarray_leaf_node
-    delay_json = json.loads(cspsal_node.read_attribute("delayModel").value)
-    assert delay_json == MID_DELAY_JSON
+def delays_are_reset(subarray_node: SubarrayNodeWrapper):
+    """Verify delayModel is reset to the initial default after End."""
+    wait_for_delay_updates_stop_on_delay_model(
+        subarray_node.csp_subarray_leaf_node
+    )
