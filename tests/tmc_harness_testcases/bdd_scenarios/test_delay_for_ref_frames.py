@@ -66,12 +66,12 @@ ADR63_POINTING_SAMPLES = {
             }
         ]
     },
-    "galactic": {
+    "gal": {
         "groups": [
             {
                 "field": {
                     "target_name": "Galactic Centre",
-                    "reference_frame": "galactic",
+                    "reference_frame": "gal",
                     "attrs": {"c1": 0.0, "c2": 0.0},
                 }
             }
