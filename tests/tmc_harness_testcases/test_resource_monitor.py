@@ -89,7 +89,12 @@ def given_subarray_idle(
         "assign_resources_mid", command_input_factory
     )
     assign_data1 = json.loads(assign_input_json)
-    assign_data1["dish"]["receptor_ids"] = ["SKA001", "SKA036", "SKA500"]
+    assign_data1["dish"]["receptor_ids"] = [
+        "SKA001",
+        "SKA036",
+        "SKA099",
+        "SKA500",
+    ]
 
     central_node_mid.store_resources(json.dumps(assign_data1))
     assert_that(event_tracer).described_as(

@@ -2,13 +2,16 @@ import json
 
 import pytest
 from pytest_bdd import parsers, scenario, then, when
+from ska_control_model import AdminMode
 from ska_tango_testing.mock.placeholders import Anything
+from tango import DevState
 
 from tests.dish_vcc_configuration.utils import get_load_dish_vcc_json
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
 @pytest.mark.batch1
@@ -43,6 +46,11 @@ def invoke_load_dish_cfg(
     for command
     """
     # Subscribe for longRunningCommandResult attribute
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master, "State", DevState.OFF
+    )
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
@@ -50,10 +58,10 @@ def invoke_load_dish_cfg(
     load_dish_cfg_json = get_load_dish_vcc_json(
         file_name="out_of_range_kvalue.json"
     )
-    result_code, _ = central_node_mid.load_dish_vcc_configuration(
+    result_code, uid = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
-
+    pytest.command_uid = uid[0]
     assert result_code == ResultCode.QUEUED
 
 
@@ -73,8 +81,24 @@ def test_tmc_rejects_command_with_error(
     assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (Anything, json.dumps([ResultCode.FAILED, error_message])),
+        (pytest.command_uid, Anything),
         lookahead=5,
     )
 
     assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
+
+    load_dish_cfg_json = get_load_dish_vcc_json(
+        file_name="ska-mid-cbf-system-parameters.json"
+    )
+    result_code, uid = central_node_mid.load_dish_vcc_configuration(
+        load_dish_cfg_json
+    )
+    command_uid = uid[0]
+    assert result_code == ResultCode.QUEUED
+
+    assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (command_uid, COMMAND_COMPLETED),
+        lookahead=10,
+    )

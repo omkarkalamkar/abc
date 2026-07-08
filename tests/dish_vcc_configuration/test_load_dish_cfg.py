@@ -2,6 +2,7 @@ import json
 
 import pytest
 from pytest_bdd import given, scenario, then, when
+from ska_control_model import AdminMode
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -29,7 +30,7 @@ def test_dish_id_vcc_configuration():
 
 
 @given("a TMC")
-def given_tmc():
+def given_tmc(central_node_mid):
     """Given a TMC"""
 
 
@@ -44,19 +45,12 @@ def telescope_in_on_state(central_node_mid, event_recorder):
     """
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    central_node_mid.csp_master.adminmode = AdminMode.ONLINE
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master, "State", DevState.OFF
+    )
     for dish in central_node_mid.dish_leaf_node_list:
         event_recorder.subscribe_event(dish, "dishMode")
-    central_node_mid.move_to_on()
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master, "State", DevState.ON
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master, "State", DevState.ON
-    )
-    for dish in central_node_mid.dish_leaf_node_list:
-        assert event_recorder.has_change_event_occurred(
-            dish, "dishMode", DishMode.STANDBY_FP
-        )
 
 
 @when(
@@ -104,7 +98,7 @@ def tmc_pass_configuration_to_csp_controller(simulator_factory):
     :param simulator_factory: fixture for creating simulator devices for
     mid Telescope respectively.
     """
-    csp_master_sim, _, _, _, _, _, _, _ = get_master_device_simulators(
+    csp_master_sim, _, _, _, _, _, _, _, _ = get_master_device_simulators(
         simulator_factory
     )
     expected_dish_vcc_config = {
@@ -167,8 +161,10 @@ def validate_dish_vcc_config_attribute_set(central_node_mid):
 
 
 @then("TMC should set Dish k-numbers provided in file on dish master devices")
-def validate_k_number_set(simulator_factory):
+def validate_k_number_set(central_node_mid, simulator_factory, event_recorder):
     """Validate k-numbers set on dish masters
+    :param central_node_mid: fixture for a TMC CentralNode Mid under test
+    :param event_recorder: fixture for a MockTangoEventCallbackGroup
     :param simulator_factory: fixture for creating simulator devices for
     mid Telescope respectively.
     """
@@ -181,6 +177,18 @@ def validate_k_number_set(simulator_factory):
         _,
         _,
         _,
+        _,
     ) = get_master_device_simulators(simulator_factory)
     assert dish_master_1_sim.kValue == 119
     assert dish_master_2_sim.kValue == 1127
+    central_node_mid.move_to_on()
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master, "State", DevState.ON
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master, "State", DevState.ON
+    )
+    for dish in central_node_mid.dish_leaf_node_list:
+        assert event_recorder.has_change_event_occurred(
+            dish, "dishMode", DishMode.STANDBY_FP
+        )
