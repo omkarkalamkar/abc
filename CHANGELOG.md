@@ -76,11 +76,14 @@ Updated
   - Subarray Node: v1.10.0
 
 
-[1.21.1-rc.1]
+[1.21.1]
 *************
 Updated
 -------
+* This is a branch release REL-3136.
 * Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
+* Updated dish-leafnode tag to v0.44.4 with fixes for SKB-1401, SKB-1374 and SKB-1184
+
 
 [1.21.0]
 *************
@@ -106,6 +109,12 @@ Fixed
 Fixed
 ------
 * Fixed skb-1314.
+
+[1.21.1-rc.1]
+*************
+Updated
+-------
+* Updated centralnode tag to v1.3.2 to fix skb-1309 i.e Telescope state should be ON when at least one dish is available.
 
 [1.21.0-rc.1]
 *************
