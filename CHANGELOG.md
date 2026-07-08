@@ -5,7 +5,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
+[1.24.0-rc.2]
+*************
+Updated
+-------
+* TMC Mid is now allows partial success of LoadDishCfg command if it succeeds on setting k-value on any of the dish.
+* LoadDishCfg fails if it fails on CSP controller or fails on all the dishes specified in the JSON.
+* For invoking LoadDishCfg ensure CSP controller is in DevState.OFF.
+* TMC does not allow assigning receptors if k-value issue is observed on dish.
+
+[1.24.0-rc.1]
 ************
 Updated
 -------
@@ -17,12 +26,6 @@ Updated
   - ska-tmc-cspleafnodes: v0.46.0
   - ska-tmc-dishleafnode: v0.46.0
   - ska-tmc-simulators: v1.15.2
-
-[Unreleased]
-*************
-Updated
--------
-* TMC Mid is now allows partial success of LoadDishCfg command if it succeeds on setting k-value on any of the dish.
 
 [1.23.0-rc.1]
 *************
