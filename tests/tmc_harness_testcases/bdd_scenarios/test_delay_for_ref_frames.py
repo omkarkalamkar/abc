@@ -44,7 +44,7 @@ ADR63_POINTING_SAMPLES = {
             {
                 "field": {
                     "target_name": "ANGOSAT 2",
-                    "reference_frame": "TLE",
+                    "reference_frame": "tle",
                     "attrs": {
                         "line1": "1 54033U 22131A   26187.02363267  "
                         ".00000150  00000+0  00000+0 0  9991",
@@ -60,7 +60,7 @@ ADR63_POINTING_SAMPLES = {
             {
                 "field": {
                     "target_name": "Zenith Drift",
-                    "reference_frame": "ALTAZ",
+                    "reference_frame": "altaz",
                     "attrs": {"c1": 180.0, "c2": 90.0},
                 }
             }
@@ -71,7 +71,7 @@ ADR63_POINTING_SAMPLES = {
             {
                 "field": {
                     "target_name": "Galactic Centre",
-                    "reference_frame": "GALACTIC",
+                    "reference_frame": "galactic",
                     "attrs": {"c1": 0.0, "c2": 0.0},
                 }
             }
@@ -82,7 +82,7 @@ ADR63_POINTING_SAMPLES = {
             {
                 "field": {
                     "target_name": "Sun",
-                    "reference_frame": "SPECIAL",
+                    "reference_frame": "special",
                 }
             }
         ]
