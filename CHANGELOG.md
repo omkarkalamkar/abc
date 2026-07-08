@@ -5,7 +5,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[1.24.0-rc.2]
+[1.25.0-rc.1]
 *************
 Updated
 -------
@@ -15,7 +15,7 @@ Updated
 * TMC does not allow assigning receptors if k-value issue is observed on dish.
 
 [1.24.0-rc.1]
-************
+*************
 Updated
 -------
 * Updated TMC nodes with Pytango 10.3.0 upgrade:
