@@ -33,7 +33,7 @@ ADR63_POINTING_SAMPLES = {
             {
                 "field": {
                     "target_name": "Polaris Australis",
-                    "reference_frame": "ICRS",
+                    "reference_frame": "icrs",
                     "attrs": {"c1": 317.199, "c2": -88.95636},
                 }
             }
@@ -59,9 +59,9 @@ ADR63_POINTING_SAMPLES = {
         "groups": [
             {
                 "field": {
-                    "target_name": "Zenith Drift",
+                    "target_name": "South Celestial Pole",
                     "reference_frame": "altaz",
-                    "attrs": {"c1": 180.0, "c2": 90.0},
+                    "attrs": {"c1": 180.0, "c2": 30.71},
                 }
             }
         ]
