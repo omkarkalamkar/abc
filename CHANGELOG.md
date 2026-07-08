@@ -18,6 +18,12 @@ Updated
   - ska-tmc-dishleafnode: v0.46.0
   - ska-tmc-simulators: v1.15.2
 
+[Unreleased]
+*************
+Updated
+-------
+* TMC Mid is now allows partial success of LoadDishCfg command if it succeeds on setting k-value on any of the dish.
+
 [1.23.0-rc.1]
 *************
 Added
