@@ -96,7 +96,7 @@ EXPECTED_RECEPTORS = ["SKA001", "SKA036", "SKA077", "SKA100"]
 @pytest.mark.SKA_mid
 @pytest.mark.post_deployment
 @scenario(
-    "features/test_harness/check_delay_for_ref_frames.feature",
+    "../features/test_harness/check_delay_for_ref_frames.feature",
     "Generate valid delay model for <reference_frame> target via TMC Mid",
 )
 def test_delay_model_for_adr63_ref_frames() -> None:

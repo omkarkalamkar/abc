@@ -486,26 +486,3 @@ MID_DELAY_JSON = {
         {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
     ],
 }
-
-REFERENCE_FRAME_FIELDS = {
-    "tle": {
-        "target_name": "ANGOSAT 2",
-        "reference_frame": "tle",
-        "attrs": {
-            "line1": "1 54033U 22131A   26187.02363267  "
-            ".00000150  00000+0  00000+0 0  9991",
-            "line2": "2 54033   0.0192 123.5880 0000094 "
-            "274.7177 277.2087  1.00271785 13664",
-        },
-    },
-    "altaz": {
-        "target_name": "Zenith Drift",
-        "reference_frame": "altaz",
-        "attrs": {"c1": 180.0, "c2": 45.0},
-    },
-    "galactic": {
-        "target_name": "Galactic Centre",
-        "reference_frame": "galactic",
-        "attrs": {"c1": 111.734745, "c2": -02.129570},
-    },
-}
