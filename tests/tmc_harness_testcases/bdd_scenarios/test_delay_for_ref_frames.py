@@ -93,8 +93,8 @@ ADR63_POINTING_SAMPLES = {
 EXPECTED_RECEPTORS = ["SKA001", "SKA036", "SKA077", "SKA100"]
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.post_deployment
 @scenario(
     "../features/test_harness/check_delay_for_ref_frames.feature",
     "Generate valid delay model for <reference_frame> target via TMC Mid",
