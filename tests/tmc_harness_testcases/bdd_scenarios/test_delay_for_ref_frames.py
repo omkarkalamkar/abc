@@ -70,9 +70,9 @@ ADR63_POINTING_SAMPLES = {
         "groups": [
             {
                 "field": {
-                    "target_name": "Cass-A",
+                    "target_name": "Large Magellanic Cloud",
                     "reference_frame": "galactic",
-                    "attrs": {"c1": 111.734745, "c2": -02.129570},
+                    "attrs": {"c1": 280.4652, "c2": -32.8884},
                 }
             }
         ]
