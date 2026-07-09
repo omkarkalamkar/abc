@@ -70,9 +70,9 @@ ADR63_POINTING_SAMPLES = {
         "groups": [
             {
                 "field": {
-                    "target_name": "Galactic Centre",
+                    "target_name": "Cass-A",
                     "reference_frame": "galactic",
-                    "attrs": {"c1": 0.0, "c2": 0.0},
+                    "attrs": {"c1": 111.734745, "c2": -02.129570},
                 }
             }
         ]
