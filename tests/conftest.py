@@ -486,3 +486,68 @@ MID_DELAY_JSON = {
         {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
     ],
 }
+
+POINTING_CONFIGS = {
+    "icrs": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "Polaris Australis",
+                    "reference_frame": "icrs",
+                    "attrs": {"c1": 317.199, "c2": -88.95636},
+                }
+            }
+        ]
+    },
+    "tle": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "ANGOSAT 2",
+                    "reference_frame": "tle",
+                    "attrs": {
+                        "line1": "1 54033U 22131A   26187.02363267  "
+                        ".00000150  00000+0  00000+0 0  9991",
+                        "line2": "2 54033   0.0192 123.5880 0000094 "
+                        "274.7177 277.2087  1.00271785 13664",
+                    },
+                }
+            }
+        ]
+    },
+    "altaz": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "South Celestial Pole",
+                    "reference_frame": "altaz",
+                    "attrs": {"c1": 180.0, "c2": 30.71},
+                }
+            }
+        ]
+    },
+    "galactic": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "Large Magellanic Cloud",
+                    "reference_frame": "galactic",
+                    "attrs": {"c1": 280.4652, "c2": -32.8884},
+                }
+            }
+        ]
+    },
+    "special": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "Mars",
+                    "reference_frame": "special",
+                }
+            }
+        ]
+    },
+}
+
+
+ASSIGNED_RECEPTORS = ["SKA001", "SKA036", "SKA077", "SKA100"]

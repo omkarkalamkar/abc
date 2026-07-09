@@ -14,7 +14,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
-from tests.conftest import MID_DELAY_JSON
+from tests.conftest import ASSIGNED_RECEPTORS, MID_DELAY_JSON, POINTING_CONFIGS
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
@@ -26,71 +26,6 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 LOGGER = logging.getLogger(__name__)
-
-ADR63_POINTING_SAMPLES = {
-    "icrs": {
-        "groups": [
-            {
-                "field": {
-                    "target_name": "Polaris Australis",
-                    "reference_frame": "icrs",
-                    "attrs": {"c1": 317.199, "c2": -88.95636},
-                }
-            }
-        ]
-    },
-    "tle": {
-        "groups": [
-            {
-                "field": {
-                    "target_name": "ANGOSAT 2",
-                    "reference_frame": "tle",
-                    "attrs": {
-                        "line1": "1 54033U 22131A   26187.02363267  "
-                        ".00000150  00000+0  00000+0 0  9991",
-                        "line2": "2 54033   0.0192 123.5880 0000094 "
-                        "274.7177 277.2087  1.00271785 13664",
-                    },
-                }
-            }
-        ]
-    },
-    "altaz": {
-        "groups": [
-            {
-                "field": {
-                    "target_name": "South Celestial Pole",
-                    "reference_frame": "altaz",
-                    "attrs": {"c1": 180.0, "c2": 30.71},
-                }
-            }
-        ]
-    },
-    "gal": {
-        "groups": [
-            {
-                "field": {
-                    "target_name": "Large Magellanic Cloud",
-                    "reference_frame": "galactic",
-                    "attrs": {"c1": 280.4652, "c2": -32.8884},
-                }
-            }
-        ]
-    },
-    "special": {
-        "groups": [
-            {
-                "field": {
-                    "target_name": "Mars",
-                    "reference_frame": "special",
-                }
-            }
-        ]
-    },
-}
-
-
-EXPECTED_RECEPTORS = ["SKA001", "SKA036", "SKA077", "SKA100"]
 
 
 @pytest.mark.batch1
@@ -162,10 +97,10 @@ def configure_with_adr63_pointing_group(
     config = json.loads(configure_input_json)
 
     ref_key = reference_frame.lower()
-    if ref_key not in ADR63_POINTING_SAMPLES:
+    if ref_key not in POINTING_CONFIGS:
         pytest.fail(f"Unsupported reference_frame in test: {reference_frame}")
 
-    config["pointing"] = ADR63_POINTING_SAMPLES[ref_key]
+    config["pointing"] = POINTING_CONFIGS[ref_key]
 
     configure_json_str = json.dumps(config)
     LOGGER.info(
@@ -195,19 +130,18 @@ def csp_leafnode_generates_delaymodel(
     )
     LOGGER.info("Delay model generated at %s", generated_time)
 
-    assert (
-        delay_json_dict != MID_DELAY_JSON
-    ), "delayModel must not be the default/empty JSON after successful "
-    "Configure with ADR-63 target"
-
+    assert delay_json_dict != MID_DELAY_JSON, (
+        "delayModel must not be the default/empty JSON after successful "
+        "Configure with ADR-63 target"
+    )
     receptor_delays = delay_json_dict.get("receptor_delays", [])
-    assert len(receptor_delays) == len(EXPECTED_RECEPTORS), (
-        f"Expected {len(EXPECTED_RECEPTORS)} receptor delay entries , "
+    assert len(receptor_delays) == len(ASSIGNED_RECEPTORS), (
+        f"Expected {len(ASSIGNED_RECEPTORS)} receptor delay entries , "
         f"got {len(receptor_delays)}"
     )
 
     for entry in receptor_delays:
-        assert entry.get("receptor") in EXPECTED_RECEPTORS
+        assert entry.get("receptor") in ASSIGNED_RECEPTORS
         xypol = entry.get("xypol_coeffs_ns")
         assert isinstance(xypol, list) and len(xypol) > 0
         assert isinstance(entry.get("ypol_offset_ns"), (int, float))
