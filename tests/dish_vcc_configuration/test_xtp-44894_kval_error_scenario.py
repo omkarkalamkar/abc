@@ -2,6 +2,7 @@ import pytest
 from pytest_bdd import scenario, then, when
 from ska_tango_base.control_model import HealthState
 
+from tests.conftest import invoke_load_dish_cfg_cmd
 from tests.dish_vcc_configuration.utils import get_load_dish_vcc_json
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -112,3 +113,7 @@ def test_tmc_rejects_command_with_error(
         "healthState",
         HealthState.DEGRADED,
     )
+
+    # Restore Dish vcc to True
+    dish_vcc_status_not_matching = invoke_load_dish_cfg_cmd()
+    assert not dish_vcc_status_not_matching

@@ -43,6 +43,7 @@ from tests.resources.test_support.constant import (
     dish_master4,
     dish_master5,
     dish_master6,
+    dish_master7,
     sdp_master,
     sdp_subarray1,
     tmc_csp_master_leaf_node,
@@ -53,6 +54,7 @@ from tests.resources.test_support.constant import (
     tmc_dish_leaf_node4,
     tmc_dish_leaf_node5,
     tmc_dish_leaf_node6,
+    tmc_dish_leaf_node7,
     tmc_sdp_master_leaf_node,
     tmc_sdp_subarrayln_prefix,
     tmc_subarray_prefix,
@@ -136,6 +138,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn100 = dish_master4
             dish_fqdn500 = dish_master5
             dish_fqdn999 = dish_master6
+            dish_fqdn099 = dish_master7
 
         self.dish_master_list = [
             DeviceProxy(dish_fqdn001),
@@ -144,6 +147,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(dish_fqdn100),
             DeviceProxy(dish_fqdn500),
             DeviceProxy(dish_fqdn999),
+            DeviceProxy(dish_fqdn099),
         ]
 
         self.dish_master_dict = {
@@ -153,6 +157,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA100": DeviceProxy(dish_fqdn100),
             "SKA500": DeviceProxy(dish_fqdn500),
             "SKA999": DeviceProxy(dish_fqdn999),
+            "SKA099": DeviceProxy(dish_fqdn099),
         }
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
@@ -161,6 +166,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(tmc_dish_leaf_node4),
             DeviceProxy(tmc_dish_leaf_node5),
             DeviceProxy(tmc_dish_leaf_node6),
+            DeviceProxy(tmc_dish_leaf_node7),
         ]
 
         self.central_node.set_timeout_millis(5000)
@@ -175,7 +181,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "SKA100": DeviceProxy(tmc_dish_leaf_node4),
             "SKA500": DeviceProxy(tmc_dish_leaf_node5),
             "SKA999": DeviceProxy(tmc_dish_leaf_node6),
+            "SKA099": DeviceProxy(tmc_dish_leaf_node7),
         }
+
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
         self.dish1_admin_dev_proxy = DeviceProxy(self.dish1_admin_dev_name)

@@ -4,6 +4,7 @@ import logging
 import os
 import time
 from os.path import dirname, join
+from time import sleep
 from typing import Generator
 
 import pytest
@@ -34,7 +35,13 @@ from tests.resources.test_harness.utils.common_utils import (
     SharedContext,
 )
 from tests.resources.test_harness.utils.enums import ResultCode
-from tests.resources.test_support.constant import centralnode, csp_master
+from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    TMC_MID_VCC_CONFIG_INPUT,
+    centralnode,
+    csp_master,
+    tmc_csp_master_leaf_node,
+)
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -192,6 +199,139 @@ def event_recorder() -> Generator[EventRecorder, None, None]:
     event_rec = EventRecorder()
     yield event_rec
     event_rec.clear_events()
+
+
+def verify_dish_vcc_command_status_completed(central_node, csp_master_device):
+    """Method to verify DishVcc is initialized and completed."""
+
+    # Using constants for readability
+    STATUS_COMPLETED = 3
+    STATUS_FAILED = 4
+    is_dish_vcc_in_desired_state = True
+
+    if (
+        int(central_node.DishVccCommandStatus) == 0
+        or csp_master_device.adminmode != AdminMode.ONLINE
+    ):
+        csp_master_device.adminmode = AdminMode.ONLINE
+        sleep(10)
+
+    # 1. Initial poll loop
+    timeout = 200
+    while timeout > 0:
+        current_status = int(central_node.DishVccCommandStatus)
+        if current_status in (STATUS_COMPLETED, STATUS_FAILED):
+            LOGGER.info("LoadDishCfg Completed")
+            is_dish_vcc_in_desired_state = False
+            break
+        timeout -= 1
+        sleep(1)
+
+    err_msg = "LoadDishCfg command status not completed, can't run tests"
+    # 2. Recovery Logic if the initial attempt failed
+    if current_status == STATUS_FAILED or is_dish_vcc_in_desired_state:
+        # Attempt recovery re-configuration
+        cn = central_node
+        cn.loaddishcfg(json.dumps(TMC_MID_VCC_CONFIG_INPUT))
+        command_status_ok = False
+        retry_timeout = 20
+        msg = "ALL DISH OK"
+        while retry_timeout > 0:
+            # Check validation status
+            validation_str = cn.DishVccValidationStatus
+            status_dict = json.loads(validation_str)
+            all_dish_ok = any(
+                msg in str(value) for value in status_dict.values()
+            )
+            # Check command status
+            if int(cn.DishVccCommandStatus) == STATUS_COMPLETED:
+                command_status_ok = True
+
+            # If both conditions are met, recovery succeeded
+            # (but we still raise the exception per original logic)
+            if all_dish_ok and command_status_ok:
+                LOGGER.info("LoadDishCfg Completed")
+                break
+            retry_timeout -= 1
+            sleep(1)
+        if not command_status_ok:
+            raise Exception(
+                f"{err_msg}. Recovery attempt also failed or timed out."
+            )
+
+
+def invoke_load_dish_cfg_cmd() -> bool:
+    """Method to invoke load dish cfg"""
+
+    cn_wrapper = CentralNodeWrapperMid()
+    central_node = cn_wrapper.central_node
+    event_recorder = EventRecorder()
+    cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
+    event_recorder.subscribe_event(central_node, "longRunningCommandResult")
+    central_node_dish_vcc_validation_status = {
+        "dish": "ALL DISH OK",
+        tmc_csp_master_leaf_node: cspmln_validation_string,
+    }
+    _, unique_id = central_node.loaddishcfg(
+        json.dumps(TMC_MID_VCC_CONFIG_INPUT)
+    )
+    event_recorder.has_change_event_occurred(
+        central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+        lookahead=10,
+    )
+    event_recorder.clear_events()
+    timeout = 10
+    while timeout > 0:
+        if (
+            json.loads(central_node.DishVccValidationStatus)
+            == central_node_dish_vcc_validation_status
+        ):
+            return False
+        timeout -= 1
+        sleep(1)
+    return True
+
+
+def assert_dish_vcc_validation_status_is_ok():
+    """Method to check dish vcc validation status is ok"""
+
+    timeout = 10
+    dish_vcc_validation_status_not_matching = True
+    cn_wrapper = CentralNodeWrapperMid()
+    central_node = cn_wrapper.central_node
+    cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
+    central_node_dish_vcc_validation_status = {
+        "dish": "ALL DISH OK",
+        tmc_csp_master_leaf_node: cspmln_validation_string,
+    }
+    while timeout > 0:
+        if (
+            json.loads(central_node.DishVccValidationStatus)
+            == central_node_dish_vcc_validation_status
+        ):
+            dish_vcc_validation_status_not_matching = False
+            break
+        timeout -= 1
+        sleep(1)
+    if dish_vcc_validation_status_not_matching:
+        LOGGER.info(
+            "Invoking LoadDishCfg. Dish VCC Status: %s",
+            central_node.DishVccValidationStatus,
+        )
+        dish_vcc_validation_status_not_matching = invoke_load_dish_cfg_cmd()
+    assert not dish_vcc_validation_status_not_matching
+
+
+@pytest.fixture(scope="session", autouse=True)
+def dish_vcc_command_status_completed_at_startup():
+    """Run dish VCC command status verification at the
+    beginning of pytest execution."""
+    central_node = CentralNodeWrapperMid()
+    verify_dish_vcc_command_status_completed(
+        central_node.central_node, central_node.csp_master
+    )
 
 
 def wait_for_dish_mode_change(

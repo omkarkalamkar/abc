@@ -7,6 +7,7 @@ from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
+    get_master_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.enums import CapabilityStates
@@ -737,7 +738,9 @@ class TestSubarrayHealthState(object):
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
         dish_master1_health_state, dish_master2_health_state, \
-        dish_master3_health_state, dish_master4_health_state",
+        dish_master3_health_state, dish_master4_health_state, \
+        dish_master5_health_state, dish_master6_health_state, \
+        dish_master7_health_state",
         [
             (
                 HealthState.OK,
@@ -746,6 +749,9 @@ class TestSubarrayHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
             ),
             (
                 HealthState.OK,
@@ -754,6 +760,9 @@ class TestSubarrayHealthState(object):
                 HealthState.FAILED,
                 HealthState.OK,
                 HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
             ),
             (
                 HealthState.OK,
@@ -762,6 +771,9 @@ class TestSubarrayHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
             ),
             (
                 HealthState.OK,
@@ -770,6 +782,9 @@ class TestSubarrayHealthState(object):
                 HealthState.DEGRADED,
                 HealthState.OK,
                 HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
             ),
             (
                 HealthState.OK,
@@ -778,8 +793,14 @@ class TestSubarrayHealthState(object):
                 HealthState.DEGRADED,
                 HealthState.OK,
                 HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
             ),
             (
+                HealthState.DEGRADED,
+                HealthState.DEGRADED,
+                HealthState.DEGRADED,
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
@@ -804,17 +825,25 @@ class TestSubarrayHealthState(object):
         dish_master2_health_state,
         dish_master3_health_state,
         dish_master4_health_state,
+        dish_master5_health_state,
+        dish_master6_health_state,
+        dish_master7_health_state,
     ):
-        # Row 15 to 17
+        (csp_sa_sim, sdp_sa_sim, _, _, _, _) = get_device_simulators(
+            simulator_factory
+        )
+
         (
-            csp_sa_sim,
-            sdp_sa_sim,
+            _,
+            _,
             dish_master_sim_1,
             dish_master_sim_2,
             dish_master_sim_3,
             dish_master_sim_4,
-        ) = get_device_simulators(simulator_factory)
-
+            dish_master_sim_5,
+            dish_master_sim_6,
+            dish_master_sim_7,
+        ) = get_master_device_simulators(simulator_factory)
         self._assign_dishes_to_subarray(
             subarray_node,
             central_node_mid,
@@ -827,12 +856,19 @@ class TestSubarrayHealthState(object):
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
+        dish_master_sim_5.SetDirectHealthState(dish_master4_health_state)
+        dish_master_sim_6.SetDirectHealthState(dish_master4_health_state)
+        dish_master_sim_7.SetDirectHealthState(dish_master4_health_state)
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
         event_recorder.subscribe_event(sdp_sa_sim, "healthState")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
         event_recorder.subscribe_event(dish_master_sim_2, "healthState")
         event_recorder.subscribe_event(dish_master_sim_3, "healthState")
         event_recorder.subscribe_event(dish_master_sim_4, "healthState")
+        event_recorder.subscribe_event(dish_master_sim_5, "healthState")
+        event_recorder.subscribe_event(dish_master_sim_6, "healthState")
+        event_recorder.subscribe_event(dish_master_sim_7, "healthState")
+
         event_recorder.subscribe_event(
             subarray_node.subarray_node, "healthState"
         )
@@ -875,19 +911,39 @@ class TestSubarrayHealthState(object):
             dish_master4_health_state,
             lookahead=2,
         )
-
+        assert event_recorder.has_change_event_occurred(
+            dish_master_sim_5,
+            "healthState",
+            dish_master5_health_state,
+            lookahead=2,
+        )
+        assert event_recorder.has_change_event_occurred(
+            dish_master_sim_6,
+            "healthState",
+            dish_master6_health_state,
+            lookahead=2,
+        )
+        assert event_recorder.has_change_event_occurred(
+            dish_master_sim_7,
+            "healthState",
+            dish_master7_health_state,
+            lookahead=2,
+        )
         if (
             dish_master1_health_state == HealthState.DEGRADED
             and dish_master2_health_state == HealthState.DEGRADED
             and dish_master3_health_state == HealthState.DEGRADED
             and dish_master4_health_state == HealthState.DEGRADED
+            and dish_master5_health_state == HealthState.DEGRADED
+            and dish_master6_health_state == HealthState.DEGRADED
+            and dish_master7_health_state == HealthState.DEGRADED
         ):
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node,
                 "healthState",
                 HealthState.FAILED,
                 lookahead=10,
-            ), "Expected Subarray Node HealthState to be DEGRADED"
+            ), "Expected Subarray Node HealthState to be FAILED"
         else:
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node,

@@ -21,7 +21,7 @@ url = 'https://pypi.org/simple'
 python = "^3.10"
 ska-control-model=">=1.0.0,<2.0.0"
 ska-tango-base="1.4.0"
-pytango = "10.1.2"
+pytango = "10.3.0"
 numpy = ">=1.26.0"
 ska-tango-testing = "0.8.0"
 ska-ser-logging = ">=0.4.3,<0.5.0"

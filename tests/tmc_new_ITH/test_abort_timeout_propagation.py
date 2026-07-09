@@ -144,6 +144,8 @@ def send_abort_command(
     # generate Abort command timeout on the subarray node
     # Use DELAY_MULTIPLIER to scale with timeout
     delay = int(ABORT_COMMAND_TIMEOUT * DELAY_MULTIPLIER)
+    pytest.subsystem = subsystem
+    pytest.delay = delay
     if subsystem == "CSP":
         csp.csp_subarray.SetDelayInfo(json.dumps({"Abort": delay}))
     if subsystem == "SDP":
@@ -304,5 +306,10 @@ def verify_error_message(
     # this sleep is necessary to allow event propagation.
     # It needs to be updated once required support to check
     # leaf nodes obsState is implemented in the ITH.
-    time.sleep(0.5)
+    # Also its observed the delayinfo timer changing the pointingState later on
+    # resulting to next command failure.
+    if pytest.subsystem == "Dish":
+        time.sleep(pytest.delay)
+    else:
+        time.sleep(0.5)
     tmc.restart()

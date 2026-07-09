@@ -4,6 +4,7 @@ from pytest_bdd import given, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
+from tests.conftest import assert_dish_vcc_validation_status_is_ok
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
@@ -59,6 +60,8 @@ def move_subarray_node_to_idle_obsstate(
     for command
     :param subarray_node: fixture for a TMC SubarrayNode under test
     """
+
+    assert_dish_vcc_validation_status_is_ok()
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )

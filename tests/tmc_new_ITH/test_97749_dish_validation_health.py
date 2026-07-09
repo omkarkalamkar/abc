@@ -32,6 +32,7 @@ from tests.resources.test_support.constant import (
     alarm_handler1,
     dish_master5,
     dish_master6,
+    dish_master7,
     tmc_dish_leaf_node1,
 )
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
@@ -58,6 +59,7 @@ def _setup_event_subscriptions(
     """
     dishes.dish_master_dict["dish_500"] = tango.DeviceProxy(dish_master5)
     dishes.dish_master_dict["dish_999"] = tango.DeviceProxy(dish_master6)
+    dishes.dish_master_dict["dish_099"] = tango.DeviceProxy(dish_master7)
 
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     event_tracer.subscribe_event(tmc.subarray_node, "healthInfo")
@@ -96,6 +98,9 @@ def _setup_event_subscriptions(
     )
     event_tracer.subscribe_event(
         dishes.dish_master_dict["dish_999"], "healthState"
+    )
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_099"], "healthState"
     )
     mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
 
@@ -258,6 +263,9 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_999"].SetDirectCapabilityState(
         pytest.capability_dict
     )
+    dishes.dish_master_dict["dish_099"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
     sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
     csp.csp_master.SetDirectHealthState(HealthState.OK)
@@ -268,6 +276,7 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_100"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_500"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_999"].SetDirectHealthState(HealthState.OK)
+    dishes.dish_master_dict["dish_099"].SetDirectHealthState(HealthState.OK)
 
     mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
 

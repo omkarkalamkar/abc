@@ -7,7 +7,7 @@ import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
-from tests.conftest import LOGGER
+from tests.conftest import LOGGER, assert_dish_vcc_validation_status_is_ok
 from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
@@ -33,19 +33,16 @@ def test_tmc_validate_dln_kvalue_not_identical():
 
 
 @given("a TMC with already loaded Dish-VCC map version")
-def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
+def given_tmc_with_already_loaded_dish_vcc_config_version(
+    tmc_mid, event_recorder
+):
     """
     Given a TMC with loaded Dish-VCC map version
     """
-    cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
-    central_node_dish_vcc_validation_status = {
-        "dish": "ALL DISH OK",
-        tmc_csp_master_leaf_node: cspmln_validation_string,
-    }
-    assert (
-        json.loads(tmc_mid.DishVccValidationStatus)
-        == central_node_dish_vcc_validation_status
+    event_recorder.subscribe_event(
+        tmc_mid.central_node_device, "longRunningCommandResult"
     )
+    assert_dish_vcc_validation_status_is_ok()
     assert tmc_mid.IsDishVccConfigSet
 
 
@@ -54,10 +51,10 @@ def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # Set DLN k-values which are not equal to its respective dish manager
     try:
-        tmc_mid.central_node.dish_leaf_node_list[1].kValue = 9
-        # Set dish manager k-value which are not equal to its respective
-        # dish leaf node
-        tmc_mid.central_node.dish_master_list[2].SetKValue(10)
+        pytest.old_kvalues = []
+        for dish_master in tmc_mid.central_node.dish_master_list:
+            pytest.old_kvalues.append(dish_master.kvalue)
+            dish_master.SetKValue(10)
     except Exception as ex:
         LOGGER.error(
             "Exception %s occurred at with error: %s",
@@ -125,8 +122,13 @@ def check_value_of_isdishvccconfigset_on_central_node(tmc_mid):
     false after dish leaf node report."""
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
-        "SKA036": "k-value not identical",
-        "SKA077": "k-value not identical",
+        "ska036": "k-value not identical",
+        "ska001": "k-value not identical",
+        "ska077": "k-value not identical",
+        "ska099": "k-value not identical",
+        "ska100": "k-value not identical",
+        "ska999": "k-value not identical",
+        "ska500": "k-value not identical",
         tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     assert wait_and_validate_device_attribute_value(
@@ -141,8 +143,11 @@ def check_value_of_isdishvccconfigset_on_central_node(tmc_mid):
         tmc_mid.TelescopeOn()
     assert "Dish Vcc Config not Set" in str(e.value)
     # Restore to previous k-value
-    tmc_mid.central_node.dish_leaf_node_list[1].SetKValue(222)
-    tmc_mid.central_node.dish_leaf_node_list[2].SetKValue(333)
+
+    for dish_leaf_node, old_kvalue in zip(
+        tmc_mid.central_node.dish_leaf_node_list, pytest.old_kvalues
+    ):
+        dish_leaf_node.SetKValue(old_kvalue)
 
     assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.central_node,
