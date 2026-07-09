@@ -71,7 +71,7 @@ ADR63_POINTING_SAMPLES = {
             {
                 "field": {
                     "target_name": "Galactic Centre",
-                    "reference_frame": "gal",
+                    "reference_frame": "galactic",
                     "attrs": {"c1": 0.0, "c2": 0.0},
                 }
             }
