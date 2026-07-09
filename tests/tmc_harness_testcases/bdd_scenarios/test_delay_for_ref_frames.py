@@ -81,7 +81,7 @@ ADR63_POINTING_SAMPLES = {
         "groups": [
             {
                 "field": {
-                    "target_name": "Sun",
+                    "target_name": "Mars",
                     "reference_frame": "special",
                 }
             }
