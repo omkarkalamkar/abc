@@ -681,7 +681,7 @@ POINTING_CONFIGS = {
         "groups": [
             {
                 "field": {
-                    "target_name": "Mars",
+                    "target_name": "Jupiter",
                     "reference_frame": "special",
                 }
             }
