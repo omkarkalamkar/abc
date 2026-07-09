@@ -14,5 +14,5 @@ Feature: Delay model generation for ADR-63 reference frames in TMC Mid
             | icrs            |
             | tle             |
             | altaz           |
-            | galactic             |
+            | galactic        |
             | special         |

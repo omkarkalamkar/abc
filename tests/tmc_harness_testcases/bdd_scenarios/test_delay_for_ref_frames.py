@@ -6,17 +6,17 @@ reference frames (icrs, special, tle, altaz, galactic) and verifies
 that the CSP Subarray Leaf Node produces a valid delay model for it
 and correctly resets the model on End.
 """
+
 import json
-import logging
 
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
+from ska_tango_testing.integration import log_events
 
 from tests.conftest import ASSIGNED_RECEPTORS, MID_DELAY_JSON, POINTING_CONFIGS
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -24,8 +24,11 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
-LOGGER = logging.getLogger(__name__)
+TIMEOUT = 50
+
+LOGGER = __import__("logging").getLogger(__name__)
 
 
 @pytest.mark.batch1
@@ -41,15 +44,42 @@ def test_delay_model_for_adr63_ref_frames() -> None:
 
 @given("a TMC in ON state")
 def tmc_in_on_state(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+    central_node_mid: CentralNodeWrapperMid, event_tracer
 ) -> None:
     """Ensure the TMC (Central Node) is in ON state."""
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
+    event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node, "telescopeState", DevState.ON
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_tracer.subscribe_event(
+        central_node_mid.subarray_node, "longRunningCommandResult"
+    )
+
+    # Logging setup
+    log_events(
+        {
+            central_node_mid.central_node: [
+                "telescopeState",
+                "longRunningCommandResult",
+            ],
+            central_node_mid.subarray_node: [
+                "obsState",
+                "longRunningCommandResult",
+            ],
+        }
+    )
+
+    central_node_mid.move_to_on()
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER ON COMMAND: "
+        f"Central Node device ({central_node_mid.central_node.dev_name()}) "
+        "is expected to be in TelescopeState ON",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.central_node, "telescopeState", "ON"
     )
 
 
@@ -57,7 +87,7 @@ def tmc_in_on_state(
 def subarray_in_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
-    event_recorder: EventRecorder,
+    event_tracer,
     command_input_factory: JsonFactory,
 ) -> None:
     """Assign resources so TMC Subarray reaches IDLE."""
@@ -67,12 +97,30 @@ def subarray_in_idle_obsstate(
     )
     assign_input = json.loads(assign_input_json)
     assign_input["subarray_id"] = 1
-    central_node_mid.store_resources(json.dumps(assign_input))
 
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    assert event_recorder.has_change_event_occurred(
+    _, unique_id = central_node_mid.store_resources(json.dumps(assign_input))
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER ASSIGNRESOURCES COMMAND: "
+        f"Subarray Node device ({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE
     )
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER ASSIGNRESOURCES COMMAND: "
+        f"'the subarray is in IDLE obsState' "
+        f"Subarray Node device ({central_node_mid.central_node.dev_name()}) "
+        f"is expected have longRunningCommand as ({unique_id[0]},"
+        f"{COMMAND_COMPLETED})",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+
+    event_tracer.clear_events()
 
 
 @when(
@@ -84,12 +132,11 @@ def subarray_in_idle_obsstate(
 def configure_with_adr63_pointing_group(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
-    event_recorder: EventRecorder,
+    event_tracer,
     reference_frame: str,
 ) -> None:
     """Override pointing.groups in the configure_mid template for the requested
-    ADR-63 reference frame, invoke Configure via TMC SubarrayNode, and wait
-    for READY (and implicit LRC success).
+    ADR-63 reference frame, invoke Configure, and assert both obsState + LRC.
     """
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -101,19 +148,33 @@ def configure_with_adr63_pointing_group(
         pytest.fail(f"Unsupported reference_frame in test: {reference_frame}")
 
     config["pointing"] = POINTING_CONFIGS[ref_key]
-
     configure_json_str = json.dumps(config)
-    LOGGER.info(
-        "Invoking Configure with ADR-63 pointing for ref_frame=%s",
-        reference_frame,
+
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", configure_json_str
     )
 
-    subarray_node.store_configuration_data(configure_json_str)
-
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+        f"Subarray Node device ({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY
     )
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+        f"'the subarray is in READY obsState' "
+        f"Subarray Node device ({subarray_node.subarray_node.dev_name()}) "
+        f"is expected have longRunningCommand as ({unique_id[0]},"
+        f"{COMMAND_COMPLETED})",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+
+    event_tracer.clear_events()
 
 
 @then("CSP Subarray Leaf Node generates a valid delayModel for the target")
@@ -121,7 +182,7 @@ def csp_leafnode_generates_delaymodel(
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Verify non-default, structurally valid delayModel with one entry per
-    assigned receptor (receptor + xypol_coeffs_ns list + ypol_offset_ns).
+    assigned receptor.
     """
     cspsal_node = subarray_node.csp_subarray_leaf_node
 
@@ -136,7 +197,7 @@ def csp_leafnode_generates_delaymodel(
     )
     receptor_delays = delay_json_dict.get("receptor_delays", [])
     assert len(receptor_delays) == len(ASSIGNED_RECEPTORS), (
-        f"Expected {len(ASSIGNED_RECEPTORS)} receptor delay entries , "
+        f"Expected {len(ASSIGNED_RECEPTORS)} receptor delay entries, "
         f"got {len(receptor_delays)}"
     )
 
@@ -148,22 +209,39 @@ def csp_leafnode_generates_delaymodel(
 
     LOGGER.info(
         "Verified valid non-default delayModel (%d receptors) "
-        "for ADR-63 %s target.",
+        "for ADR-63 target.",
         len(receptor_delays),
-        "ref frame",
     )
 
 
 @then("I end the observation")
 def end_the_observation(
-    subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
+    subarray_node: SubarrayNodeWrapper, event_tracer
 ) -> None:
     """Invoke End and wait for IDLE (triggers delay manager stop + reset)."""
-    subarray_node.end_observation()
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    assert event_recorder.has_change_event_occurred(
+    _, unique_id = subarray_node.execute_transition("End")
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER END COMMAND: "
+        f"Subarray Node device ({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE
     )
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER END COMMAND: "
+        f"'the subarray is in IDLE obsState' "
+        f"Subarray Node device ({subarray_node.subarray_node.dev_name()}) "
+        f"is expected have longRunningCommand as ({unique_id[0]},"
+        f"{COMMAND_COMPLETED})",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+
+    event_tracer.clear_events()
 
 
 @then("CSP Subarray Leaf Node resets the delayModel to default")
