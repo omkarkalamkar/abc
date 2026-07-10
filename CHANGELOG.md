@@ -14,6 +14,12 @@ Updated
 * For invoking LoadDishCfg ensure CSP controller is in DevState.OFF.
 * TMC does not allow assigning receptors if k-value issue is observed on dish.
 
+[1.24.0-rc.2]
+*************
+Updated
+-------
+* Updated Dish leaf node tag 0.46.1 with bug fixes SKB-1374, SKB-1401, SKB-1184.
+
 [1.24.0-rc.1]
 *************
 Updated
