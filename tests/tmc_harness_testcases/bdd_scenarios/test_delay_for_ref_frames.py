@@ -14,6 +14,7 @@ from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import log_events
+from tango import DevState
 
 from tests.conftest import ASSIGNED_RECEPTORS, MID_DELAY_JSON, POINTING_CONFIGS
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -79,7 +80,7 @@ def tmc_in_on_state(
         f"Central Node device ({central_node_mid.central_node.dev_name()}) "
         "is expected to be in TelescopeState ON",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node_mid.central_node, "telescopeState", "ON"
+        central_node_mid.central_node, "telescopeState", DevState.ON
     )
 
 
