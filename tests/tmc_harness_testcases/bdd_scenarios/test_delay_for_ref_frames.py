@@ -16,7 +16,12 @@ from ska_control_model import ObsState
 from ska_tango_testing.integration import log_events
 from tango import DevState
 
-from tests.conftest import ASSIGNED_RECEPTORS, MID_DELAY_JSON, POINTING_CONFIGS
+from tests.conftest import (
+    ASSIGNED_RECEPTORS,
+    MID_DELAY_JSON,
+    POINTING_CONFIGS,
+    pick_visible_solar_system_target,
+)
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -148,8 +153,20 @@ def configure_with_adr63_pointing_group(
     if ref_key not in POINTING_CONFIGS:
         pytest.fail(f"Unsupported reference_frame in test: {reference_frame}")
 
-    config["pointing"] = POINTING_CONFIGS[ref_key]
+    pointing_config = POINTING_CONFIGS[ref_key]
+
+    if ref_key == "special":
+        chosen = pick_visible_solar_system_target(ASSIGNED_RECEPTORS)
+        pointing_config["groups"][0]["field"]["target_name"] = chosen
+        LOGGER.info("Using dynamic special target for test: %s", chosen)
+
+    config["pointing"] = pointing_config
     configure_json_str = json.dumps(config)
+
+    LOGGER.info(
+        "Invoking Configure with ADR-63 pointing for ref_frame=%s",
+        reference_frame,
+    )
 
     _, unique_id = subarray_node.execute_transition(
         "Configure", configure_json_str

@@ -3,10 +3,12 @@ import json
 import logging
 import os
 import time
+from datetime import datetime
 from os.path import dirname, join
 from time import sleep
 from typing import Generator
 
+import katpoint
 import pytest
 import tango
 from pytest_bdd import given, parsers, then, when
@@ -681,7 +683,7 @@ POINTING_CONFIGS = {
         "groups": [
             {
                 "field": {
-                    "target_name": "Jupiter",
+                    "target_name": None,
                     "reference_frame": "special",
                 }
             }
@@ -691,3 +693,86 @@ POINTING_CONFIGS = {
 
 
 ASSIGNED_RECEPTORS = ["SKA001", "SKA036", "SKA077", "SKA100"]
+
+
+LOGGER = logging.getLogger(__name__)
+
+NON_SIDEREAL_OBJECTS = [
+    "Sun",
+    "Moon",
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+]
+
+
+_SKA_MID_ANTENNAS = {
+    "SKA001": "SKA001, -30:42:39.8, 21:26:38.0, 1086, 15.0",
+    "SKA036": "SKA036, -30:42:39.8, 21:26:38.0, 1086, 15.0",
+    "SKA077": "SKA077, -30:42:39.8, 21:26:38.0, 1086, 15.0",
+    "SKA100": "SKA100, -30:42:39.8, 21:26:38.0, 1086, 15.0",
+}
+
+
+def pick_visible_solar_system_target(
+    receptor_ids: list[str],
+    candidate_bodies: list[str] | None = None,
+    fallback_body: str = "Jupiter",
+    when_utc: datetime | None = None,
+) -> str:
+    """Return the first solar-system object visible to ALL given receptors."""
+    if candidate_bodies is None:
+        candidate_bodies = NON_SIDEREAL_OBJECTS
+
+    if when_utc is None:
+        when_utc = datetime.utcnow()
+
+    for body_name in candidate_bodies:
+        visible_to_all = True
+        for receptor_id in receptor_ids:
+            try:
+                antenna = katpoint.Antenna(
+                    _SKA_MID_ANTENNAS.get(
+                        receptor_id, _SKA_MID_ANTENNAS["SKA001"]
+                    )
+                )
+                target = katpoint.Target(f"{body_name}, special")
+                target.antenna = antenna
+                az, el = target.azel(when_utc)  # <-- tuple unpacking fix
+
+                if not (-270.0 <= az.deg <= 270.0 and 17.5 <= el.deg <= 90.0):
+                    LOGGER.debug(
+                        "Rejected %s for %s: az=%.2f°, el=%.2f°",
+                        body_name,
+                        receptor_id,
+                        az.deg,
+                        el.deg,
+                    )
+                    visible_to_all = False
+                    break
+            except Exception as exc:
+                LOGGER.warning(
+                    "Error checking %s for %s: %s", body_name, receptor_id, exc
+                )
+                visible_to_all = False
+                break
+
+        if visible_to_all:
+            LOGGER.info(
+                "Selected special target: %s (visible to all receptors: %s)",
+                body_name,
+                receptor_ids,
+            )
+            return body_name
+
+    LOGGER.warning(
+        "No solar-system body visible from %s at %s. Falling back to %s",
+        receptor_ids,
+        when_utc,
+        fallback_body,
+    )
+    return fallback_body
