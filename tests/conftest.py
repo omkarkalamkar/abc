@@ -3,7 +3,7 @@ import json
 import logging
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from os.path import dirname, join
 from time import sleep
 from typing import Generator
@@ -721,41 +721,56 @@ _SKA_MID_ANTENNAS = {
 def pick_visible_solar_system_target(
     receptor_ids: list[str],
     candidate_bodies: list[str] | None = None,
-    fallback_body: str = "Jupiter",
     when_utc: datetime | None = None,
 ) -> str:
-    """Return the first solar-system object visible to ALL given receptors."""
+    """Return the first solar-system object visible to ALL given receptors.
+    Raises RuntimeError if no candidate is visible.
+    """
     if candidate_bodies is None:
         candidate_bodies = NON_SIDEREAL_OBJECTS
 
     if when_utc is None:
-        when_utc = datetime.utcnow()
+        when_utc = datetime.now(timezone.utc)
 
     for body_name in candidate_bodies:
         visible_to_all = True
         for receptor_id in receptor_ids:
             try:
-                antenna = katpoint.Antenna(
-                    _SKA_MID_ANTENNAS.get(
-                        receptor_id, _SKA_MID_ANTENNAS["SKA001"]
+                try:
+                    ant_desc = _SKA_MID_ANTENNAS[receptor_id]
+                except KeyError:
+                    LOGGER.warning(
+                        "No antenna description for %s; using SKA001 as proxy",
+                        receptor_id,
                     )
-                )
+                    ant_desc = _SKA_MID_ANTENNAS["SKA001"]
+
+                antenna = katpoint.Antenna(ant_desc)
                 target = katpoint.Target(f"{body_name}, special")
                 target.antenna = antenna
-                az, el = target.azel(when_utc)  # <-- tuple unpacking fix
+                result = target.azel(when_utc)
 
-                if not (-270.0 <= az.deg <= 270.0 and 17.5 <= el.deg <= 90.0):
+                if hasattr(result, "az"):
+                    az = result.az
+                    el = result.alt
+                else:
+                    az, el = result
+
+                az_deg = float(az.deg) if hasattr(az, "deg") else float(az)
+                el_deg = float(el.deg) if hasattr(el, "deg") else float(el)
+
+                if not (-270.0 <= az_deg <= 270.0 and 17.5 <= el_deg <= 90.0):
                     LOGGER.debug(
                         "Rejected %s for %s: az=%.2f°, el=%.2f°",
                         body_name,
                         receptor_id,
-                        az.deg,
-                        el.deg,
+                        az_deg,
+                        el_deg,
                     )
                     visible_to_all = False
                     break
             except Exception as exc:
-                LOGGER.warning(
+                LOGGER.debug(
                     "Error checking %s for %s: %s", body_name, receptor_id, exc
                 )
                 visible_to_all = False
@@ -769,10 +784,6 @@ def pick_visible_solar_system_target(
             )
             return body_name
 
-    LOGGER.warning(
-        "No solar-system body visible from %s at %s. Falling back to %s",
-        receptor_ids,
-        when_utc,
-        fallback_body,
+    raise RuntimeError(
+        f"No solar-system body from {candidate_bodies} is visible "
     )
-    return fallback_body

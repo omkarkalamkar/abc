@@ -8,6 +8,7 @@ and correctly resets the model on End.
 """
 
 import json
+from copy import deepcopy
 
 import pytest
 from assertpy import assert_that
@@ -153,7 +154,7 @@ def configure_with_adr63_pointing_group(
     if ref_key not in POINTING_CONFIGS:
         pytest.fail(f"Unsupported reference_frame in test: {reference_frame}")
 
-    pointing_config = POINTING_CONFIGS[ref_key]
+    pointing_config = deepcopy(POINTING_CONFIGS[ref_key])
 
     if ref_key == "special":
         chosen = pick_visible_solar_system_target(ASSIGNED_RECEPTORS)
