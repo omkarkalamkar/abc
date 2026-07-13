@@ -1,22 +1,18 @@
-release=1.23.0-rc.1
-tag=1.23.0-rc.1
+release=1.25.0-rc.1
+tag=1.25.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.22.0-rc.2 to v1.23.0-rc.1**
-        * Added following new properties in Central Node.
-        MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0. 
-        MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
-        SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1. 
-        SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999. 
-        * Central Node v1.6.0 with new validation to allow SKA dishes till 999.
+**1. Updated ska-tmc-mid from v1.24.0-rc.1 to v1.25.0-rc.1**
+        * TMC Mid is now allows partial success of LoadDishCfg command if it succeeds on setting k-value on any of the dish.
+        * LoadDishCfg fails if it fails on CSP controller or fails on all the dishes specified in the JSON.
+        * For invoking LoadDishCfg ensure CSP controller is in DevState.OFF.
+        * TMC does not allow assigning receptors if k-value issue is observed on dish.
 
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.22.0-rc.2 to v1.23.0-rc.1**
-        * Added following new properties in Central Node.
-        MeerKatDishIdLowerLimit: This refers to lower limit allowed for Meerkat dish ids.Defaults to 0. 
-        MeerKatDishIdUpperLimit: This refers to upper limit allowed for Meerkat dish ids.Defaults to 63.
-        SkaDishIdLowerLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 1. 
-        SkaDishIdUpperLimit: This refers to lower limit allowed for SKA dish ids.Defaults to 999. 
-        * Central Node v1.6.0 with new validation to allow SKA dishes till 999.
+**1. Updated ska-tmc-mid from v1.24.0-rc.1 to v1.25.0-rc.1**
+        * TMC Mid is now allows partial success of LoadDishCfg command if it succeeds on setting k-value on any of the dish.
+        * LoadDishCfg fails if it fails on CSP controller or fails on all the dishes specified in the JSON.
+        * For invoking LoadDishCfg ensure CSP controller is in DevState.OFF.
+        * TMC does not allow assigning receptors if k-value issue is observed on dish.
