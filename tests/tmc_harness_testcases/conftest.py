@@ -32,7 +32,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@given("the telescope is is ON state")
+@given("the telescope is ON state")
 def check_telescope_is_in_on_state(
     central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
@@ -46,12 +46,18 @@ def check_telescope_is_in_on_state(
         central_node_mid.central_node, "telescopeState"
     )
     event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
     log_events(
         {
-            central_node_mid.central_node: ["telescopeState"],
+            central_node_mid.central_node: [
+                "telescopeState",
+                "longRunningCommandResult",
+            ],
             subarray_node.subarray_node: [
                 "obsState",
                 "longRunningCommandResult",

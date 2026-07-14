@@ -14,8 +14,6 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from ska_tango_testing.integration import log_events
-from tango import DevState
 
 from tests.conftest import (
     ASSIGNED_RECEPTORS,
@@ -47,47 +45,6 @@ LOGGER = __import__("logging").getLogger(__name__)
 def test_delay_model_for_adr63_ref_frames() -> None:
     """Scenario runner for ADR-63 delay model verification via TMC."""
     pass
-
-
-@given("a TMC in ON state")
-def tmc_in_on_state(
-    central_node_mid: CentralNodeWrapperMid, event_tracer
-) -> None:
-    """Ensure the TMC (Central Node) is in ON state."""
-    event_tracer.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    event_tracer.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
-    event_tracer.subscribe_event(
-        central_node_mid.subarray_node, "longRunningCommandResult"
-    )
-
-    # Logging setup
-    log_events(
-        {
-            central_node_mid.central_node: [
-                "telescopeState",
-                "longRunningCommandResult",
-            ],
-            central_node_mid.subarray_node: [
-                "obsState",
-                "longRunningCommandResult",
-            ],
-        }
-    )
-
-    central_node_mid.move_to_on()
-
-    assert_that(event_tracer).described_as(
-        "FAILED ASSUMPTION AFTER ON COMMAND: "
-        f"Central Node device ({central_node_mid.central_node.dev_name()}) "
-        "is expected to be in TelescopeState ON",
-    ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node_mid.central_node, "telescopeState", DevState.ON
-    )
 
 
 @given("subarray is in IDLE ObsState")
