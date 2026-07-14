@@ -32,7 +32,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@given("the telescope is ON state")
+@given("the telescope is in ON state")
 def check_telescope_is_in_on_state(
     central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
