@@ -1040,14 +1040,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "gitpython"
-version = "3.1.50"
+version = "3.1.51"
 description = "GitPython is a Python library used to interact with Git repositories"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "gitpython-3.1.50-py3-none-any.whl", hash = "sha256:d352abe2908d07355014abdd21ddf798c2a961469239afec4962e9da884858f9"},
-    {file = "gitpython-3.1.50.tar.gz", hash = "sha256:80da2d12504d52e1f998772dc5baf6e553f8d2fcfe1fcc226c9d9a2ee3372dcc"},
+    {file = "gitpython-3.1.51-py3-none-any.whl", hash = "sha256:d5b29685708f3c80a56db040b665bfd69492c8e150b5848532af8013b686c5a4"},
+    {file = "gitpython-3.1.51.tar.gz", hash = "sha256:22c9c94bb6b0b9f3c7157c684fece45a414cea204586b600beae6cd4570dcd6d"},
 ]
 
 [package.dependencies]
@@ -4508,14 +4508,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "tzdata"
-version = "2026.2"
+version = "2026.3"
 description = "Provider of IANA time zone data"
 optional = false
 python-versions = ">=2"
 groups = ["main"]
 files = [
-    {file = "tzdata-2026.2-py2.py3-none-any.whl", hash = "sha256:bbe9af844f658da81a5f95019480da3a89415801f6cc966806612cc7169bffe7"},
-    {file = "tzdata-2026.2.tar.gz", hash = "sha256:9173fde7d80d9018e02a662e168e5a2d04f87c41ea174b139fbef642eda62d10"},
+    {file = "tzdata-2026.3-py2.py3-none-any.whl", hash = "sha256:dc096730c87af6cab1b171c9d532be840741ff5d459015e7f6947bd7d7e54931"},
+    {file = "tzdata-2026.3.tar.gz", hash = "sha256:4a1518b8993086a7982523e071643f3c0e5f213e75b21318e78bcabfff9d1415"},
 ]
 
 [package.source]
@@ -4694,4 +4694,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "acb39f7e5241634f12ed8d9359b65d6f00f1d59c4e96609d898532e100d4fd08"
+content-hash = "e49e0cedae09d192a2e8e2e8d45f2cfe8053c1762209f9d65ac791f3d32074c4"

@@ -25,6 +25,7 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+    wait_for_delay_updates_stop_on_delay_model,
     wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
@@ -118,7 +119,7 @@ def configure_with_adr63_pointing_group(
         pointing_config["groups"][0]["field"]["target_name"] = chosen
         LOGGER.info("Using dynamic special target for test: %s", chosen)
 
-    config["pointing"] = pointing_config
+    config["pointing"]["groups"] = pointing_config["groups"]
     configure_json_str = json.dumps(config)
 
     LOGGER.info(
@@ -221,13 +222,13 @@ def end_the_observation(
 
 
 @then("CSP Subarray Leaf Node resets the delayModel to default")
-def then_csp_leafnode_resets_delaymodel_to_default(
+def csp_leafnode_resets_delaymodel_to_default(
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """CSP Subarray Leaf Node must publish the default empty delayModel."""
     cspsal_node = subarray_node.csp_subarray_leaf_node
+    wait_for_delay_updates_stop_on_delay_model(cspsal_node)
     delay_json = json.loads(cspsal_node.read_attribute("delayModel").value)
-
     assert (
         delay_json == MID_DELAY_JSON
     ), f"Expected default delayModel after End, got {delay_json}"

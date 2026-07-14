@@ -465,12 +465,12 @@ def is_dish_vcc_set():
         csp_subarray_02.adminMode = AdminMode.ONLINE
     if csp_master_device.adminMode != AdminMode.ONLINE:
         csp_master_device.adminMode = AdminMode.ONLINE
-        csp_state = csp_master_device.state()
-        if CSP_SIMULATION_ENABLED.lower() == "true" and csp_state in (
-            tango.DevState.UNKNOWN,
-            tango.DevState.DISABLE,
-        ):
-            csp_master_device.setdirectstate(tango.DevState.OFF)
+    csp_state = csp_master_device.state()
+    if CSP_SIMULATION_ENABLED.lower() == "true" and csp_state in (
+        tango.DevState.UNKNOWN,
+        tango.DevState.DISABLE,
+    ):
+        csp_master_device.setdirectstate(tango.DevState.OFF)
     central_node = tango.DeviceProxy(centralnode)
     assert wait_and_validate_device_attribute_value(
         central_node,
@@ -694,8 +694,11 @@ POINTING_CONFIGS = {
 
 ASSIGNED_RECEPTORS = ["SKA001", "SKA036", "SKA077", "SKA100"]
 
-
-LOGGER = logging.getLogger(__name__)
+# SKA-Mid Dish mechanical limits (sourced from Dish LMC / tmdata)
+AZ_MIN_DEG = -270.0
+AZ_MAX_DEG = 270.0
+EL_MIN_DEG = 17.5
+EL_MAX_DEG = 90.0
 
 NON_SIDEREAL_OBJECTS = [
     "Sun",
@@ -709,13 +712,7 @@ NON_SIDEREAL_OBJECTS = [
     "Neptune",
 ]
 
-
-_SKA_MID_ANTENNAS = {
-    "SKA001": "SKA001, -30:42:39.8, 21:26:38.0, 1086, 15.0",
-    "SKA036": "SKA036, -30:42:39.8, 21:26:38.0, 1086, 15.0",
-    "SKA077": "SKA077, -30:42:39.8, 21:26:38.0, 1086, 15.0",
-    "SKA100": "SKA100, -30:42:39.8, 21:26:38.0, 1086, 15.0",
-}
+_SKA001_ANTENNA = "SKA001, -30:42:39.8, 21:26:38.0, 1086, 15.0"
 
 
 def pick_visible_solar_system_target(
@@ -724,6 +721,7 @@ def pick_visible_solar_system_target(
     when_utc: datetime | None = None,
 ) -> str:
     """Return the first solar-system object visible to ALL given receptors.
+
     Raises RuntimeError if no candidate is visible.
     """
     if candidate_bodies is None:
@@ -732,34 +730,28 @@ def pick_visible_solar_system_target(
     if when_utc is None:
         when_utc = datetime.now(timezone.utc)
 
+    if not receptor_ids:
+        raise ValueError("receptor_ids cannot be empty")
+
     for body_name in candidate_bodies:
         visible_to_all = True
         for receptor_id in receptor_ids:
             try:
-                try:
-                    ant_desc = _SKA_MID_ANTENNAS[receptor_id]
-                except KeyError:
-                    LOGGER.warning(
-                        "No antenna description for %s; using SKA001 as proxy",
-                        receptor_id,
-                    )
-                    ant_desc = _SKA_MID_ANTENNAS["SKA001"]
-
-                antenna = katpoint.Antenna(ant_desc)
+                antenna = katpoint.Antenna(_SKA001_ANTENNA)
                 target = katpoint.Target(f"{body_name}, special")
                 target.antenna = antenna
                 result = target.azel(when_utc)
 
-                if hasattr(result, "az"):
-                    az = result.az
-                    el = result.alt
-                else:
-                    az, el = result
+                az = result.az
+                el = result.alt
 
-                az_deg = float(az.deg) if hasattr(az, "deg") else float(az)
-                el_deg = float(el.deg) if hasattr(el, "deg") else float(el)
+                az_deg = float(az.deg)
+                el_deg = float(el.deg)
 
-                if not (-270.0 <= az_deg <= 270.0 and 17.5 <= el_deg <= 90.0):
+                if not (
+                    AZ_MIN_DEG <= az_deg <= AZ_MAX_DEG
+                    and EL_MIN_DEG <= el_deg <= EL_MAX_DEG
+                ):
                     LOGGER.debug(
                         "Rejected %s for %s: az=%.2f°, el=%.2f°",
                         body_name,

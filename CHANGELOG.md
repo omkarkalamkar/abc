@@ -9,13 +9,12 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 Added
 -----
-* Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in mid-integration test harness (HM-972).
-* Dynamic visible solar-system target selection for `special` reference frame to prevent mechanical limit failures.
-* BDD test `test_delay_model_for_adr63_ref_frames` covering all five reference frames with multi-receptor delay model validation.
+* Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid (HM-972).
+* Dynamic special target selection to avoid dish mechanical limit failures.
 
 Updated
 -------
-* Utilised ska-tmc-dishleafnode tag 0.46.2 includes SKB-912 logging cleanup.
+* Utilised ska-tmc-dishleafnode tag 0.46.2 (includes SKB-912 logging cleanup).
 * Utilised and tested ska-tmc-cspleafnodes tag 0.48.0.
 
 [1.25.0-rc.1]
