@@ -3,10 +3,12 @@ import json
 import logging
 import os
 import time
+from datetime import datetime, timezone
 from os.path import dirname, join
 from time import sleep
 from typing import Generator
 
+import katpoint
 import pytest
 import tango
 from pytest_bdd import given, parsers, then, when
@@ -463,12 +465,12 @@ def is_dish_vcc_set():
         csp_subarray_02.adminMode = AdminMode.ONLINE
     if csp_master_device.adminMode != AdminMode.ONLINE:
         csp_master_device.adminMode = AdminMode.ONLINE
-        csp_state = csp_master_device.state()
-        if CSP_SIMULATION_ENABLED.lower() == "true" and csp_state in (
-            tango.DevState.UNKNOWN,
-            tango.DevState.DISABLE,
-        ):
-            csp_master_device.setdirectstate(tango.DevState.OFF)
+    csp_state = csp_master_device.state()
+    if CSP_SIMULATION_ENABLED.lower() == "true" and csp_state in (
+        tango.DevState.UNKNOWN,
+        tango.DevState.DISABLE,
+    ):
+        csp_master_device.setdirectstate(tango.DevState.OFF)
     central_node = tango.DeviceProxy(centralnode)
     assert wait_and_validate_device_attribute_value(
         central_node,
@@ -626,3 +628,154 @@ MID_DELAY_JSON = {
         {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
     ],
 }
+
+POINTING_CONFIGS = {
+    "icrs": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "Polaris Australis",
+                    "reference_frame": "icrs",
+                    "attrs": {"c1": 317.199, "c2": -88.95636},
+                }
+            }
+        ]
+    },
+    "tle": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "ANGOSAT 2",
+                    "reference_frame": "tle",
+                    "attrs": {
+                        "line1": "1 54033U 22131A   26187.02363267  "
+                        ".00000150  00000+0  00000+0 0  9991",
+                        "line2": "2 54033   0.0192 123.5880 0000094 "
+                        "274.7177 277.2087  1.00271785 13664",
+                    },
+                }
+            }
+        ]
+    },
+    "altaz": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "South Celestial Pole",
+                    "reference_frame": "altaz",
+                    "attrs": {"c1": 180.0, "c2": 30.71},
+                }
+            }
+        ]
+    },
+    "galactic": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": "Large Magellanic Cloud",
+                    "reference_frame": "galactic",
+                    "attrs": {"c1": 280.4652, "c2": -32.8884},
+                }
+            }
+        ]
+    },
+    "special": {
+        "groups": [
+            {
+                "field": {
+                    "target_name": None,
+                    "reference_frame": "special",
+                }
+            }
+        ]
+    },
+}
+
+
+ASSIGNED_RECEPTORS = ["SKA001", "SKA036", "SKA077", "SKA100"]
+
+# SKA-Mid Dish mechanical limits (sourced from Dish LMC / tmdata)
+AZ_MIN_DEG = -270.0
+AZ_MAX_DEG = 270.0
+EL_MIN_DEG = 17.5
+EL_MAX_DEG = 90.0
+
+NON_SIDEREAL_OBJECTS = [
+    "Sun",
+    "Moon",
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+]
+
+_SKA001_ANTENNA = "SKA001, -30:42:39.8, 21:26:38.0, 1086, 15.0"
+
+
+def pick_visible_solar_system_target(
+    receptor_ids: list[str],
+    candidate_bodies: list[str] | None = None,
+    when_utc: datetime | None = None,
+) -> str:
+    """Return the first solar-system object visible to ALL given receptors.
+
+    Raises RuntimeError if no candidate is visible.
+    """
+    if candidate_bodies is None:
+        candidate_bodies = NON_SIDEREAL_OBJECTS
+
+    if when_utc is None:
+        when_utc = datetime.now(timezone.utc)
+
+    if not receptor_ids:
+        raise ValueError("receptor_ids cannot be empty")
+
+    for body_name in candidate_bodies:
+        visible_to_all = True
+        for receptor_id in receptor_ids:
+            try:
+                antenna = katpoint.Antenna(_SKA001_ANTENNA)
+                target = katpoint.Target(f"{body_name}, special")
+                target.antenna = antenna
+                result = target.azel(when_utc)
+
+                az = result.az
+                el = result.alt
+
+                az_deg = float(az.deg)
+                el_deg = float(el.deg)
+
+                if not (
+                    AZ_MIN_DEG <= az_deg <= AZ_MAX_DEG
+                    and EL_MIN_DEG <= el_deg <= EL_MAX_DEG
+                ):
+                    LOGGER.debug(
+                        "Rejected %s for %s: az=%.2f°, el=%.2f°",
+                        body_name,
+                        receptor_id,
+                        az_deg,
+                        el_deg,
+                    )
+                    visible_to_all = False
+                    break
+            except Exception as exc:
+                LOGGER.debug(
+                    "Error checking %s for %s: %s", body_name, receptor_id, exc
+                )
+                visible_to_all = False
+                break
+
+        if visible_to_all:
+            LOGGER.info(
+                "Selected special target: %s (visible to all receptors: %s)",
+                body_name,
+                receptor_ids,
+            )
+            return body_name
+
+    raise RuntimeError(
+        f"No solar-system body from {candidate_bodies} is visible "
+    )

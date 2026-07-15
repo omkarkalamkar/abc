@@ -1,6 +1,6 @@
 @SKA_mid @XTP-73592 @XTP-76068 @XTP-28347
 Scenario Outline: Error Propagation Reported by TMC Mid AssignResources/ReleaseAllResources/Configure/End/EndScan/Scan Commands for Defective Subarray
-		Given the telescope is is ON state
+		Given the telescope is in ON state
 		And the TMC subarray is in the <initialObsState> observation state
 		When <command> is invoked on a defectiveSubsystem <defectiveSubsystem>
 		Then the command failure is reported by subarray with error message
@@ -28,7 +28,7 @@ Scenario Outline: Error Propagation Reported by TMC Mid AssignResources/ReleaseA
 
 @SKA_mid @XTP-73592 @XTP-76069 @XTP-28347
 	Scenario Outline: TimeOut Reported by TMC Mid AssignResources/ReleaseAllResources/Configure/End/EndScan/Scan Commands for Defective Subarray
-		Given the telescope is is ON state
+		Given the telescope is in ON state
 		And the TMC subarray is in the <initialObsState> observation state
 		When <command> is invoked on a <defectiveSubsystem> Subarray
 		Then the command failure is reported by subarray with appropriate error message
@@ -55,7 +55,7 @@ Scenario Outline: Error Propagation Reported by TMC Mid AssignResources/ReleaseA
 
 @SKA_mid
 Scenario Outline: TMC moves to FAULT obsState when CSP/SDP moves to FAULT obsState
-		Given the telescope is is ON state
+		Given the telescope is in ON state
 		And the TMC subarray is in the <initialObsState> observation state
 		When the <subsystem> subarray moves to FAULT obsState
 		Then the TMC SubarrayNode transitions to FAULT obsState
