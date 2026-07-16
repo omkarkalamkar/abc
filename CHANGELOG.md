@@ -5,6 +5,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.25.0-rc.2]
+*************
+Fixed
+-----
+* Fixed bug SKB-1436: Dish leaf node fails to report dish availability.
+* Updated dish leaf node tag to 0.46.3
+
 [1.25.0-rc.1]
 *************
 Updated
@@ -84,6 +91,12 @@ Updated
   - Central Node: v1.33.0
   - Subarray Node: v1.10.0
 
+[1.21.2]
+********
+Fixed
+-----
+* Fixed bug SKB-1436: Dish leaf node fails to report dish availability.
+* Updated Dish leaf node tag to 0.44.5.
 
 [1.21.1]
 *************
