@@ -21,6 +21,13 @@ Updated
 * Utilised ska-tmc-dishleafnode tag 0.46.2.
 * Utilised and tested ska-tmc-cspleafnodes tag 0.48.0.
 
+[1.25.0-rc.2]
+*************
+Fixed
+-----
+* Fixed bug SKB-1436: Dish leaf node fails to report dish availability.
+* Updated dish leaf node tag to 0.46.3
+
 [1.25.0-rc.1]
 *************
 Updated

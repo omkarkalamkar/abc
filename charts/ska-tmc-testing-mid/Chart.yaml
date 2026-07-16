@@ -32,7 +32,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tango-alarmhandler.enabled
   - name: ska-tango-taranta
-    version: 2.14.1
+    version: 2.18.2
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-taranta.enabled
   - name: ska-tango-tangogql
