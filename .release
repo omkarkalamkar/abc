@@ -1,18 +1,20 @@
-release=1.25.0-rc.1
-tag=1.25.0-rc.1
+release=1.26.0-rc.1
+tag=1.26.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.24.0-rc.1 to v1.25.0-rc.1**
-        * TMC Mid is now allows partial success of LoadDishCfg command if it succeeds on setting k-value on any of the dish.
-        * LoadDishCfg fails if it fails on CSP controller or fails on all the dishes specified in the JSON.
-        * For invoking LoadDishCfg ensure CSP controller is in DevState.OFF.
-        * TMC does not allow assigning receptors if k-value issue is observed on dish.
+**1. Updated ska-tmc-mid from v1.25.0-rc.2 to v1.26.0-rc.1**
+        * Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid (HM-972).
+        * Dynamic special target selection to avoid dish mechanical limit failures.
+        * Fixed excessive/redundant logging (SKB-912).
+        * Updated ska-tmc-dishleafnode to tag 0.46.3.
+        * Updated and validated ska-tmc-cspleafnodes using tag 0.48.0.
 
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.24.0-rc.1 to v1.25.0-rc.1**
-        * TMC Mid is now allows partial success of LoadDishCfg command if it succeeds on setting k-value on any of the dish.
-        * LoadDishCfg fails if it fails on CSP controller or fails on all the dishes specified in the JSON.
-        * For invoking LoadDishCfg ensure CSP controller is in DevState.OFF.
-        * TMC does not allow assigning receptors if k-value issue is observed on dish.
+**1. Updated ska-tmc-mid from v1.25.0-rc.2 to v1.26.0-rc.1**
+        * Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid (HM-972).
+        * Dynamic special target selection to avoid dish mechanical limit failures.
+        * Fixed excessive/redundant logging (SKB-912) .
+        * Updated ska-tmc-dishleafnode to tag 0.46.3.
+        * Updated and validated ska-tmc-cspleafnodes using tag 0.48.0.

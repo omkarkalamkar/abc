@@ -5,21 +5,28 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
-************
+[1.26.0-rc.1]
+*************
 Added
 -----
-* Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid (HM-972).
+* Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid.
 * Dynamic special target selection to avoid dish mechanical limit failures.
 
 Fixed
 -----
-* Fixed excessive/redundant logging (SKB-912) by utilising ska-tmc-dishleafnode tag 0.46.2.
+* Fixed excessive/redundant logging (SKB-912) .
 
 Updated
 -------
-* Utilised ska-tmc-dishleafnode tag 0.46.2.
-* Utilised and tested ska-tmc-cspleafnodes tag 0.48.0.
+* Updated ska-tmc-dishleafnode to tag 0.46.3.
+* Updated and validated ska-tmc-cspleafnodes using tag 0.48.0.
+
+[1.25.0-rc.2]
+*************
+Fixed
+-----
+* Fixed bug SKB-1436: Dish leaf node fails to report dish availability.
+* Updated dish leaf node tag to 0.46.3
 
 [1.25.0-rc.1]
 *************
