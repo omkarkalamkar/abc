@@ -291,6 +291,10 @@ def invoke_load_dish_cfg_cmd() -> bool:
             return False
         timeout -= 1
         sleep(1)
+    LOGGER.info(
+        "DishVCCValidationStatus: %s",
+        json.loads(central_node.DishVccValidationStatus),
+    )
     return True
 
 
