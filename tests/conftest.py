@@ -290,8 +290,8 @@ def invoke_load_dish_cfg_cmd() -> bool:
         for dish_id in vcc_status:
             if "ska" not in dish_id.lower():
                 continue
-            dish_ln = central_node.dish_leaf_node_dict[dish_id.upper()]
-            dish_controller = central_node.dish_master_dict[dish_id.upper()]
+            dish_ln = cn_wrapper.dish_leaf_node_dict[dish_id.upper()]
+            dish_controller = cn_wrapper.dish_master_dict[dish_id.upper()]
             dish_ln.setkvalue(dish_ln.kvalue)
             dish_controller.setkvalue(dish_ln.kvalue)
         timeout -= 1
