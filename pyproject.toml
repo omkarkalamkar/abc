@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ska-tmc-mid-integration"
-version = "1.25.0-rc.2"
+version = "1.26.0-rc.1"
 description = "Repository for integration of TMC components"
 authors = ["Team Himalaya", "Team Sahyadri"]
 license = "BSD-3-Clause"
@@ -50,6 +50,7 @@ pytest-mock = "^3.6.1"
 pytest-xdist = "^2.4.0"
 pytest-repeat = "^0.9.1"
 pytest-bdd-report = "1.0.3b0"
+katpoint = "1.0a3"
 
 [tool.poetry.group.docs.dependencies]
 docutils = "^0.18.1"

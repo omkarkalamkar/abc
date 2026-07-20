@@ -1,13 +1,20 @@
-release=1.25.0-rc.2
-tag=1.25.0-rc.2
+release=1.26.0-rc.1
+tag=1.26.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.25.0-rc.1 to v1.25.0-rc.2**
-        * Fixed bug SKB-1436: Dish leaf node fails to report dish availability.
-        * Updated dish leaf node tag to 0.46.3
+**1. Updated ska-tmc-mid from v1.25.0-rc.2 to v1.26.0-rc.1**
+        * Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid (HM-972).
+        * Dynamic special target selection to avoid dish mechanical limit failures.
+        * Fixed excessive/redundant logging (SKB-912).
+        * Updated ska-tmc-dishleafnode to tag 0.46.3.
+        * Updated and validated ska-tmc-cspleafnodes using tag 0.48.0.
+
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.25.0-rc.1 to v1.25.0-rc.2**
-        * Fixed bug SKB-1436: Dish leaf node fails to report dish availability.
-        * Updated dish leaf node tag to 0.46.3
+**1. Updated ska-tmc-mid from v1.25.0-rc.2 to v1.26.0-rc.1**
+        * Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid (HM-972).
+        * Dynamic special target selection to avoid dish mechanical limit failures.
+        * Fixed excessive/redundant logging (SKB-912) .
+        * Updated ska-tmc-dishleafnode to tag 0.46.3.
+        * Updated and validated ska-tmc-cspleafnodes using tag 0.48.0.
