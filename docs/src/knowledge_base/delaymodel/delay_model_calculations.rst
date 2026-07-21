@@ -14,12 +14,12 @@ apply to the digitised signal from each configured receptor (dish) so that
 the signals from all receptors in a subarray are coherently aligned on the
 requested sky target. The model accounts for:
 
-* the *geometric delay* resulting from the different positions of the
+* The *geometric delay* resulting from the different positions of the
   receptors relative to a common reference antenna and the direction of the
   source on the celestial sphere;
-* the *atmospheric delay* (troposphere) at the site, derived from local
+* The *atmospheric delay* (troposphere) at the site, derived from local
   weather data (pressure, temperature and relative humidity);
-* the *fixed instrumental delays* per receptor, obtained from the SKA
+* The *fixed instrumental delays* per receptor, obtained from the SKA
   Telescope Model (Telmodel) layout and applied so that each receptor's
   signal-chain length is corrected. The horizontal component is folded
   into the constant term of the polynomial for that receptor, while the
@@ -99,7 +99,7 @@ the leaf node performs the following steps:
    entries expressed in seconds are first converted to an equivalent
    cable length in metres using ``katpoint.delay_model.FIXEDSPEED``; the
    metre value is then converted to a time delay in nanoseconds via
-   :math:`L / (0.7 \cdot c) \cdot 10^{9}`, where the factor **0.7** is
+   :math:`L / (0.7 \cdot c) \cdot 10^{9}`, where the factor 0.7 is
    the fibre propagation velocity relative to the speed of light in
    vacuum.
 #. Computes the constant Y-vs-X polarisation offset ``ypol_offset_ns``

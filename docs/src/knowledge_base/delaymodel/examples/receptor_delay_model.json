@@ -16,7 +16,7 @@
                 4.5e-13,
                 -8.9e-17
             ],
-            "ypol_offset_ns": 0.312
+            "ypol_offset_ns": 0.0
         },
         {
             "receptor": "SKA036",
@@ -28,7 +28,7 @@
                 -6.7e-13,
                 1.1e-16
             ],
-            "ypol_offset_ns": -0.185
+            "ypol_offset_ns": 0.0
         },
         {
             "receptor": "MKT000",
