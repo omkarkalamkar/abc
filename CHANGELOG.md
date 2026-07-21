@@ -107,6 +107,12 @@ Updated
   - Central Node: v1.33.0
   - Subarray Node: v1.10.0
 
+[1.21.2]
+********
+Fixed
+-----
+* Fixed bug SKB-1436: Dish leaf node fails to report dish availability.
+* Updated Dish leaf node tag to 0.44.5.
 
 [1.21.1]
 *************

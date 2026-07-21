@@ -266,10 +266,4 @@ def dish_with_kvalue_issue(central_node_mid, event_recorder):
     assert error_msg in error_message
 
     pytest.errorless_dish.SetKValue(kvalue)
-    vcc_status = central_node_mid.central_node.DishVccValidationStatus
-    for dish_id in vcc_status:
-        if "ska" not in dish_id.lower():
-            continue
-        dish_ln = central_node_mid.dish_leaf_node_dict[dish_id.upper()]
-        dish_ln.setkvalue(dish_ln.kvalue)
     assert_dish_vcc_validation_status_is_ok()
