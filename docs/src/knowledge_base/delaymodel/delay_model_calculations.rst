@@ -93,7 +93,7 @@ On every cadence cycle the leaf node performs the following steps:
    ``katpoint`` for each timestamp, using the current weather data.
    No additional per-target correction is applied at present
    (``extra_correction`` is fixed at ``0 s``).
-#. For each receptor, fits a **fifth-order polynomial** in time to the
+#. For each receptor, fits a fifth-order polynomial in time to the
    H delay samples using ``numpy.polynomial.Polynomial.fit``. The
    coefficients returned by ``katpoint`` are in seconds and are
    converted to nanoseconds (multiplied by :math:`10^{9}`) before
