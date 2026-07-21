@@ -286,13 +286,25 @@ def invoke_load_dish_cfg_cmd() -> bool:
     event_recorder.clear_events()
     timeout = 10
     while timeout > 0:
+        vcc_status = json.loads(central_node.DishVccValidationStatus)
+        for dish_id in vcc_status:
+            if "ska" not in dish_id.lower():
+                continue
+            dish_ln = cn_wrapper.dish_leaf_node_dict[dish_id.upper()]
+            dish_controller = cn_wrapper.dish_master_dict[dish_id.upper()]
+            dish_ln.setkvalue(dish_ln.kvalue)
+            dish_controller.setkvalue(dish_ln.kvalue)
+        timeout -= 1
+        sleep(1)
         if (
             json.loads(central_node.DishVccValidationStatus)
             == central_node_dish_vcc_validation_status
         ):
             return False
-        timeout -= 1
-        sleep(1)
+    LOGGER.info(
+        "DishVCCValidationStatus: %s",
+        json.loads(central_node.DishVccValidationStatus),
+    )
     return True
 
 
