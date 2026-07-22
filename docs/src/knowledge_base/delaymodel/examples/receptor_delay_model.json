@@ -1,0 +1,46 @@
+{
+    "interface": "https://schema.skao.int/ska-mid-csp-delaymodel/3.0",
+    "start_validity_sec": 832032000.0,
+    "cadence_sec": 10.0,
+    "validity_period_sec": 20.0,
+    "config_id": "sbi-mvp01-20260721-00001-science_A",
+    "subarray": 1,
+    "receptor_delays": [
+        {
+            "receptor": "SKA001",
+            "xypol_coeffs_ns": [
+                1024.375123,
+                -0.048217,
+                1.7e-05,
+                -2.1e-09,
+                4.5e-13,
+                -8.9e-17
+            ],
+            "ypol_offset_ns": 0.0
+        },
+        {
+            "receptor": "SKA036",
+            "xypol_coeffs_ns": [
+                987.114582,
+                0.031904,
+                -1.2e-05,
+                3.4e-09,
+                -6.7e-13,
+                1.1e-16
+            ],
+            "ypol_offset_ns": 0.0
+        },
+        {
+            "receptor": "MKT000",
+            "xypol_coeffs_ns": [
+                842.907621,
+                0.019873,
+                -8.5e-06,
+                1.9e-09,
+                -3.2e-13,
+                5.4e-17
+            ],
+            "ypol_offset_ns": 0.0
+        }
+    ]
+}
