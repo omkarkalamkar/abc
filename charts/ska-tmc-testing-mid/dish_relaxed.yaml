@@ -1,0 +1,19 @@
+# Values override used by the "relaxed dish ids" test job.
+#
+# It deploys the standard set of dishes together with dish ids beyond 197
+# (SKA200, SKA999) so that TMC mid can be exercised with the relaxed dish id
+# range (SkaDishIdUpperLimit = 999). The device server DishIDs are overridden
+# explicitly because the base values file resolves them through a YAML anchor,
+# which a separate -f override cannot re-link.
+global:
+  dishids: &relaxed_dish_ids
+    ["SKA001", "SKA036", "SKA077", "SKA100", "SKA198", "SKA500", "SKA999"]
+
+tmc-mid:
+  deviceServers:
+    centralnode:
+      DishIDs: *relaxed_dish_ids
+    subarraynode:
+      DishIDs: *relaxed_dish_ids
+    resourcemonitor:
+      DishIDs: *relaxed_dish_ids

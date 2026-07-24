@@ -178,6 +178,40 @@ stop-k8s-test-batch2:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     action: stop
 
+# Deploys TMC mid with dish ids beyond 197 (relaxed dish ids) and runs the
+# tests marked with "relaxed_dish_id".
+k8s-test-relaxed-dish-id:
+  extends:
+    - k8s-test
+  variables:
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-relaxed-dish-id"
+    DISH_SIMULATION_ENABLED: "true"
+    DEPLOY_RELAXED_DISH: "true"
+    SUBARRAY_COUNT: 2
+    COUNT: 1
+    SUBARRAY_COMMAND_TIMEOUT: 50
+    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
+    DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-relaxed-dish-id"
+  script:
+    - make k8s-test MARK="relaxed_dish_id"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-relaxed-dish-id
+    on_stop: stop-k8s-test-relaxed-dish-id
+    auto_stop_in: 1 minute
+  when: manual
+  allow_failure: true
+
+stop-k8s-test-relaxed-dish-id:
+  extends:
+    - stop-k8s-test
+  variables:
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-relaxed-dish-id"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-relaxed-dish-id
+    action: stop
+
 k8s-tmc-scaling:
   stage: scaling
   when: manual

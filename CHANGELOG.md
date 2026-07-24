@@ -9,6 +9,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 *************
 Added
 -----
+* New CI test job (k8s-test-relaxed-dish-id) that deploys TMC Mid with dish ids beyond 197 (relaxed dish ids) and validates their deployment.
 * Support for ADR-63 reference frames (icrs, tle, altaz, galactic, special) in TMC Mid.
 * Dynamic special target selection to avoid dish mechanical limit failures.
 
