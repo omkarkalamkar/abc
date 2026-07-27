@@ -123,3 +123,38 @@ stop-k8s-dish-lmc-100:
   environment:
     name: test/d100-$CI_COMMIT_REF_SLUG
     action: stop
+
+
+dish-lmc-extended-dish-ids:
+  stage: pair-wise-tests
+  tags:
+    - ska-k8s
+  variables:
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-extended"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-extended"
+    DISH_HELM_RELEASE: "7.0.1"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  script:
+    - make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml
+      --set "global.dishes={198,500,999}" --version=7.0.1
+      --set global.cluster_domain=$(CLUSTER_DOMAIN)'
+      HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
+    - make k8s-wait
+  environment:
+    name: test/extended-dish-ids-$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-dish-lmc-extended
+  allow_failure: true
+  when: manual
+
+
+stop-k8s-dish-lmc-extended:
+  stage: pair-wise-tests
+  extends:
+    - stop-k8s-dish-lmc-001
+  variables:
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-extended"
+    DISH_HELM_RELEASE: "7.0.1"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  environment:
+    name: test/extended-dish-ids-$CI_COMMIT_REF_SLUG
+    action: stop

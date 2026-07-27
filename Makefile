@@ -29,6 +29,13 @@ CUSTOM_VALUES3 ?=
 ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
 CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml
 endif
+
+DEPLOY_RELAXED_DISH ?= false ## Flag to deploy dishes with ids beyond 197 (relaxed dish ids)
+
+CUSTOM_VALUES4 ?=
+ifeq ($(strip $(DEPLOY_RELAXED_DISH)),true)
+CUSTOM_VALUES4 = -f charts/ska-tmc-testing-mid/dish_relaxed.yaml
+endif
 # ----------------------------------------------------------------------------
 # Exit at failure flag
 #
@@ -200,7 +207,8 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.cspsubarrayleafnode.TelmodelPath=$(ARRAY_LAYOUT_PATH)\
 	$(CUSTOM_VALUES1)\
 	$(CUSTOM_VALUES2)\
-	$(CUSTOM_VALUES3)
+	$(CUSTOM_VALUES3)\
+	$(CUSTOM_VALUES4)
 
 PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 TANGO_HOST=$(TANGO_HOST) \
