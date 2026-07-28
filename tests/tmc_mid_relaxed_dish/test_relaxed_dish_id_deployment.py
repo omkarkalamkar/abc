@@ -23,7 +23,7 @@ RELAXED_DISH_IDS = ["SKA198", "SKA500", "SKA999"]
 @pytest.mark.relaxed_dish_id
 @pytest.mark.SKA_mid
 @scenario(
-    "features/relaxed_dish_id.feature",
+    "../tmc_mid_relaxed_dish/features/relaxed_dish_id.feature",
     "TMC mid deploys dishes with ids beyond 197",
 )
 def test_relaxed_dish_id_deployment():
