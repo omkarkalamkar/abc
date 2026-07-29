@@ -204,7 +204,7 @@ k8s-test-relaxed-dish-id:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
       allow_failure: true
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: $CI_COMMIT_BRANCH
       when: manual
       allow_failure: true
 
@@ -220,7 +220,7 @@ stop-k8s-test-relaxed-dish-id:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
       allow_failure: true
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: $CI_COMMIT_BRANCH
       when: manual
       allow_failure: true
 
