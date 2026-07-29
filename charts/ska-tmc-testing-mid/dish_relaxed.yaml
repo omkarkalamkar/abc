@@ -7,7 +7,7 @@
 # which a separate -f override cannot re-link.
 global:
   dishids: &relaxed_dish_ids
-    ["SKA001", "SKA036", "SKA077", "SKA100", "SKA198", "SKA500", "SKA999"]
+    ["SKA001", "SKA036", "SKA077", "SKA099","SKA100", "SKA198", "SKA500", "SKA999"]
 
 tmc-mid:
   deviceServers:
