@@ -863,14 +863,16 @@ def check_for_device_command_event(
             device,
             attribute_name=attr_name,
             attribute_value=(Anything, Anything),
+            lookahead=50,
         )
         LOGGER.info("The assertion data is %s", assertion_data)
-        if assertion_data["attribute_value"][0].endswith(command_name):
+        if assertion_data and assertion_data["attribute_value"][0].endswith(
+            command_name
+        ):
             if event_data in assertion_data["attribute_value"][1]:
                 event_found = True
-                return event_found
-
         elapsed_time = time.time() - start_time
+        time.sleep(1)
 
     return event_found
 
