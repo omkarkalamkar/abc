@@ -195,7 +195,7 @@ k8s-test-relaxed-dish-id:
     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-relaxed-dish-id"
   script:
-    - make k8s-test MARK="relaxed_dish_id" PYTHON_VARS_AFTER_PYTEST="-W ignore::pytest.PytestCollectionWarning"
+    - make k8s-test MARK="relaxed_dish_id" ADD_ARGS="-W ignore::pytest.PytestCollectionWarning"
   after_script: []
   environment:
     name: test/$CI_COMMIT_REF_SLUG-relaxed-dish-id
