@@ -12,9 +12,10 @@ from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
 
 from tests.conftest import LOGGER
-
-CENTRAL_NODE_FQDN = "mid-tmc/central-node/0"
-DISH_LEAF_NODE_PREFIX = "mid-tmc/leaf-node-dish/"
+from tests.resources.test_support.constant import (
+    centralnode,
+    dish_leaf_node_prefix,
+)
 
 # Dish ids that lie beyond the previous limit of 197 (relaxed dish ids).
 RELAXED_DISH_IDS = ["SKA198", "SKA500", "SKA999"]
@@ -33,7 +34,7 @@ def test_relaxed_dish_id_deployment():
 @given("a TMC mid deployment configured with relaxed dish ids")
 def given_relaxed_dish_deployment():
     """The deployment is created by the CI job with dish_relaxed.yaml."""
-    central_node = tango.DeviceProxy(CENTRAL_NODE_FQDN)
+    central_node = tango.DeviceProxy(centralnode)
     assert_that(central_node.ping()).described_as(
         "The TMC central node should be reachable."
     ).is_greater_than(0)
@@ -50,7 +51,7 @@ def when_query_devices():
 def then_relaxed_dish_leaf_nodes_reachable():
     """Every relaxed dish id has a reachable dish leaf node device."""
     for dish_id in RELAXED_DISH_IDS:
-        dln_fqdn = f"{DISH_LEAF_NODE_PREFIX}{dish_id.lower()}"
+        dln_fqdn = f"{dish_leaf_node_prefix}{dish_id.lower()}"
         LOGGER.info("Checking dish leaf node %s", dln_fqdn)
         dish_leaf_node = tango.DeviceProxy(dln_fqdn)
         assert_that(dish_leaf_node.ping()).described_as(
@@ -66,7 +67,7 @@ def then_central_node_reports_relaxed_dish_ids():
     """The central node DishIDs property contains the relaxed dish ids."""
     database = tango.Database()
     configured_dish_ids = database.get_device_property(
-        CENTRAL_NODE_FQDN, "DishIDs"
+        centralnode, "DishIDs"
     )["DishIDs"]
     LOGGER.info("Central node DishIDs: %s", list(configured_dish_ids))
     for dish_id in RELAXED_DISH_IDS:
