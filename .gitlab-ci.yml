@@ -201,13 +201,7 @@ k8s-test-relaxed-dish-id:
     name: test/$CI_COMMIT_REF_SLUG-relaxed-dish-id
     on_stop: stop-k8s-test-relaxed-dish-id
     auto_stop_in: 1 minute
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
-      allow_failure: true
-    - if: $CI_COMMIT_BRANCH
-      when: manual
-      allow_failure: true
+
 
 stop-k8s-test-relaxed-dish-id:
   extends:
