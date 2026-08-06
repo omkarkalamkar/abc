@@ -868,12 +868,13 @@ def check_for_device_command_event(
         LOGGER.info("The assertion data is %s", assertion_data)
         # has_change_event_occurred returns the event data on a match, but a
         # plain bool when it falls back to reading the attribute directly.
-        if isinstance(assertion_data, dict):
-            attribute_value = assertion_data["attribute_value"]
-            if attribute_value[0].endswith(command_name):
-                if event_data in attribute_value[1]:
-                    event_found = True
-                    break
+        if assertion_data and assertion_data["attribute_value"][0].endswith(
+            command_name
+        ):
+            if event_data in assertion_data["attribute_value"][1]:
+                event_found = True
+                return event_found
+
         elapsed_time = time.time() - start_time
         time.sleep(0.1)
 
