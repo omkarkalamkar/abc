@@ -875,7 +875,7 @@ def check_for_device_command_event(
                     event_found = True
                     break
         elapsed_time = time.time() - start_time
-        time.sleep(1)
+        time.sleep(0.1)
 
     return event_found
 
