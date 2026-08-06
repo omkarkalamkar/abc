@@ -12,8 +12,10 @@ from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
 
 from tests.conftest import LOGGER
-from tests.resources.test_support.constant import centralnode
-DISH_LEAF_NODE_PREFIX = "mid-tmc/leaf-node-dish/"
+from tests.resources.test_support.constant import (
+    centralnode,
+    dish_leaf_node_prefix,
+)
 
 # Dish ids that lie beyond the previous limit of 197 (relaxed dish ids).
 RELAXED_DISH_IDS = ["SKA198", "SKA500", "SKA999"]
@@ -47,7 +49,7 @@ def when_query_devices():
 def then_relaxed_dish_leaf_nodes_reachable():
     """Every relaxed dish id has a reachable dish leaf node device."""
     for dish_id in RELAXED_DISH_IDS:
-        dln_fqdn = f"{DISH_LEAF_NODE_PREFIX}{dish_id.lower()}"
+        dln_fqdn = f"{dish_leaf_node_prefix}{dish_id.lower()}"
         LOGGER.info("Checking dish leaf node %s", dln_fqdn)
         dish_leaf_node = tango.DeviceProxy(dln_fqdn)
         assert_that(dish_leaf_node.ping()).described_as(
